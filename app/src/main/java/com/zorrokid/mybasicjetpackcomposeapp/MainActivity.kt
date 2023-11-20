@@ -19,6 +19,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -32,6 +36,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MyBasicJetpackComposeAppTheme {
+
+                var presses by remember { mutableStateOf(0) }
                 Scaffold(
                     topBar = {
                         TopAppBar(
@@ -58,7 +64,7 @@ class MainActivity : ComponentActivity() {
 
                     },
                     floatingActionButton = {
-                        FloatingActionButton(onClick = { /*TODO*/ }) {
+                        FloatingActionButton(onClick = { presses++ }) {
                            Icon(Icons.Default.Add, contentDescription = "Add")
                         }
                     }
@@ -68,11 +74,20 @@ class MainActivity : ComponentActivity() {
                         verticalArrangement = Arrangement.spacedBy(16.dp),
                     ) {
                         Greeting("Scaffold")
+                        CounterText(presses)
                     }
                 }
             }
         }
     }
+}
+
+@Composable
+fun CounterText(presses: Int, modifier: Modifier = Modifier) {
+    Text(
+        text = "You've pressed $presses times.",
+        modifier = modifier
+    )
 }
 
 @Composable
