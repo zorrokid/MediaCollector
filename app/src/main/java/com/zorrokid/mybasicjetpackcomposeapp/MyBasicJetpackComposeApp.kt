@@ -34,15 +34,7 @@ fun MyBasicJetpackComposeApp () {
         var presses by remember { mutableStateOf(0) }
         Scaffold(
             topBar = {
-                TopAppBar(
-                    colors = TopAppBarDefaults.mediumTopAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.primaryContainer,
-                        titleContentColor = MaterialTheme.colorScheme.primary,
-                    ),
-                    title = {
-                        Text("Top app bar")
-                    }
-                )
+                     MyTopAppBar(text = "Top app bar")
             },
             bottomBar = {
                 BottomAppBar(
@@ -72,6 +64,29 @@ fun MyBasicJetpackComposeApp () {
         }
     }
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MyTopAppBar(text: String, modifier: Modifier = Modifier) {
+    TopAppBar(
+        colors = TopAppBarDefaults.mediumTopAppBarColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
+            titleContentColor = MaterialTheme.colorScheme.primary,
+        ),
+        title = {
+            Text(text)
+        }
+    )
+}
+
+@Composable
+@Preview
+fun MyTopAppBarPreview(){
+    MyBasicJetpackComposeAppTheme {
+        MyTopAppBar(text = "Top app bar")
+    }
+}
+
 @Composable
 fun CounterText(presses: Int, modifier: Modifier = Modifier) {
     Text(
