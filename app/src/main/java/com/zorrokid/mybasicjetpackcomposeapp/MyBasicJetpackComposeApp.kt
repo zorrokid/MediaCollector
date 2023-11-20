@@ -2,6 +2,7 @@ package com.zorrokid.mybasicjetpackcomposeapp
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -30,38 +31,75 @@ import com.zorrokid.mybasicjetpackcomposeapp.ui.theme.MyBasicJetpackComposeAppTh
 @Composable
 fun MyBasicJetpackComposeApp () {
     MyBasicJetpackComposeAppTheme {
-
         var presses by remember { mutableStateOf(0) }
         Scaffold(
-            topBar = {
-                     MyTopAppBar(text = "Top app bar")
-            },
-            bottomBar = {
-                BottomAppBar(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    contentColor = MaterialTheme.colorScheme.primary,
-                ) {
-                    Text(
-                        modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Center,
-                        text = "Bottom app bar"
-                    )
-                }
-
-            },
+            topBar = { MyTopAppBar(text = "Top app bar") },
+            bottomBar = { MyBottomAppBar(text = "Bottom app bar") },
             floatingActionButton = {
                 FloatingActionButton(onClick = { presses++ }) {
-                    Icon(Icons.Default.Add, contentDescription = "Add")
+                   AddIcon()
                 }
             }
-        ) { innerPadding ->
-            Column(
-                modifier = Modifier.padding(innerPadding),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-            ) {
-                CounterText(presses)
-            }
-        }
+        ) { innerPadding -> MainContent(presses = presses, innerPadding = innerPadding,) }
+    }
+}
+
+@Composable
+fun AddIcon() {
+    Icon(Icons.Default.Add, contentDescription = "Add")
+}
+
+@Composable
+@Preview(showBackground = true)
+fun AddIconPreview() {
+    MyBasicJetpackComposeAppTheme {
+        AddIcon()
+    }
+}
+
+@Composable
+@Preview
+fun MyBasicJetpackComposeAppPreview() {
+    MyBasicJetpackComposeApp()
+}
+
+@Composable
+fun MainContent(presses: Int, innerPadding: PaddingValues = PaddingValues()) {
+    Column(
+        modifier = Modifier.padding(innerPadding),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+    ) {
+        CounterText(presses)
+    }
+}
+
+@Composable
+@Preview(showBackground = true)
+fun MainContentPreview() {
+    MyBasicJetpackComposeAppTheme {
+        MainContent(presses = 1)
+    }
+}
+
+@Composable
+fun MyBottomAppBar(text: String, modifier: Modifier = Modifier) {
+    BottomAppBar(
+        containerColor = MaterialTheme.colorScheme.primaryContainer,
+        contentColor = MaterialTheme.colorScheme.primary,
+    ) {
+        Text(
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Center,
+            text = text
+        )
+    }
+}
+
+@Composable
+@Preview
+fun MyBottomAppBarPreview() {
+    MyBasicJetpackComposeAppTheme {
+        MyBottomAppBar(text = "Bottom app bar")
     }
 }
 
@@ -74,7 +112,7 @@ fun MyTopAppBar(text: String, modifier: Modifier = Modifier) {
             titleContentColor = MaterialTheme.colorScheme.primary,
         ),
         title = {
-            Text(text)
+            Text(text = text, modifier = modifier,)
         }
     )
 }
