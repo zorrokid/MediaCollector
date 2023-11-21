@@ -1,7 +1,5 @@
 package com.zorrokid.mybasicjetpackcomposeapp
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -24,12 +22,20 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import com.zorrokid.mybasicjetpackcomposeapp.ui.theme.MyBasicJetpackComposeAppTheme
+import androidx.navigation.compose.rememberNavController
+import com.zorrokid.mybasicjetpackcomposeapp.screens.login.LogInScreen
+import com.zorrokid.mybasicjetpackcomposeapp.screens.main.MainScreen
+import com.zorrokid.mybasicjetpackcomposeapp.screens.start.StartScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MyBasicJetpackComposeApp () {
+fun MyBasicJetpackComposeApp (
+    navController: NavHostController = rememberNavController(),
+) {
     MyBasicJetpackComposeAppTheme {
         var presses by remember { mutableStateOf(0) }
         Scaffold(
@@ -40,9 +46,26 @@ fun MyBasicJetpackComposeApp () {
                    AddIcon()
                 }
             }
-        ) { innerPadding -> MainContent(presses = presses, innerPadding = innerPadding,) }
+        ) { innerPadding ->
+            NavHost(
+                navController = navController,
+                startDestination = MyBasicJetpackComposeScreen.Start.name,
+                modifier = Modifier.padding(innerPadding)
+            ){
+                composable(route = MyBasicJetpackComposeScreen.Main.name){
+                    MainScreen()
+                }
+                composable(route = MyBasicJetpackComposeScreen.Start.name){
+                    StartScreen()
+                }
+                composable(route = MyBasicJetpackComposeScreen.LogIn.name){
+                    LogInScreen()
+                }
+            }
+        }
     }
 }
+
 
 @Composable
 fun AddIcon() {
@@ -63,14 +86,10 @@ fun MyBasicJetpackComposeAppPreview() {
     MyBasicJetpackComposeApp()
 }
 
+
 @Composable
 fun MainContent(presses: Int, innerPadding: PaddingValues = PaddingValues()) {
-    Column(
-        modifier = Modifier.padding(innerPadding),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-    ) {
-        CounterText(presses)
-    }
+
 }
 
 @Composable
