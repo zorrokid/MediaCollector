@@ -49,7 +49,11 @@ fun MyBasicJetpackComposeApp (
         )
 
         Scaffold(
-            topBar = { MyTopAppBar(currentScreen = currentScreen, canNavigateBack = false, navigateUp = {}) },
+            topBar = { MyTopAppBar(
+                    currentScreen = currentScreen,
+                    canNavigateBack = navController.previousBackStackEntry != null,
+                    navigateUp = { navController.navigateUp() }
+                ) },
             bottomBar = { MyBottomAppBar(text = "Bottom app bar") },
             floatingActionButton = {
                 FloatingActionButton(onClick = { presses++ }) {
