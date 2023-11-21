@@ -56,7 +56,9 @@ fun MyBasicJetpackComposeApp (
                     MainScreen()
                 }
                 composable(route = MyBasicJetpackComposeScreen.Start.name){
-                    StartScreen()
+                    StartScreen(onLoginButtonClicked = {
+                        navController.navigate(MyBasicJetpackComposeScreen.LogIn.name)
+                    })
                 }
                 composable(route = MyBasicJetpackComposeScreen.LogIn.name){
                     LogInScreen()

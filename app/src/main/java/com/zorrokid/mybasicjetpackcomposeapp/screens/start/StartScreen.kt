@@ -11,25 +11,25 @@ import androidx.compose.ui.unit.dp
 import com.zorrokid.mybasicjetpackcomposeapp.ui.theme.MyBasicJetpackComposeAppTheme
 
 @Composable
-fun StartScreen() {
-    StartScreenContent()
+fun StartScreen(onLoginButtonClicked: () -> Unit, modifier: Modifier = Modifier,) {
+    StartScreenContent(modifier, onLoginButtonClicked)
 }
 
 @Composable
 fun StartScreenContent(
     modifier: Modifier = Modifier,
+    onLoginButtonClicked: () -> Unit,
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-        LogInButton {
-        }
+        LogInButton(onClick = onLoginButtonClicked)
     }
 }
 
 @Composable
 fun LogInButton(onClick: () -> Unit) {
-    Button(onClick = { /*TODO*/ }){
+    Button(onClick = onClick){
         Text(text = "Log in")
     }
 }
