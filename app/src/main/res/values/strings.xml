@@ -3,4 +3,6 @@
     <string name="start">Start</string>
     <string name="login">Log in</string>
     <string name="main">Main</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
 </resources>
