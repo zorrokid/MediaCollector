@@ -28,15 +28,36 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.zorrokid.mybasicjetpackcomposeapp.R
 
 @Composable
-fun LogInScreen(){
-    LogInScreenContent()
+fun LogInScreen(
+/* Note: Due to their lifecycle and scoping, you should access and call ViewModel instances at
+   screen-level composables, that is, close to a root composable called from an activity,
+   fragment, or destination of a Navigation graph. You should never pass down ViewModel
+   instances to other composables, pass only the data they need and functions that perform
+   the required logic as parameters./
+*/
+    viewModel: LoginViewModel = viewModel()
+){
+    val uiState by viewModel.uiState
+    LogInScreenContent(
+        uiState = uiState,
+        onEmailChange = viewModel::onEmailChange,
+        onPasswordChange = viewModel::onPasswordChange,
+        onSignInClick =  viewModel::onSignInClick,
+    )
 }
 
 @Composable
-fun LogInScreenContent(modifier: Modifier = Modifier,) {
+fun LogInScreenContent(
+    modifier: Modifier = Modifier,
+    uiState: LoginUiState,
+    onEmailChange: (String) -> Unit,
+    onPasswordChange: (String) -> Unit,
+    onSignInClick: () -> Unit,
+    ) {
     Column(
         modifier
             .fillMaxWidth()
@@ -45,8 +66,8 @@ fun LogInScreenContent(modifier: Modifier = Modifier,) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ){
-        EmailField("email", onNewValue = { /*TODO*/ })
-        PasswordField(value = "", onNewValue = { /* TODO */})
+        EmailField(value = uiState.email, onNewValue = onEmailChange)
+        PasswordField(value = uiState.password, onNewValue = onPasswordChange)
     }
 }
 
