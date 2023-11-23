@@ -11,6 +11,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -28,9 +29,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.zorrokid.mybasicjetpackcomposeapp.R
-
+import androidx.hilt.navigation.compose.hiltViewModel
 @Composable
 fun LogInScreen(
 /* Note: Due to their lifecycle and scoping, you should access and call ViewModel instances at
@@ -39,7 +41,7 @@ fun LogInScreen(
    instances to other composables, pass only the data they need and functions that perform
    the required logic as parameters./
 */
-    viewModel: LoginViewModel = viewModel()
+    viewModel: LoginViewModel = hiltViewModel()
 ){
     val uiState by viewModel.uiState
     LogInScreenContent(
@@ -68,6 +70,9 @@ fun LogInScreenContent(
     ){
         EmailField(value = uiState.email, onNewValue = onEmailChange)
         PasswordField(value = uiState.password, onNewValue = onPasswordChange)
+        Button(onClick = onSignInClick) {
+            Text(stringResource(id = R.string.login))
+        }
     }
 }
 

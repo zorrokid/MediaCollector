@@ -1,11 +1,18 @@
 package com.zorrokid.mybasicjetpackcomposeapp.screens.login
 
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.ViewModel
 import com.zorrokid.mybasicjetpackcomposeapp.common.ext.isValidEmail
+import com.zorrokid.mybasicjetpackcomposeapp.model.service.AccountService
+import com.zorrokid.mybasicjetpackcomposeapp.model.service.LogService
+import com.zorrokid.mybasicjetpackcomposeapp.screens.MyBasicJetpackComposeAppViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-
-class LoginViewModel : ViewModel() {
+@HiltViewModel
+class LoginViewModel @Inject constructor(
+    private val accountService: AccountService,
+    logService: LogService
+): MyBasicJetpackComposeAppViewModel(logService) {
 
     // mutableStateOf creates an observable MutableState<T>, which is an observable type integrated with the compose runtime.
     // Any changes to value schedules recomposition of any composable functions that read value.
@@ -39,12 +46,8 @@ class LoginViewModel : ViewModel() {
             // TODO error message
             return
         }
-
-        /* TODO authentification
         launchCatching {
             accountService.authenticate(email, password)
-            openAndPopUp(SETTINGS_SCREEN, LOGIN_SCREEN)
-        }*/
+        }
     }
-
 }
