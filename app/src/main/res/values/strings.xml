@@ -2,7 +2,14 @@
     <string name="app_name">MyBasicJetpackComposeApp</string>
     <string name="start">Start</string>
     <string name="login">Log in</string>
+    <string name="signup">Sign up</string>
     <string name="main">Main</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
+    <string name="splash">Splash</string>
+    <string name="sign_out">Sign out</string>
+    <string name="delete_account">Delete account</string>
+    <string name="generic_error">Ooops! Something went wrong.</string>
+    <string name="try_again">Try again</string>
+    <string name="settings">Settings</string>
 </resources>

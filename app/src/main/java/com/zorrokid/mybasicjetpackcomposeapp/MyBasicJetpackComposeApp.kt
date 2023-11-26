@@ -1,6 +1,5 @@
 package com.zorrokid.mybasicjetpackcomposeapp
 
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -13,6 +12,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -27,13 +27,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.zorrokid.mybasicjetpackcomposeapp.ui.theme.MyBasicJetpackComposeAppTheme
 import androidx.navigation.compose.rememberNavController
-import com.zorrokid.mybasicjetpackcomposeapp.screens.login.LogInScreen
-import com.zorrokid.mybasicjetpackcomposeapp.screens.main.MainScreen
-import com.zorrokid.mybasicjetpackcomposeapp.screens.start.StartScreen
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -41,47 +38,31 @@ fun MyBasicJetpackComposeApp (
     navController: NavHostController = rememberNavController(),
 ) {
     MyBasicJetpackComposeAppTheme {
-        var presses by remember { mutableStateOf(0) }
 
-        val backStackEntry by navController.currentBackStackEntryAsState()
-        val currentScreen = MyBasicJetpackComposeScreen.valueOf(
-            backStackEntry?.destination?.route ?: MyBasicJetpackComposeScreen.Start.name
-        )
+        Surface {
+            val appState = rememberAppState()
 
-        Scaffold(
-            topBar = { MyTopAppBar(
-                    currentScreen = currentScreen,
-                    canNavigateBack = navController.previousBackStackEntry != null,
-                    navigateUp = { navController.navigateUp() }
-                ) },
-            bottomBar = { MyBottomAppBar(text = "Bottom app bar") },
-            floatingActionButton = {
-                FloatingActionButton(onClick = { presses++ }) {
-                   AddIcon()
-                }
-            }
-        ) { innerPadding ->
-            NavHost(
-                navController = navController,
-                startDestination = MyBasicJetpackComposeScreen.Start.name,
-                modifier = Modifier.padding(innerPadding)
-            ){
-                composable(route = MyBasicJetpackComposeScreen.Main.name){
-                    MainScreen()
-                }
-                composable(route = MyBasicJetpackComposeScreen.Start.name){
-                    StartScreen(onLoginButtonClicked = {
-                        navController.navigate(MyBasicJetpackComposeScreen.LogIn.name)
-                    })
-                }
-                composable(route = MyBasicJetpackComposeScreen.LogIn.name){
-                    LogInScreen()
+            Scaffold() { innerPadding ->
+                NavHost(
+                    navController = appState.navController,
+                    startDestination = MyBasicJetpackComposeScreen.Splash.name,
+                    modifier = Modifier.padding(innerPadding)
+                ){
+                    // setup navigation graph
+                    myBasicJetpackComposeAppGraph(appState)
                 }
             }
         }
     }
 }
 
+@Composable
+fun rememberAppState(
+    navController: NavHostController = rememberNavController(),
+) =
+    remember(navController) {
+        MyJetpackComposeAppState(navController)
+    }
 
 @Composable
 fun AddIcon() {
@@ -100,20 +81,6 @@ fun AddIconPreview() {
 @Preview
 fun MyBasicJetpackComposeAppPreview() {
     MyBasicJetpackComposeApp()
-}
-
-
-@Composable
-fun MainContent(presses: Int, innerPadding: PaddingValues = PaddingValues()) {
-
-}
-
-@Composable
-@Preview(showBackground = true)
-fun MainContentPreview() {
-    MyBasicJetpackComposeAppTheme {
-        MainContent(presses = 1)
-    }
 }
 
 @Composable

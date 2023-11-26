@@ -1,23 +1,61 @@
 package com.zorrokid.mybasicjetpackcomposeapp.model.service.impl
 
-import android.util.Log
+import com.google.firebase.auth.EmailAuthProvider
+import com.google.firebase.auth.FirebaseAuth
 import com.zorrokid.mybasicjetpackcomposeapp.model.User
 import com.zorrokid.mybasicjetpackcomposeapp.model.service.AccountService
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 
 // Constructor-injected, because Hilt needs to know how to
 // provide instances of AccountServiceImpl, too.
-class AccountServiceImpl @Inject constructor( ) : AccountService {
+class AccountServiceImpl @Inject constructor(private val auth: FirebaseAuth) : AccountService {
     override val currentUserId: String
-        get() = TODO("Not yet implemented")
+        get() = auth.currentUser?.uid.orEmpty()
     override val hasUser: Boolean
-        get() = TODO("Not yet implemented")
+        get() = auth.currentUser != null
     override val currentUser: Flow<User>
-        get() = TODO("Not yet implemented")
+        get() = callbackFlow {
+            val listener =
+                FirebaseAuth.AuthStateListener { auth ->
+                    this.trySend(auth.currentUser?.let { User(it.uid, it.isAnonymous) } ?: User())
+                }
+            auth.addAuthStateListener(listener)
+            awaitClose { auth.removeAuthStateListener(listener) }
+        }
 
     override suspend fun authenticate(email: String, password: String) {
-        Log.v("AccountServiceImpl", "authenticate")
+        auth.signInWithEmailAndPassword(email, password).await()
+    }
+
+    override suspend fun sendRecoveryEmail(email: String) {
+        auth.sendPasswordResetEmail(email).await()
+    }
+
+    override suspend fun createAnonymousAccount() {
+        auth.signInAnonymously().await()
+    }
+
+    override suspend fun linkAccount(email: String, password: String) {
+        val credential = EmailAuthProvider.getCredential(email, password)
+        auth.currentUser!!.linkWithCredential(credential).await()
+    }
+
+    override suspend fun deleteAccount() {
+        auth.currentUser!!.delete().await()
+    }
+
+    override suspend fun signOut() {
+        if (auth.currentUser!!.isAnonymous) {
+            auth.currentUser!!.delete()
+        }
+        auth.signOut()
+
+        // Sign the user back in anonymously.
+        createAnonymousAccount()
     }
 }

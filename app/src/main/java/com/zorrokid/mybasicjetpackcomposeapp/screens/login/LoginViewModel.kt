@@ -34,6 +34,12 @@ class LoginViewModel @Inject constructor(
         uiState.value = uiState.value.copy(password = newValue)
     }
 
+    fun onSignUpClick() {
+        launchCatching {
+            accountService.linkAccount(email, password)
+        }
+    }
+
     fun onSignInClick() {
         if (email.isBlank() || password.isBlank()) return
 
