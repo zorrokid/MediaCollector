@@ -10,13 +10,14 @@ import com.zorrokid.mybasicjetpackcomposeapp.common.composable.SubmitButton
 
 @Composable
 fun AddItemScreen(
-    viewModel: AddItemViewModel = hiltViewModel()
+    viewModel: AddItemViewModel = hiltViewModel(),
+    openAndPopUp: (String, String) -> Unit
 ) {
     val uiState by viewModel.uiState
 
     AddItemScreenContent(
         uiState = uiState,
-        onSubmitClick = viewModel::onSubmitClick,
+        onSubmitClick = { viewModel.onSubmitClick(openAndPopUp) },
         onBarcodeChange = viewModel::onBarcodeChange
     )
 }

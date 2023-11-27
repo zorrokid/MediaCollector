@@ -1,6 +1,7 @@
 package com.zorrokid.mybasicjetpackcomposeapp.screens.add_item
 
 import androidx.compose.runtime.mutableStateOf
+import com.zorrokid.mybasicjetpackcomposeapp.MyBasicJetpackComposeScreen
 import com.zorrokid.mybasicjetpackcomposeapp.model.CollectionItem
 import com.zorrokid.mybasicjetpackcomposeapp.model.service.AccountService
 import com.zorrokid.mybasicjetpackcomposeapp.model.service.LogService
@@ -25,8 +26,11 @@ class AddItemViewModel @Inject constructor(
         uiState.value = uiState.value.copy(barcode = newValue)
     }
 
-    fun onSubmitClick() {
+    fun onSubmitClick(
+        openAndPopUp: (String, String) -> Unit
+    ) {
         launchCatching {
             storageService.save(CollectionItem(barcode = barcode, userId = accountService.currentUserId ))
+            openAndPopUp(MyBasicJetpackComposeScreen.Settings.name, MyBasicJetpackComposeScreen.LogIn.name)
         }}
 }

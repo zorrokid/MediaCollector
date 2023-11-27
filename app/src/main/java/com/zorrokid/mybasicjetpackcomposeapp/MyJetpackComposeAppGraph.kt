@@ -39,6 +39,8 @@ fun NavGraphBuilder.myBasicJetpackComposeAppGraph(appState: MyJetpackComposeAppS
         )
     }
     composable(route = MyBasicJetpackComposeScreen.AddItem.name){
-        AddItemScreen()
+        AddItemScreen(
+            openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) }
+        )
     }
 }
