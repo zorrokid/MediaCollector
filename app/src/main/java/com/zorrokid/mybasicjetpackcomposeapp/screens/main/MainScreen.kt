@@ -27,12 +27,13 @@ import com.zorrokid.mybasicjetpackcomposeapp.model.CollectionItem
 @Composable
 fun MainScreen(
     openScreen: (String) -> Unit,
-   viewModel: MainViewModel = hiltViewModel()) {
+    viewModel: MainViewModel = hiltViewModel()) {
     val collectionItems = viewModel.collectionItems.collectAsStateWithLifecycle(emptyList())
     MainScreenContent(
         onSettingsClick = viewModel::onSettingsClick,
         openScreen = openScreen,
-        collectionItems = collectionItems.value
+        collectionItems = collectionItems.value,
+        onAddItemClick = viewModel::onAddItemClick
     )
 }
 
@@ -42,13 +43,14 @@ fun MainScreen(
 fun MainScreenContent(
     modifier: Modifier = Modifier,
     onSettingsClick: ((String) -> Unit) -> Unit,
+    onAddItemClick: ((String) -> Unit) -> Unit,
     openScreen: (String) -> Unit,
     collectionItems: List<CollectionItem>
 ) {
     Scaffold (
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { /*TODO*/ },
+                onClick = { onAddItemClick(openScreen) },
             ) {
                 Icon(Icons.Filled.Add, "Add")
             }

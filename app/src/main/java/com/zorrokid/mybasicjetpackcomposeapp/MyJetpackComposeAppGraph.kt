@@ -2,6 +2,7 @@ package com.zorrokid.mybasicjetpackcomposeapp
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import com.zorrokid.mybasicjetpackcomposeapp.screens.add_item.AddItemScreen
 import com.zorrokid.mybasicjetpackcomposeapp.screens.login.LogInScreen
 import com.zorrokid.mybasicjetpackcomposeapp.screens.main.MainScreen
 import com.zorrokid.mybasicjetpackcomposeapp.screens.settings.SettingsScreen
@@ -36,5 +37,8 @@ fun NavGraphBuilder.myBasicJetpackComposeAppGraph(appState: MyJetpackComposeAppS
             openScreen = { route -> appState.navigate(route) },
             restartApp = { route -> appState.clearAndNavigate(route) }
         )
+    }
+    composable(route = MyBasicJetpackComposeScreen.AddItem.name){
+        AddItemScreen()
     }
 }

@@ -3,6 +3,7 @@ package com.zorrokid.mybasicjetpackcomposeapp.common.composable
 import androidx.annotation.StringRes
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -38,6 +39,23 @@ fun EmailField(value: String, onNewValue: (String) -> Unit, modifier: Modifier =
         ) }
     )
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun BarcodeField(barcode: String, onBarcodeChange: (String) -> Unit, modifier: Modifier = Modifier) {
+    OutlinedTextField(
+        singleLine = true,
+        modifier = modifier,
+        value = barcode,
+        onValueChange = onBarcodeChange,
+        placeholder = { Text(stringResource(id = R.string.barcode)) },
+        leadingIcon = { Icon(imageVector = Icons.Default.Edit, contentDescription = stringResource(
+            id = R.string.barcode
+        )
+        ) }
+    )
+}
+
 
 @Composable
 fun PasswordField(value: String, onNewValue: (String) -> Unit, modifier: Modifier = Modifier) {

@@ -14,4 +14,5 @@ class MainViewModel @Inject constructor(
 ) : MyBasicJetpackComposeAppViewModel(logService){
     val collectionItems = storageService.collectionItems
     fun onSettingsClick(openScreen: (String) -> Unit) = openScreen(MyBasicJetpackComposeScreen.Settings.name)
+    fun onAddItemClick(openScreen: (String) -> Unit) = openScreen(MyBasicJetpackComposeScreen.AddItem.name)
 }
