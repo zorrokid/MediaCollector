@@ -1,4 +1,4 @@
-package com.zorrokid.mybasicjetpackcomposeapp.screens.login
+package com.zorrokid.mybasicjetpackcomposeapp.screens.signup
 
 import androidx.compose.runtime.mutableStateOf
 import com.zorrokid.mybasicjetpackcomposeapp.MyBasicJetpackComposeScreen
@@ -9,17 +9,14 @@ import com.zorrokid.mybasicjetpackcomposeapp.screens.MyBasicJetpackComposeAppVie
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
+
 @HiltViewModel
-class LoginViewModel @Inject constructor(
+class SignUpViewModel @Inject constructor(
     private val accountService: AccountService,
     logService: LogService
-): MyBasicJetpackComposeAppViewModel(logService) {
-
-    // mutableStateOf creates an observable MutableState<T>, which is an observable type integrated with the compose runtime.
-    // Any changes to value schedules recomposition of any composable functions that read value.
-
-    var uiState = mutableStateOf(LoginUiState())
-    private set
+) : MyBasicJetpackComposeAppViewModel(logService) {
+    var uiState = mutableStateOf(SignUpUiState())
+        private set
 
     private val email
         get() = uiState.value.email
@@ -34,30 +31,27 @@ class LoginViewModel @Inject constructor(
     fun onPasswordChange(newValue: String) {
         uiState.value = uiState.value.copy(password = newValue)
     }
-
-    fun onSignUpClick() {
-        launchCatching {
-            accountService.linkAccount(email, password)
-        }
+    fun onRepeatPasswordChange(newValue: String) {
+        uiState.value = uiState.value.copy(repeatPassword = newValue)
     }
 
-    fun onSignInClick(
-        openAndPopUp: (String, String) -> Unit
-    ) {
-        if (email.isBlank() || password.isBlank()) return
-
+    fun onSignUpClick(openAndPopUp: (String, String) -> Unit) {
         if (!email.isValidEmail()) {
-            // TODO error message
             return
         }
 
         if (password.isBlank()) {
-            // TODO error message
             return
         }
+
+        if (password != uiState.value.repeatPassword) {
+            return
+        }
+
         launchCatching {
-            accountService.authenticate(email, password)
-            openAndPopUp(MyBasicJetpackComposeScreen.Settings.name, MyBasicJetpackComposeScreen.LogIn.name)
+            accountService.linkAccount(email, password)
+            openAndPopUp(MyBasicJetpackComposeScreen.Settings.name, MyBasicJetpackComposeScreen.SignUp.name)
         }
     }
+
 }
