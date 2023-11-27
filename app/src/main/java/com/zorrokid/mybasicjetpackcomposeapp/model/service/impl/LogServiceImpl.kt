@@ -7,7 +7,5 @@ import javax.inject.Inject
 class LogServiceImpl @Inject constructor() : LogService{
     override fun logNonFatalCrash(throwable: Throwable) {
         Log.e("LogServiceImpl", throwable.toString())
-
-        TODO("Not yet implemented")
     }
 }

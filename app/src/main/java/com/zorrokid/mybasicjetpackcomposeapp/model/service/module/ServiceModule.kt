@@ -2,8 +2,10 @@ package com.zorrokid.mybasicjetpackcomposeapp.model.service.module
 
 import com.zorrokid.mybasicjetpackcomposeapp.model.service.AccountService
 import com.zorrokid.mybasicjetpackcomposeapp.model.service.LogService
+import com.zorrokid.mybasicjetpackcomposeapp.model.service.StorageService
 import com.zorrokid.mybasicjetpackcomposeapp.model.service.impl.AccountServiceImpl
 import com.zorrokid.mybasicjetpackcomposeapp.model.service.impl.LogServiceImpl
+import com.zorrokid.mybasicjetpackcomposeapp.model.service.impl.StorageServiceImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -21,4 +23,5 @@ abstract class ServiceModule {
     // The @Binds annotation tells Hilt which implementation to use when it needs to provide an instance of an interface.
     @Binds abstract fun provideAccountService(impl: AccountServiceImpl): AccountService
     @Binds abstract fun provideLogService(impl: LogServiceImpl): LogService
+    @Binds abstract fun provideStorageService(impl: StorageServiceImpl): StorageService
 }
