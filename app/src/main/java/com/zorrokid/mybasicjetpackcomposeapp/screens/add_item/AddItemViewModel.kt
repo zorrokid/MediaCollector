@@ -44,6 +44,6 @@ class AddItemViewModel @Inject constructor(
     ) {
         launchCatching {
             storageService.save(CollectionItem(barcode = barcode, userId = accountService.currentUserId ))
-            openAndPopUp(MyBasicJetpackComposeScreen.Settings.name, MyBasicJetpackComposeScreen.LogIn.name)
+            openAndPopUp(MyBasicJetpackComposeScreen.Main.name, MyBasicJetpackComposeScreen.AddItem.name)
         }}
 }

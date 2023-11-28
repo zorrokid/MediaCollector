@@ -1,6 +1,5 @@
 package com.zorrokid.mybasicjetpackcomposeapp.model.service.impl
 
-import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
 import com.zorrokid.mybasicjetpackcomposeapp.model.service.BarcodeScanService
 import kotlinx.coroutines.channels.awaitClose
