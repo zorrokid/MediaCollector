@@ -12,7 +12,16 @@ import javax.inject.Inject
 class BarcodeScanServiceImpl @Inject constructor(
     private val scanner: GmsBarcodeScanner
 ) : BarcodeScanService {
+
+    // Flow: An asynchronous data stream that sequentially emits values and completes normally or with an exception.
     override fun startScanning(): Flow<String?> {
+
+        // callbackFlow creates an instance of a cold Flow with elements that are sent to a
+        // SendChannel provided to the builder's block of code via ProducerScope.
+        // It allows elements to be produced by code that is running in a different context or concurrently.
+        // The resulting flow is cold, which means that block is called every time a
+        // terminal operator is applied to the resulting flow.
+        // https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/callback-flow.html
         return callbackFlow {
             scanner.startScan()
                 .addOnSuccessListener {

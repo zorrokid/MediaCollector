@@ -13,10 +13,16 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 
-// A Hilt module is a class that is annotated with @Module.
-// Like a Dagger module, it informs Hilt how to provide instances of certain types.
-// Unlike Dagger modules, you must annotate Hilt modules with @InstallIn to tell Hilt which
-// Android class each module will be used or installed in.
+/**
+ * This module provides app services for dependency injection with Hilt.
+ *
+ * Notes for myself:
+ * A Hilt module is a class that is annotated with @Module.
+ * It informs Hilt how to provide instances of certain types.
+ * You must annotate Hilt modules with @InstallIn to tell Hilt which
+ * Android class each module will be used or installed in.
+ */
+
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class ServiceModule {

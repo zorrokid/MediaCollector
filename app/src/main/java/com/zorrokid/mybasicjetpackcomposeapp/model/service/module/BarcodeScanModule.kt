@@ -11,6 +11,9 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 
+/**
+ * Provides the barcode scanner with context and options for dependency injection.
+ */
 @Module
 @InstallIn(SingletonComponent::class)
 object BarcodeScanModule {

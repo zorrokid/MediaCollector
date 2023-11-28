@@ -10,6 +10,9 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 
+/**
+ * Provides the Firebase services for dependency injection.
+ */
 @Module
 @InstallIn(SingletonComponent::class)
 object FirebaseModule {
