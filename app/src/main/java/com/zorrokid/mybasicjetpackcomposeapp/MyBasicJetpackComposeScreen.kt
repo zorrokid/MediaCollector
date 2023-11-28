@@ -10,4 +10,5 @@ enum class MyBasicJetpackComposeScreen(@StringRes val title: Int) {
     Splash(title = R.string.splash),
     Settings(title = R.string.settings),
     AddItem(title = R.string.add_item),
+    Search(title = R.string.search),
 }

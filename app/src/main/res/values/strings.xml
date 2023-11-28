@@ -17,4 +17,5 @@
     <string name="submit">Submit</string>
     <string name="add_item">Add item</string>
     <string name="scan_barcode">Scan barcode</string>
+    <string name="search">Search</string>
 </resources>
