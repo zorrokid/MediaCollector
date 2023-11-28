@@ -56,7 +56,6 @@ fun MainScreenContent(
             }
         },
         content = { padding ->
-            
             Column(modifier = modifier.padding(padding)) {
                 TopAppBar(title = { Text("Main screen") }, actions = {
                     Box(modifier){

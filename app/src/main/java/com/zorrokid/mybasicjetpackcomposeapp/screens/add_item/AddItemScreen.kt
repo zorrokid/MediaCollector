@@ -1,6 +1,13 @@
 package com.zorrokid.mybasicjetpackcomposeapp.screens.add_item
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -24,6 +31,7 @@ fun AddItemScreen(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddItemScreenContent(
     modifier: Modifier = Modifier,
@@ -32,9 +40,18 @@ fun AddItemScreenContent(
     onBarcodeChange: (String) -> Unit,
     onScanBarcodeClick: () -> Unit
 ) {
-    Column {
-        BarcodeField(uiState.barcode, onBarcodeChange, modifier)
-        BarcodeScanButton(onScanBarcodeClick, modifier)
-        SubmitButton(onSubmitClick, modifier)
-    }
+    Scaffold (
+        floatingActionButton = {
+            FloatingActionButton(onClick = onSubmitClick) {
+                Icon(Icons.Filled.Check, "Add")
+            }
+        },
+        content = { padding ->
+            Column(modifier = modifier.padding(padding)){
+                BarcodeField(uiState.barcode, onBarcodeChange, modifier)
+                BarcodeScanButton(onScanBarcodeClick, modifier)
+            }
+        }
+    )
+
 }
