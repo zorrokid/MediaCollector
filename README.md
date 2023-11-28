@@ -23,3 +23,11 @@ Using [Compose Material 3](https://developer.android.com/jetpack/androidx/releas
 # Dependency Injection
 
 Using [Hilt](https://developer.android.com/training/dependency-injection/hilt-android) for dependency injection.
+
+# Dependencies
+
+## Google code scanner
+
+[Google code scanner](https://developers.google.com/ml-kit/vision/barcode-scanning/code-scanner) is used for barcode scanning. No camera permission is needed for this since scanning task is provided by Google Play services and only the scan results are provided for the app. App is configure to download scanner module automatically when app is installed from Play Store. Found a really nice example how to use barcode scanner module [here](https://github.com/akash251/Clean-architecture-barcode-scanner-using-Jetpack-compose)
+
+

@@ -6,6 +6,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.zorrokid.mybasicjetpackcomposeapp.common.composable.BarcodeField
+import com.zorrokid.mybasicjetpackcomposeapp.common.composable.BarcodeScanButton
 import com.zorrokid.mybasicjetpackcomposeapp.common.composable.SubmitButton
 
 @Composable
@@ -18,7 +19,8 @@ fun AddItemScreen(
     AddItemScreenContent(
         uiState = uiState,
         onSubmitClick = { viewModel.onSubmitClick(openAndPopUp) },
-        onBarcodeChange = viewModel::onBarcodeChange
+        onBarcodeChange = viewModel::onBarcodeChange,
+        onScanBarcodeClick = viewModel::onScanBarcodeClick
     )
 }
 
@@ -27,10 +29,12 @@ fun AddItemScreenContent(
     modifier: Modifier = Modifier,
     uiState: AddItemUiState,
     onSubmitClick: () -> Unit,
-    onBarcodeChange: (String) -> Unit
+    onBarcodeChange: (String) -> Unit,
+    onScanBarcodeClick: () -> Unit
 ) {
     Column {
         BarcodeField(uiState.barcode, onBarcodeChange, modifier)
+        BarcodeScanButton(onScanBarcodeClick, modifier)
         SubmitButton(onSubmitClick, modifier)
     }
 }

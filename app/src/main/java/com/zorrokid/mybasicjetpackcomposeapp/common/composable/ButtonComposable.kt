@@ -13,3 +13,10 @@ fun SubmitButton(onSubmitClick: () -> Unit, modifier: Modifier = Modifier) {
         Text(stringResource(id = R.string.submit))
     }
 }
+
+@Composable
+fun BarcodeScanButton(onScanBarcodeClick: () -> Unit, modifier: Modifier = Modifier) {
+    Button(onClick = onScanBarcodeClick, modifier = modifier) {
+        Text(stringResource(id = R.string.scan_barcode))
+    }
+}
