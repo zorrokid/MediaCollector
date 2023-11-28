@@ -14,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.zorrokid.mybasicjetpackcomposeapp.common.composable.BarcodeField
 import com.zorrokid.mybasicjetpackcomposeapp.common.composable.BarcodeScanButton
-import com.zorrokid.mybasicjetpackcomposeapp.common.composable.SubmitButton
 
 @Composable
 fun AddItemScreen(
