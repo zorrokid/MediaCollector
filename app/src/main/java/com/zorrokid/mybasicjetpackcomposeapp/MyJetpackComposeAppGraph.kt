@@ -5,6 +5,7 @@ import androidx.navigation.compose.composable
 import com.zorrokid.mybasicjetpackcomposeapp.screens.add_item.AddItemScreen
 import com.zorrokid.mybasicjetpackcomposeapp.screens.login.LogInScreen
 import com.zorrokid.mybasicjetpackcomposeapp.screens.main.MainScreen
+import com.zorrokid.mybasicjetpackcomposeapp.screens.search.SearchScreen
 import com.zorrokid.mybasicjetpackcomposeapp.screens.settings.SettingsScreen
 import com.zorrokid.mybasicjetpackcomposeapp.screens.signup.SignUpScreen
 import com.zorrokid.mybasicjetpackcomposeapp.screens.splash.SplashScreen
@@ -41,6 +42,11 @@ fun NavGraphBuilder.myBasicJetpackComposeAppGraph(appState: MyJetpackComposeAppS
     composable(route = MyBasicJetpackComposeScreen.AddItem.name){
         AddItemScreen(
             openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) }
+        )
+    }
+    composable(route = MyBasicJetpackComposeScreen.Search.name){
+        SearchScreen(
+            openScreen = { route -> appState.navigate(route) }
         )
     }
 }
