@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zorrokid.mybasicjetpackcomposeapp.MyBasicJetpackComposeScreen
+import com.zorrokid.mybasicjetpackcomposeapp.common.composable.MainNavigationBar
 import com.zorrokid.mybasicjetpackcomposeapp.model.CollectionItem
 
 @Composable
@@ -90,29 +91,3 @@ fun MainScreenContent(
     )
 }
 
-@Composable
-fun MainNavigationBar(openScreen: (String) -> Unit) {
-    var selectedItem by remember { mutableStateOf(0) }
-    val items = listOf(
-        MyBasicJetpackComposeScreen.Main.name,
-        MyBasicJetpackComposeScreen.Search.name,
-        MyBasicJetpackComposeScreen.Settings.name
-    )
-    NavigationBar{
-        items.forEachIndexed { index, item ->
-            NavigationBarItem(
-                selected = index == selectedItem,
-                onClick = {
-                    selectedItem = index
-                    openScreen(item)
-                  },
-                icon = {
-                    Icon(Icons.Filled.Add, item)
-                },
-                label = {
-                    Text(item)
-                }
-            )
-        }
-    }
-}
