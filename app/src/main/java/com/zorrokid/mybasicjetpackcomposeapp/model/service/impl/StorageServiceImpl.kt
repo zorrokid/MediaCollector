@@ -7,6 +7,7 @@ import com.zorrokid.mybasicjetpackcomposeapp.model.service.AccountService
 import com.zorrokid.mybasicjetpackcomposeapp.model.service.StorageService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class StorageServiceImpl
@@ -22,9 +23,11 @@ class StorageServiceImpl
         TODO("Not yet implemented")
     }
 
-    override suspend fun save(task: CollectionItem): String {
-        TODO("Not yet implemented")
+    override suspend fun save(collectionItem: CollectionItem): String {
+        val collectionItemWithUserId = collectionItem.copy(userId = auth.currentUserId)
+        return firestore.collection(COLLECTION_ITEM_COLLECTION).add(collectionItemWithUserId).await().id
     }
+
     override suspend fun update(task: CollectionItem) {
         TODO("Not yet implemented")
     }
