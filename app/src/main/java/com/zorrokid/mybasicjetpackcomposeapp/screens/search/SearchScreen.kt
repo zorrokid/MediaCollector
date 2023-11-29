@@ -12,9 +12,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zorrokid.mybasicjetpackcomposeapp.common.composable.BarcodeField
 import com.zorrokid.mybasicjetpackcomposeapp.common.composable.BarcodeScanButton
+import com.zorrokid.mybasicjetpackcomposeapp.common.composable.ItemList
 import com.zorrokid.mybasicjetpackcomposeapp.common.composable.MainNavigationBar
+import com.zorrokid.mybasicjetpackcomposeapp.model.CollectionItem
 
 @Composable
 fun SearchScreen(
@@ -22,13 +25,14 @@ fun SearchScreen(
     openScreen: (String) -> Unit
 ) {
     val uiState by viewModel.uiState
-
+    val searchResults = uiState.searchResults.collectAsStateWithLifecycle(emptyList())
     SearchScreenContent(
         uiState = uiState,
         onSubmitClick = viewModel::onSubmitClick,
         onBarcodeChange = viewModel::onBarcodeChange,
         onScanBarcodeClick = viewModel::onScanBarcodeClick,
-        openScreen = openScreen
+        openScreen = openScreen,
+        searchResults = searchResults.value
     )
 }
 
@@ -40,7 +44,8 @@ fun SearchScreenContent(
     onSubmitClick: () -> Unit,
     onBarcodeChange: (String) -> Unit,
     onScanBarcodeClick: () -> Unit,
-    openScreen: (String) -> Unit
+    openScreen: (String) -> Unit,
+    searchResults: List<CollectionItem>
 ) {
     Scaffold (
         floatingActionButton = {
@@ -52,6 +57,7 @@ fun SearchScreenContent(
             Column(modifier = modifier.padding(padding)){
                 BarcodeField(uiState.barcode, onBarcodeChange, modifier)
                 BarcodeScanButton(onScanBarcodeClick, modifier)
+                ItemList(collectionItems = searchResults)
             }
         },
         bottomBar = {
