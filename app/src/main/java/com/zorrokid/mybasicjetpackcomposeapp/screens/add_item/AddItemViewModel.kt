@@ -3,13 +3,13 @@ package com.zorrokid.mybasicjetpackcomposeapp.screens.add_item
 import androidx.compose.runtime.mutableStateOf
 import com.zorrokid.mybasicjetpackcomposeapp.MyBasicJetpackComposeScreen
 import com.zorrokid.mybasicjetpackcomposeapp.model.CollectionItem
+import com.zorrokid.mybasicjetpackcomposeapp.model.ReleaseAreas.releaseAreas
 import com.zorrokid.mybasicjetpackcomposeapp.model.service.AccountService
 import com.zorrokid.mybasicjetpackcomposeapp.model.service.BarcodeScanService
 import com.zorrokid.mybasicjetpackcomposeapp.model.service.LogService
 import com.zorrokid.mybasicjetpackcomposeapp.model.service.StorageService
 import com.zorrokid.mybasicjetpackcomposeapp.screens.MyBasicJetpackComposeAppViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collectIndexed
 import javax.inject.Inject
 
 @HiltViewModel
@@ -37,6 +37,11 @@ class AddItemViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun onReleaseAreaSelect(releaseArea: String) {
+        val releaseArea = releaseAreas.find { it.name == releaseArea } ?: return
+        uiState.value = uiState.value.copy(releaseArea = releaseArea)
     }
 
     fun onSubmitClick(
