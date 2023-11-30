@@ -3,7 +3,7 @@ package com.zorrokid.mybasicjetpackcomposeapp.screens.add_item
 import androidx.compose.runtime.mutableStateOf
 import com.zorrokid.mybasicjetpackcomposeapp.MyBasicJetpackComposeScreen
 import com.zorrokid.mybasicjetpackcomposeapp.model.CollectionItem
-import com.zorrokid.mybasicjetpackcomposeapp.model.ReleaseAreas.releaseAreas
+import com.zorrokid.mybasicjetpackcomposeapp.model.ReleaseArea
 import com.zorrokid.mybasicjetpackcomposeapp.model.service.AccountService
 import com.zorrokid.mybasicjetpackcomposeapp.model.service.BarcodeScanService
 import com.zorrokid.mybasicjetpackcomposeapp.model.service.LogService
@@ -39,8 +39,7 @@ class AddItemViewModel @Inject constructor(
         }
     }
 
-    fun onReleaseAreaSelect(releaseArea: String) {
-        val releaseArea = releaseAreas.find { it.name == releaseArea } ?: return
+    fun onReleaseAreaSelect(releaseArea: ReleaseArea) {
         uiState.value = uiState.value.copy(releaseArea = releaseArea)
     }
 
