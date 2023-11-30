@@ -25,6 +25,9 @@ class AddItemViewModel @Inject constructor(
     private val barcode
         get() = uiState.value.barcode
 
+    private val releaseArea
+        get() = uiState.value.releaseArea
+
     fun onBarcodeChange(newValue: String) {
         uiState.value = uiState.value.copy(barcode = newValue)
     }
@@ -47,7 +50,12 @@ class AddItemViewModel @Inject constructor(
         openAndPopUp: (String, String) -> Unit
     ) {
         launchCatching {
-            storageService.save(CollectionItem(barcode = barcode, userId = accountService.currentUserId ))
+            val collectionItem = CollectionItem(
+                barcode = barcode,
+                userId = accountService.currentUserId,
+                releaseArea = releaseArea.countryCodes.toList()
+            )
+            storageService.save(collectionItem)
             openAndPopUp(MyBasicJetpackComposeScreen.Main.name, MyBasicJetpackComposeScreen.AddItem.name)
         }}
 }
