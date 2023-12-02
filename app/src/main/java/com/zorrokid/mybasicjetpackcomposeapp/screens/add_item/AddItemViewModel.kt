@@ -7,6 +7,7 @@ import com.zorrokid.mybasicjetpackcomposeapp.model.ReleaseArea
 import com.zorrokid.mybasicjetpackcomposeapp.model.service.AccountService
 import com.zorrokid.mybasicjetpackcomposeapp.model.service.BarcodeScanService
 import com.zorrokid.mybasicjetpackcomposeapp.model.service.LogService
+import com.zorrokid.mybasicjetpackcomposeapp.model.service.ReleaseAreaService
 import com.zorrokid.mybasicjetpackcomposeapp.model.service.StorageService
 import com.zorrokid.mybasicjetpackcomposeapp.screens.MyBasicJetpackComposeAppViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,8 +18,10 @@ class AddItemViewModel @Inject constructor(
     logService: LogService,
     private val storageService: StorageService,
     private val accountService: AccountService,
-    private val barcodeScanService: BarcodeScanService
+    private val barcodeScanService: BarcodeScanService,
+    private val releaseAreaService: ReleaseAreaService
 ) : MyBasicJetpackComposeAppViewModel(logService) {
+    val releaseAreas = releaseAreaService.releaseAreas
     var uiState = mutableStateOf(AddItemUiState())
         private set
 

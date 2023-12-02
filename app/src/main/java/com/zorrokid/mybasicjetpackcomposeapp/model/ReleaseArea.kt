@@ -1,7 +1,10 @@
 package com.zorrokid.mybasicjetpackcomposeapp.model
 
+import com.google.firebase.firestore.DocumentId
+
 data class ReleaseArea(
-    val countryCodes: Set<String> = emptySet(),
-    val name: String = ""
+    @DocumentId val id: String = "",
+    val name: String = "",
+    val countryCodes: List<String> = emptyList(),
 )
 

@@ -3,10 +3,12 @@ package com.zorrokid.mybasicjetpackcomposeapp.model.service.module
 import com.zorrokid.mybasicjetpackcomposeapp.model.service.AccountService
 import com.zorrokid.mybasicjetpackcomposeapp.model.service.BarcodeScanService
 import com.zorrokid.mybasicjetpackcomposeapp.model.service.LogService
+import com.zorrokid.mybasicjetpackcomposeapp.model.service.ReleaseAreaService
 import com.zorrokid.mybasicjetpackcomposeapp.model.service.StorageService
 import com.zorrokid.mybasicjetpackcomposeapp.model.service.impl.AccountServiceImpl
 import com.zorrokid.mybasicjetpackcomposeapp.model.service.impl.BarcodeScanServiceImpl
 import com.zorrokid.mybasicjetpackcomposeapp.model.service.impl.LogServiceImpl
+import com.zorrokid.mybasicjetpackcomposeapp.model.service.impl.ReleaseAreaServiceImpl
 import com.zorrokid.mybasicjetpackcomposeapp.model.service.impl.StorageServiceImpl
 import dagger.Binds
 import dagger.Module
@@ -33,4 +35,5 @@ abstract class ServiceModule {
     @Binds abstract fun provideLogService(impl: LogServiceImpl): LogService
     @Binds abstract fun provideStorageService(impl: StorageServiceImpl): StorageService
     @Binds abstract fun provideBarcodeScanService(impl: BarcodeScanServiceImpl): BarcodeScanService
+    @Binds abstract fun provideReleaseAreaService(impl: ReleaseAreaServiceImpl): ReleaseAreaService
 }

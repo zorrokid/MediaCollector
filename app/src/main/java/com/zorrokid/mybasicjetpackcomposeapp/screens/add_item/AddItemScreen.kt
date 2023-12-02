@@ -23,10 +23,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zorrokid.mybasicjetpackcomposeapp.common.composable.BarcodeField
 import com.zorrokid.mybasicjetpackcomposeapp.common.composable.BarcodeScanButton
 import com.zorrokid.mybasicjetpackcomposeapp.model.ReleaseArea
-import com.zorrokid.mybasicjetpackcomposeapp.model.ReleaseAreas.releaseAreas
 
 @Composable
 fun AddItemScreen(
@@ -35,13 +35,15 @@ fun AddItemScreen(
 ) {
     val uiState by viewModel.uiState
 
+    val releaseAreas = viewModel.releaseAreas.collectAsStateWithLifecycle(emptyList())
+
     AddItemScreenContent(
         uiState = uiState,
         onSubmitClick = { viewModel.onSubmitClick(openAndPopUp) },
         onBarcodeChange = viewModel::onBarcodeChange,
         onScanBarcodeClick = viewModel::onScanBarcodeClick,
-        onReleaseAreaSelect = viewModel::onReleaseAreaSelect
-
+        onReleaseAreaSelect = viewModel::onReleaseAreaSelect,
+        releaseAreas = releaseAreas.value,
     )
 }
 
@@ -54,6 +56,7 @@ fun AddItemScreenContent(
     onBarcodeChange: (String) -> Unit,
     onScanBarcodeClick: () -> Unit,
     onReleaseAreaSelect: (ReleaseArea) -> Unit,
+    releaseAreas: List<ReleaseArea>,
 ) {
     Scaffold (
         floatingActionButton = {
@@ -65,16 +68,19 @@ fun AddItemScreenContent(
             Column(modifier = modifier.padding(padding)){
                 BarcodeField(uiState.barcode, onBarcodeChange, modifier)
                 BarcodeScanButton(onScanBarcodeClick, modifier)
-                ReleaseAreasListWithBox(onReleaseAreaSelect = onReleaseAreaSelect, uiState.releaseArea)
+                ReleaseAreasListWithBox(
+                    onReleaseAreaSelect = onReleaseAreaSelect,
+                    uiState.releaseArea,
+                    releaseAreas
+                )
             }
         }
     )
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ReleaseAreasListWithBox(onReleaseAreaSelect: (ReleaseArea) -> Unit, selectedArea: ReleaseArea) {
+fun ReleaseAreasListWithBox(onReleaseAreaSelect: (ReleaseArea) -> Unit, selectedArea: ReleaseArea, releaseAreas: List<ReleaseArea>) {
     var expanded by remember {
         mutableStateOf(false)
     }
