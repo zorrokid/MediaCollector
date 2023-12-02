@@ -1,6 +1,8 @@
 package com.zorrokid.mybasicjetpackcomposeapp.common.composable
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.windowInsetsEndWidth
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
@@ -22,6 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import com.zorrokid.mybasicjetpackcomposeapp.R
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -49,11 +52,20 @@ fun BarcodeField(barcode: String, onBarcodeChange: (String) -> Unit, modifier: M
         value = barcode,
         onValueChange = onBarcodeChange,
         placeholder = { Text(stringResource(id = R.string.barcode)) },
-        leadingIcon = { Icon(imageVector = Icons.Default.Edit, contentDescription = stringResource(
-            id = R.string.barcode
-        )
-        ) }
+        leadingIcon = {
+            Icon(
+                imageVector = Icons.Default.Edit,
+                contentDescription = stringResource(R.string.barcode)
+            )
+        },
+        label = { Text("Barcode") }
     )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun BarcodeFieldPreview(){
+    BarcodeField(barcode = "123455", onBarcodeChange = {})
 }
 
 

@@ -1,6 +1,9 @@
 package com.zorrokid.mybasicjetpackcomposeapp.screens.add_item
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -20,8 +23,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.VerticalAlignmentLine
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zorrokid.mybasicjetpackcomposeapp.common.composable.BarcodeField
@@ -66,8 +72,11 @@ fun AddItemScreenContent(
         },
         content = { padding ->
             Column(modifier = modifier.padding(padding)){
-                BarcodeField(uiState.barcode, onBarcodeChange, modifier)
-                BarcodeScanButton(onScanBarcodeClick, modifier)
+                BarcodeInput(
+                    onBarcodeChange = onBarcodeChange,
+                    onScanBarcodeClick = onScanBarcodeClick,
+                    barcode = uiState.barcode
+                )
                 ReleaseAreasListWithBox(
                     onReleaseAreaSelect = onReleaseAreaSelect,
                     uiState.releaseArea,
@@ -75,6 +84,37 @@ fun AddItemScreenContent(
                 )
             }
         }
+    )
+}
+
+@Composable
+fun BarcodeInput(
+    onBarcodeChange: (String) -> Unit,
+    onScanBarcodeClick: () -> Unit,
+    barcode: String,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        BarcodeField(barcode, onBarcodeChange, modifier)
+        BarcodeScanButton(onScanBarcodeClick, modifier)
+    }
+}
+
+@Composable
+@Preview
+fun AddItemScreenContentPreview(){
+    val selectedArea = ReleaseArea("Test")
+    val uiState = AddItemUiState("12345", selectedArea);
+    val releaseAreas: List<ReleaseArea> = listOf(selectedArea)
+    AddItemScreenContent(
+        uiState = uiState,
+        onSubmitClick = {},
+        onBarcodeChange = {},
+        onScanBarcodeClick = {},
+        onReleaseAreaSelect = {}, releaseAreas = releaseAreas
     )
 }
 
