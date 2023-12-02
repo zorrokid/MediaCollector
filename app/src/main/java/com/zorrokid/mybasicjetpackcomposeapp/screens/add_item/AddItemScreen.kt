@@ -21,6 +21,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zorrokid.mybasicjetpackcomposeapp.common.composable.BarcodeField
@@ -112,4 +113,12 @@ fun ReleaseAreasListWithBox(onReleaseAreaSelect: (ReleaseArea) -> Unit, selected
                 }},
         )
     }
+}
+
+@Composable
+@Preview(showBackground = true)
+fun ReleaseAreasListWithBoxPreview(){
+    val releaseArea = ReleaseArea(name = "Example")
+    val releaseAreas: List<ReleaseArea> = listOf(releaseArea)
+    ReleaseAreasListWithBox(onReleaseAreaSelect = {}, selectedArea = releaseArea, releaseAreas = releaseAreas)
 }
