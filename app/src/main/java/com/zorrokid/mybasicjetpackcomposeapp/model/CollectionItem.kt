@@ -6,5 +6,8 @@ data class CollectionItem(
     @DocumentId val id: String = "",
     val barcode: String = "",
     val userId: String = "",
-    val releaseArea: List<String> = emptyList()
+    // store id of denormalized data for easy updates
+    val releaseAreaId: String = "",
+    // denormalize are to string for easy fetch
+    val releaseAreaName: String = ""
 )

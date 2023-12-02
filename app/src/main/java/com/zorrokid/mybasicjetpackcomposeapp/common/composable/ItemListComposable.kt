@@ -20,6 +20,7 @@ fun ItemList(collectionItems: List<CollectionItem>) {
             ){
                 Column {
                     Text(text = collectionItem.barcode)
+                    Text(text = collectionItem.releaseAreaName)
                 }
             }
         }

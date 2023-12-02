@@ -56,7 +56,8 @@ class AddItemViewModel @Inject constructor(
             val collectionItem = CollectionItem(
                 barcode = barcode,
                 userId = accountService.currentUserId,
-                releaseArea = releaseArea.countryCodes.toList()
+                releaseAreaId = releaseArea.id,
+                releaseAreaName = releaseArea.name
             )
             storageService.save(collectionItem)
             openAndPopUp(MyBasicJetpackComposeScreen.Main.name, MyBasicJetpackComposeScreen.AddItem.name)
