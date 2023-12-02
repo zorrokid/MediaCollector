@@ -23,15 +23,15 @@ fun ItemList(collectionItems: List<CollectionItem>) {
 }
 
 @Composable
-fun ItemListCard(collectionItem: CollectionItem) {
+fun ItemListCard(collectionItem: CollectionItem, modifier: Modifier = Modifier) {
     Card(
-        modifier = Modifier
+        modifier = modifier
             .padding(8.dp, 0.dp, 8.dp, 8.dp)
             .fillMaxWidth(),
     ){
         Column {
-            Text(text = collectionItem.barcode)
-            Text(text = collectionItem.releaseAreaName)
+            Text(text = collectionItem.barcode, modifier = modifier.padding(8.dp))
+            Text(text = collectionItem.releaseAreaName, modifier = modifier.padding(8.dp))
         }
     }}
 
