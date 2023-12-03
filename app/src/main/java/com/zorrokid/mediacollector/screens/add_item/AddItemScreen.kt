@@ -1,4 +1,4 @@
-package com.zorrokid.mybasicjetpackcomposeapp.screens.add_item
+package com.zorrokid.mediacollector.screens.add_item
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -14,10 +14,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.zorrokid.mybasicjetpackcomposeapp.common.composable.BarcodeInput
-import com.zorrokid.mybasicjetpackcomposeapp.common.composable.DropDownWithTextField
-import com.zorrokid.mybasicjetpackcomposeapp.model.ConditionClassification
-import com.zorrokid.mybasicjetpackcomposeapp.model.ReleaseArea
+import com.zorrokid.mediacollector.common.composable.BarcodeInput
+import com.zorrokid.mediacollector.common.composable.DropDownWithTextField
+import com.zorrokid.mediacollector.model.ConditionClassification
+import com.zorrokid.mediacollector.model.ReleaseArea
 
 @Composable
 fun AddItemScreen(

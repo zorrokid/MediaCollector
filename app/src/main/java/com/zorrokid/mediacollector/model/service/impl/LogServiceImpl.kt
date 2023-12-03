@@ -1,7 +1,7 @@
-package com.zorrokid.mybasicjetpackcomposeapp.model.service.impl
+package com.zorrokid.mediacollector.model.service.impl
 
 import android.util.Log
-import com.zorrokid.mybasicjetpackcomposeapp.model.service.LogService
+import com.zorrokid.mediacollector.model.service.LogService
 import javax.inject.Inject
 
 class LogServiceImpl @Inject constructor() : LogService{

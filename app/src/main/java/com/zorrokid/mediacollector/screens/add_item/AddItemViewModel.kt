@@ -1,17 +1,17 @@
-package com.zorrokid.mybasicjetpackcomposeapp.screens.add_item
+package com.zorrokid.mediacollector.screens.add_item
 
 import androidx.compose.runtime.mutableStateOf
-import com.zorrokid.mybasicjetpackcomposeapp.MyBasicJetpackComposeScreen
-import com.zorrokid.mybasicjetpackcomposeapp.model.ConditionClassification
-import com.zorrokid.mybasicjetpackcomposeapp.model.CollectionItem
-import com.zorrokid.mybasicjetpackcomposeapp.model.ReleaseArea
-import com.zorrokid.mybasicjetpackcomposeapp.model.service.AccountService
-import com.zorrokid.mybasicjetpackcomposeapp.model.service.BarcodeScanService
-import com.zorrokid.mybasicjetpackcomposeapp.model.service.ConditionClassificationService
-import com.zorrokid.mybasicjetpackcomposeapp.model.service.LogService
-import com.zorrokid.mybasicjetpackcomposeapp.model.service.ReleaseAreaService
-import com.zorrokid.mybasicjetpackcomposeapp.model.service.StorageService
-import com.zorrokid.mybasicjetpackcomposeapp.screens.MyBasicJetpackComposeAppViewModel
+import com.zorrokid.mediacollector.MyBasicJetpackComposeScreen
+import com.zorrokid.mediacollector.model.ConditionClassification
+import com.zorrokid.mediacollector.model.CollectionItem
+import com.zorrokid.mediacollector.model.ReleaseArea
+import com.zorrokid.mediacollector.model.service.AccountService
+import com.zorrokid.mediacollector.model.service.BarcodeScanService
+import com.zorrokid.mediacollector.model.service.ConditionClassificationService
+import com.zorrokid.mediacollector.model.service.LogService
+import com.zorrokid.mediacollector.model.service.ReleaseAreaService
+import com.zorrokid.mediacollector.model.service.StorageService
+import com.zorrokid.mediacollector.screens.MyBasicJetpackComposeAppViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

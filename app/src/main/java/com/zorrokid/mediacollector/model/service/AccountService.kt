@@ -1,6 +1,6 @@
-package com.zorrokid.mybasicjetpackcomposeapp.model.service
+package com.zorrokid.mediacollector.model.service
 
-import com.zorrokid.mybasicjetpackcomposeapp.model.User
+import com.zorrokid.mediacollector.model.User
 import kotlinx.coroutines.flow.Flow
 
 interface AccountService {

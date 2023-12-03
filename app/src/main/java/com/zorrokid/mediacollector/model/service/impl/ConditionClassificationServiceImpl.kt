@@ -1,9 +1,9 @@
-package com.zorrokid.mybasicjetpackcomposeapp.model.service.impl
+package com.zorrokid.mediacollector.model.service.impl
 
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.dataObjects
-import com.zorrokid.mybasicjetpackcomposeapp.model.ConditionClassification
-import com.zorrokid.mybasicjetpackcomposeapp.model.service.ConditionClassificationService
+import com.zorrokid.mediacollector.model.ConditionClassification
+import com.zorrokid.mediacollector.model.service.ConditionClassificationService
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

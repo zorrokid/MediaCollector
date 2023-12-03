@@ -1,7 +1,7 @@
-package com.zorrokid.mybasicjetpackcomposeapp.model.service.impl
+package com.zorrokid.mediacollector.model.service.impl
 
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
-import com.zorrokid.mybasicjetpackcomposeapp.model.service.BarcodeScanService
+import com.zorrokid.mediacollector.model.service.BarcodeScanService
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow

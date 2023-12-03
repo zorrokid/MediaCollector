@@ -1,4 +1,4 @@
-package com.zorrokid.mybasicjetpackcomposeapp.screens.signup
+package com.zorrokid.mediacollector.screens.signup
 
 data class SignUpUiState(
     val email: String = "",

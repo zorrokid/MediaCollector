@@ -1,4 +1,4 @@
-package com.zorrokid.mybasicjetpackcomposeapp.ui.theme
+package com.zorrokid.mediacollector.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

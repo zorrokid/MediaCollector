@@ -1,4 +1,4 @@
-package com.zorrokid.mybasicjetpackcomposeapp.model
+package com.zorrokid.mediacollector.model
 
 import com.google.firebase.firestore.DocumentId
 

@@ -1,4 +1,4 @@
-package com.zorrokid.mybasicjetpackcomposeapp
+package com.zorrokid.mediacollector
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import com.zorrokid.mybasicjetpackcomposeapp.ui.theme.MyBasicJetpackComposeAppTheme
+import com.zorrokid.mediacollector.ui.theme.MyBasicJetpackComposeAppTheme
 
 
 @OptIn(ExperimentalMaterial3Api::class)

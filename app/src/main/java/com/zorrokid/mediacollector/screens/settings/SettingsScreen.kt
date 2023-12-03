@@ -1,4 +1,4 @@
-package com.zorrokid.mybasicjetpackcomposeapp.screens.settings
+package com.zorrokid.mediacollector.screens.settings
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -17,8 +17,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.zorrokid.mybasicjetpackcomposeapp.R
-import com.zorrokid.mybasicjetpackcomposeapp.common.composable.MainNavigationBar
+import com.zorrokid.mediacollector.R
+import com.zorrokid.mediacollector.common.composable.MainNavigationBar
 
 @Composable
 fun SettingsScreen(

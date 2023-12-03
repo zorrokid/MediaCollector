@@ -1,9 +1,9 @@
-package com.zorrokid.mybasicjetpackcomposeapp.screens.settings
+package com.zorrokid.mediacollector.screens.settings
 
-import com.zorrokid.mybasicjetpackcomposeapp.MyBasicJetpackComposeScreen
-import com.zorrokid.mybasicjetpackcomposeapp.model.service.AccountService
-import com.zorrokid.mybasicjetpackcomposeapp.model.service.LogService
-import com.zorrokid.mybasicjetpackcomposeapp.screens.MyBasicJetpackComposeAppViewModel
+import com.zorrokid.mediacollector.MyBasicJetpackComposeScreen
+import com.zorrokid.mediacollector.model.service.AccountService
+import com.zorrokid.mediacollector.model.service.LogService
+import com.zorrokid.mediacollector.screens.MyBasicJetpackComposeAppViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject

@@ -1,8 +1,8 @@
-package com.zorrokid.mybasicjetpackcomposeapp.screens
+package com.zorrokid.mediacollector.screens
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.zorrokid.mybasicjetpackcomposeapp.model.service.LogService
+import com.zorrokid.mediacollector.model.service.LogService
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch

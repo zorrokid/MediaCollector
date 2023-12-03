@@ -1,4 +1,4 @@
-package com.zorrokid.mybasicjetpackcomposeapp.model.service.module
+package com.zorrokid.mediacollector.model.service.module
 
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth

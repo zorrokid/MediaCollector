@@ -1,4 +1,4 @@
-package com.zorrokid.mybasicjetpackcomposeapp.model.service
+package com.zorrokid.mediacollector.model.service
 
 import kotlinx.coroutines.flow.Flow
 

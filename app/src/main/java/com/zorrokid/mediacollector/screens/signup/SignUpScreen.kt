@@ -1,4 +1,4 @@
-package com.zorrokid.mybasicjetpackcomposeapp.screens.signup
+package com.zorrokid.mediacollector.screens.signup
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,10 +14,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.zorrokid.mybasicjetpackcomposeapp.R
-import com.zorrokid.mybasicjetpackcomposeapp.common.composable.EmailField
-import com.zorrokid.mybasicjetpackcomposeapp.common.composable.PasswordField
-import com.zorrokid.mybasicjetpackcomposeapp.common.composable.RepeatPasswordField
+import com.zorrokid.mediacollector.R
+import com.zorrokid.mediacollector.common.composable.EmailField
+import com.zorrokid.mediacollector.common.composable.PasswordField
+import com.zorrokid.mediacollector.common.composable.RepeatPasswordField
 
 @Composable
 fun SignUpScreen(

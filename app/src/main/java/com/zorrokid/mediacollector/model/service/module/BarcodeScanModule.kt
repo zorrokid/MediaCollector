@@ -1,4 +1,4 @@
-package com.zorrokid.mybasicjetpackcomposeapp.model.service.module
+package com.zorrokid.mediacollector.model.service.module
 
 import android.app.Application
 import android.content.Context

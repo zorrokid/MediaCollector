@@ -1,4 +1,4 @@
-package com.zorrokid.mybasicjetpackcomposeapp.common.composable
+package com.zorrokid.mediacollector.common.composable
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.DropdownMenu
@@ -15,8 +15,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.zorrokid.mybasicjetpackcomposeapp.model.IdAndNameObject
-import com.zorrokid.mybasicjetpackcomposeapp.model.ReleaseArea
+import com.zorrokid.mediacollector.model.IdAndNameObject
+import com.zorrokid.mediacollector.model.ReleaseArea
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

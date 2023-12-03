@@ -1,6 +1,6 @@
-package com.zorrokid.mybasicjetpackcomposeapp.model.service
+package com.zorrokid.mediacollector.model.service
 
-import com.zorrokid.mybasicjetpackcomposeapp.model.CollectionItem
+import com.zorrokid.mediacollector.model.CollectionItem
 import kotlinx.coroutines.flow.Flow
 
 interface StorageService {

@@ -1,4 +1,4 @@
-package com.zorrokid.mybasicjetpackcomposeapp.common.composable
+package com.zorrokid.mediacollector.common.composable
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth

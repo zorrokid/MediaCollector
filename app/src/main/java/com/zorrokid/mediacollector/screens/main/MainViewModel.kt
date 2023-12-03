@@ -1,9 +1,9 @@
-package com.zorrokid.mybasicjetpackcomposeapp.screens.main
+package com.zorrokid.mediacollector.screens.main
 
-import com.zorrokid.mybasicjetpackcomposeapp.MyBasicJetpackComposeScreen
-import com.zorrokid.mybasicjetpackcomposeapp.model.service.LogService
-import com.zorrokid.mybasicjetpackcomposeapp.model.service.StorageService
-import com.zorrokid.mybasicjetpackcomposeapp.screens.MyBasicJetpackComposeAppViewModel
+import com.zorrokid.mediacollector.MyBasicJetpackComposeScreen
+import com.zorrokid.mediacollector.model.service.LogService
+import com.zorrokid.mediacollector.model.service.StorageService
+import com.zorrokid.mediacollector.screens.MyBasicJetpackComposeAppViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

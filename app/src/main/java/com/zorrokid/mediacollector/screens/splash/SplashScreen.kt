@@ -1,4 +1,4 @@
-package com.zorrokid.mybasicjetpackcomposeapp.screens.splash
+package com.zorrokid.mediacollector.screens.splash
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -17,7 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.zorrokid.mybasicjetpackcomposeapp.R
+import com.zorrokid.mediacollector.R
 import kotlinx.coroutines.delay
 
 private const val SPLASH_TIMEOUT = 1000L

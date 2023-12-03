@@ -1,4 +1,4 @@
-package com.zorrokid.mybasicjetpackcomposeapp.screens.search
+package com.zorrokid.mediacollector.screens.search
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -13,10 +13,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.zorrokid.mybasicjetpackcomposeapp.common.composable.BarcodeInput
-import com.zorrokid.mybasicjetpackcomposeapp.common.composable.ItemList
-import com.zorrokid.mybasicjetpackcomposeapp.common.composable.MainNavigationBar
-import com.zorrokid.mybasicjetpackcomposeapp.model.CollectionItem
+import com.zorrokid.mediacollector.common.composable.BarcodeInput
+import com.zorrokid.mediacollector.common.composable.ItemList
+import com.zorrokid.mediacollector.common.composable.MainNavigationBar
+import com.zorrokid.mediacollector.model.CollectionItem
 
 @Composable
 fun SearchScreen(

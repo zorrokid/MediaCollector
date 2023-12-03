@@ -1,6 +1,6 @@
-package com.zorrokid.mybasicjetpackcomposeapp.model.service
+package com.zorrokid.mediacollector.model.service
 
-import com.zorrokid.mybasicjetpackcomposeapp.model.ReleaseArea
+import com.zorrokid.mediacollector.model.ReleaseArea
 import kotlinx.coroutines.flow.Flow
 
 interface ReleaseAreaService {

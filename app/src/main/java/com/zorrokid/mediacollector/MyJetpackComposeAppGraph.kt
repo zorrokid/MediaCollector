@@ -1,15 +1,15 @@
-package com.zorrokid.mybasicjetpackcomposeapp
+package com.zorrokid.mediacollector
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.zorrokid.mybasicjetpackcomposeapp.screens.add_item.AddItemScreen
-import com.zorrokid.mybasicjetpackcomposeapp.screens.login.LogInScreen
-import com.zorrokid.mybasicjetpackcomposeapp.screens.main.MainScreen
-import com.zorrokid.mybasicjetpackcomposeapp.screens.search.SearchScreen
-import com.zorrokid.mybasicjetpackcomposeapp.screens.settings.SettingsScreen
-import com.zorrokid.mybasicjetpackcomposeapp.screens.signup.SignUpScreen
-import com.zorrokid.mybasicjetpackcomposeapp.screens.splash.SplashScreen
-import com.zorrokid.mybasicjetpackcomposeapp.screens.start.StartScreen
+import com.zorrokid.mediacollector.screens.add_item.AddItemScreen
+import com.zorrokid.mediacollector.screens.login.LogInScreen
+import com.zorrokid.mediacollector.screens.main.MainScreen
+import com.zorrokid.mediacollector.screens.search.SearchScreen
+import com.zorrokid.mediacollector.screens.settings.SettingsScreen
+import com.zorrokid.mediacollector.screens.signup.SignUpScreen
+import com.zorrokid.mediacollector.screens.splash.SplashScreen
+import com.zorrokid.mediacollector.screens.start.StartScreen
 
 fun NavGraphBuilder.myBasicJetpackComposeAppGraph(appState: MyJetpackComposeAppState) {
     composable(route = MyBasicJetpackComposeScreen.Splash.name) {

@@ -1,4 +1,4 @@
-package com.zorrokid.mybasicjetpackcomposeapp.ui.theme
+package com.zorrokid.mediacollector.ui.theme
 
 import android.app.Activity
 import android.os.Build

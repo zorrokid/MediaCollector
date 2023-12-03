@@ -1,8 +1,6 @@
-package com.zorrokid.mybasicjetpackcomposeapp.common.composable
+package com.zorrokid.mediacollector.common.composable
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.windowInsetsEndWidth
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
@@ -25,7 +23,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
-import com.zorrokid.mybasicjetpackcomposeapp.R
+import com.zorrokid.mediacollector.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

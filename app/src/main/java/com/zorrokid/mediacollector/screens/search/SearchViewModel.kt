@@ -1,10 +1,10 @@
-package com.zorrokid.mybasicjetpackcomposeapp.screens.search
+package com.zorrokid.mediacollector.screens.search
 
 import androidx.compose.runtime.mutableStateOf
-import com.zorrokid.mybasicjetpackcomposeapp.model.service.BarcodeScanService
-import com.zorrokid.mybasicjetpackcomposeapp.model.service.LogService
-import com.zorrokid.mybasicjetpackcomposeapp.model.service.StorageService
-import com.zorrokid.mybasicjetpackcomposeapp.screens.MyBasicJetpackComposeAppViewModel
+import com.zorrokid.mediacollector.model.service.BarcodeScanService
+import com.zorrokid.mediacollector.model.service.LogService
+import com.zorrokid.mediacollector.model.service.StorageService
+import com.zorrokid.mediacollector.screens.MyBasicJetpackComposeAppViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject

@@ -1,4 +1,4 @@
-package com.zorrokid.mybasicjetpackcomposeapp.common.composable
+package com.zorrokid.mediacollector.common.composable
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -11,7 +11,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import com.zorrokid.mybasicjetpackcomposeapp.MyBasicJetpackComposeScreen
+import com.zorrokid.mediacollector.MyBasicJetpackComposeScreen
 
 @Composable
 fun MainNavigationBar(openScreen: (String) -> Unit) {

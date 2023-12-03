@@ -1,10 +1,10 @@
-package com.zorrokid.mybasicjetpackcomposeapp.model.service.impl
+package com.zorrokid.mediacollector.model.service.impl
 
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.dataObjects
-import com.zorrokid.mybasicjetpackcomposeapp.model.CollectionItem
-import com.zorrokid.mybasicjetpackcomposeapp.model.service.AccountService
-import com.zorrokid.mybasicjetpackcomposeapp.model.service.StorageService
+import com.zorrokid.mediacollector.model.CollectionItem
+import com.zorrokid.mediacollector.model.service.AccountService
+import com.zorrokid.mediacollector.model.service.StorageService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.tasks.await

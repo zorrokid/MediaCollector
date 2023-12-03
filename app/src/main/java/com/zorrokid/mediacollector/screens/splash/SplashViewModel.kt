@@ -1,11 +1,11 @@
-package com.zorrokid.mybasicjetpackcomposeapp.screens.splash
+package com.zorrokid.mediacollector.screens.splash
 
 import androidx.compose.runtime.mutableStateOf
 import com.google.firebase.auth.FirebaseAuthException
-import com.zorrokid.mybasicjetpackcomposeapp.MyBasicJetpackComposeScreen
-import com.zorrokid.mybasicjetpackcomposeapp.model.service.AccountService
-import com.zorrokid.mybasicjetpackcomposeapp.model.service.LogService
-import com.zorrokid.mybasicjetpackcomposeapp.screens.MyBasicJetpackComposeAppViewModel
+import com.zorrokid.mediacollector.MyBasicJetpackComposeScreen
+import com.zorrokid.mediacollector.model.service.AccountService
+import com.zorrokid.mediacollector.model.service.LogService
+import com.zorrokid.mediacollector.screens.MyBasicJetpackComposeAppViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

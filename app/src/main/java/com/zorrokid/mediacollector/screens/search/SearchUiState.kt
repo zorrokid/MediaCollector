@@ -1,6 +1,6 @@
-package com.zorrokid.mybasicjetpackcomposeapp.screens.search
+package com.zorrokid.mediacollector.screens.search
 
-import com.zorrokid.mybasicjetpackcomposeapp.model.CollectionItem
+import com.zorrokid.mediacollector.model.CollectionItem
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 

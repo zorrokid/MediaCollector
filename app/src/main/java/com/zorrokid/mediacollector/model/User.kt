@@ -1,4 +1,4 @@
-package com.zorrokid.mybasicjetpackcomposeapp.model
+package com.zorrokid.mediacollector.model
 
 data class User(
     val id: String = "",

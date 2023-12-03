@@ -1,3 +1,3 @@
-package com.zorrokid.mybasicjetpackcomposeapp.screens.settings
+package com.zorrokid.mediacollector.screens.settings
 
 data class SettingsUiState(val isAnonymousAccount: Boolean = true)

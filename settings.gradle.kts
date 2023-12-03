@@ -13,6 +13,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "MyBasicJetpackComposeApp"
+rootProject.name = "Media Collector"
 include(":app")
  

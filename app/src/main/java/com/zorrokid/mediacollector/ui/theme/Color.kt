@@ -1,4 +1,4 @@
-package com.zorrokid.mybasicjetpackcomposeapp.ui.theme
+package com.zorrokid.mediacollector.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

@@ -1,4 +1,4 @@
-package com.zorrokid.mybasicjetpackcomposeapp.model
+package com.zorrokid.mediacollector.model
 
 interface IdAndNameObject {
     val id: String

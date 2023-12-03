@@ -1,11 +1,11 @@
-package com.zorrokid.mybasicjetpackcomposeapp.screens.signup
+package com.zorrokid.mediacollector.screens.signup
 
 import androidx.compose.runtime.mutableStateOf
-import com.zorrokid.mybasicjetpackcomposeapp.MyBasicJetpackComposeScreen
-import com.zorrokid.mybasicjetpackcomposeapp.common.ext.isValidEmail
-import com.zorrokid.mybasicjetpackcomposeapp.model.service.AccountService
-import com.zorrokid.mybasicjetpackcomposeapp.model.service.LogService
-import com.zorrokid.mybasicjetpackcomposeapp.screens.MyBasicJetpackComposeAppViewModel
+import com.zorrokid.mediacollector.MyBasicJetpackComposeScreen
+import com.zorrokid.mediacollector.common.ext.isValidEmail
+import com.zorrokid.mediacollector.model.service.AccountService
+import com.zorrokid.mediacollector.model.service.LogService
+import com.zorrokid.mediacollector.screens.MyBasicJetpackComposeAppViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

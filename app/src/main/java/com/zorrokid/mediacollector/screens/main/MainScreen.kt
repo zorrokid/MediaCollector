@@ -1,6 +1,5 @@
-package com.zorrokid.mybasicjetpackcomposeapp.screens.main
+package com.zorrokid.mediacollector.screens.main
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -18,9 +17,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.zorrokid.mybasicjetpackcomposeapp.common.composable.ItemList
-import com.zorrokid.mybasicjetpackcomposeapp.common.composable.MainNavigationBar
-import com.zorrokid.mybasicjetpackcomposeapp.model.CollectionItem
+import com.zorrokid.mediacollector.common.composable.ItemList
+import com.zorrokid.mediacollector.common.composable.MainNavigationBar
+import com.zorrokid.mediacollector.model.CollectionItem
 
 @Composable
 fun MainScreen(

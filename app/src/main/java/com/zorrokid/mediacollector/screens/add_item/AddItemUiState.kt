@@ -1,7 +1,7 @@
-package com.zorrokid.mybasicjetpackcomposeapp.screens.add_item
+package com.zorrokid.mediacollector.screens.add_item
 
-import com.zorrokid.mybasicjetpackcomposeapp.model.ConditionClassification
-import com.zorrokid.mybasicjetpackcomposeapp.model.ReleaseArea
+import com.zorrokid.mediacollector.model.ConditionClassification
+import com.zorrokid.mediacollector.model.ReleaseArea
 
 data class AddItemUiState(
     val barcode: String = "",

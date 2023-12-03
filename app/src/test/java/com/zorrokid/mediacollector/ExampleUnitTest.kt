@@ -1,4 +1,4 @@
-package com.zorrokid.mybasicjetpackcomposeapp
+package com.zorrokid.mediacollector
 
 import org.junit.Test
 

@@ -1,4 +1,4 @@
-package com.zorrokid.mybasicjetpackcomposeapp.common.ext
+package com.zorrokid.mediacollector.common.ext
 
 import android.util.Patterns
 
