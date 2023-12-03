@@ -13,8 +13,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.zorrokid.mybasicjetpackcomposeapp.common.composable.BarcodeField
-import com.zorrokid.mybasicjetpackcomposeapp.common.composable.BarcodeScanButton
+import com.zorrokid.mybasicjetpackcomposeapp.common.composable.BarcodeInput
 import com.zorrokid.mybasicjetpackcomposeapp.common.composable.ItemList
 import com.zorrokid.mybasicjetpackcomposeapp.common.composable.MainNavigationBar
 import com.zorrokid.mybasicjetpackcomposeapp.model.CollectionItem
@@ -55,8 +54,11 @@ fun SearchScreenContent(
         },
         content = { padding ->
             Column(modifier = modifier.padding(padding)){
-                BarcodeField(uiState.barcode, onBarcodeChange, modifier)
-                BarcodeScanButton(onScanBarcodeClick, modifier)
+                BarcodeInput(
+                    onBarcodeChange = onBarcodeChange,
+                    onScanBarcodeClick = onScanBarcodeClick,
+                    barcode = uiState.barcode,
+                )
                 ItemList(collectionItems = searchResults)
             }
         },
