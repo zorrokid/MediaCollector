@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    namespace = "com.zorrokid.mybasicjetpackcomposeapp"
+    namespace = "com.zorrokid.mediacollector"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.zorrokid.mybasicjetpackcomposeapp"
+        applicationId = "com.zorrokid.mediacollector"
         minSdk = 24
         targetSdk = 33
         versionCode = 1
