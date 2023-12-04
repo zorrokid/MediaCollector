@@ -30,4 +30,46 @@ Using [Hilt](https://developer.android.com/training/dependency-injection/hilt-an
 
 [Google code scanner](https://developers.google.com/ml-kit/vision/barcode-scanning/code-scanner) is used for barcode scanning. No camera permission is needed for this since scanning task is provided by Google Play services and only the scan results are provided for the app. App is configure to download scanner module automatically when app is installed from Play Store. Found a really nice example how to use barcode scanner module [here](https://github.com/akash251/Clean-architecture-barcode-scanner-using-Jetpack-compose)
 
+# Data persistance
 
+Data is stored in Firebase Firestore database.
+
+## User data
+
+### Collection items
+
+Table: collectionItems
+
+Collection items can be promoted as library collection items when selected common data is available for all users. This has not been implemented yet.
+
+When collection item is promoted as library collection item, the original collection item will remain as is, it's only linked to the library collection item that was created. Only the ownder of original collection item can access it and all the other users can access the library collection item.
+
+## Static data
+
+Static data is pre initialized to database and is common for all users.
+
+### Condition classifications
+
+Table: conditionClassifications
+
+This is used to classify collection items. Currently user can decide whether it's an overall classification or for example only for media condition. Later on condition can be specified for each media item, container, sleeve card etc separately.
+
+|name|value|
+|-|-|
+|Bad|1|
+|Poor|2|
+|Fair|3|
+|Good|4|
+|Mint|5|
+|New|6|
+
+### Release areas
+
+Table: releaseAreas
+
+|name|countryCodes|
+|-|-|
+|Nordic countries|FI,SE,DK,NO|
+|Finland|FI|
+|Sweden|SE|
+|...|...|
