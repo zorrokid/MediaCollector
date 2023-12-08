@@ -35,14 +35,37 @@ fun ItemList(
     onDelete:  (id: String) -> Unit,
     openScreen: (String) -> Unit,
 ) {
+    val openAlertDialog = remember { mutableStateOf(false) }
+    val deleteId = remember { mutableStateOf("") }
+
+
     LazyColumn {
         items(collectionItems, key = { it.id }) { collectionItem ->
             ItemListCard(
                 collectionItem,
                 onEdit = onEdit,
-                onDelete = onDelete,
+                onDelete = {
+                   deleteId.value = it
+                   openAlertDialog.value = true
+                },
                 openScreen = openScreen,
            )
+        }
+    }
+    when {
+        openAlertDialog.value -> {
+            ConfirmDialog(
+                message = "Are you sure you want to delete this item?",
+                onDismiss = {
+                    openAlertDialog.value = false
+                    deleteId.value = ""
+                },
+                onConfirm = {
+                    openAlertDialog.value = false
+                    onDelete(deleteId.value)
+                    deleteId.value = ""
+                }
+            )
         }
     }
 }

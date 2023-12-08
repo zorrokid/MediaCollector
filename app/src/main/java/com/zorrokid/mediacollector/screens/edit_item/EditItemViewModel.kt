@@ -3,9 +3,7 @@ package com.zorrokid.mediacollector.screens.edit_item
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import com.zorrokid.mediacollector.ID
-import com.zorrokid.mediacollector.ID_ARG
 import com.zorrokid.mediacollector.MyBasicJetpackComposeScreen
-import com.zorrokid.mediacollector.common.ext.idFromParameter
 import com.zorrokid.mediacollector.model.CollectionItem
 import com.zorrokid.mediacollector.model.ConditionClassification
 import com.zorrokid.mediacollector.model.ReleaseArea
