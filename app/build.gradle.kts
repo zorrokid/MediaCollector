@@ -24,7 +24,7 @@ android {
     }
 
     buildTypes {
-        release {
+       release {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -32,6 +32,15 @@ android {
             )
         }
     }
+    flavorDimensions += "full"
+    productFlavors {
+        create("full") {
+            dimension = "full"
+            applicationIdSuffix = ".full"
+            versionNameSuffix = "-full"
+        }
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8

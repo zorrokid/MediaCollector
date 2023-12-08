@@ -5,7 +5,7 @@ import com.zorrokid.mediacollector.MyBasicJetpackComposeScreen
 import com.zorrokid.mediacollector.common.ext.isValidEmail
 import com.zorrokid.mediacollector.model.service.AccountService
 import com.zorrokid.mediacollector.model.service.LogService
-import com.zorrokid.mediacollector.screens.MyBasicJetpackComposeAppViewModel
+import com.zorrokid.mediacollector.screens.MediaCollectorViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -13,7 +13,7 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val accountService: AccountService,
     logService: LogService
-): MyBasicJetpackComposeAppViewModel(logService) {
+): MediaCollectorViewModel(logService) {
 
     // mutableStateOf creates an observable MutableState<T>, which is an observable type integrated with the compose runtime.
     // Any changes to value schedules recomposition of any composable functions that read value.

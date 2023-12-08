@@ -11,7 +11,7 @@ import com.zorrokid.mediacollector.model.service.ConditionClassificationService
 import com.zorrokid.mediacollector.model.service.LogService
 import com.zorrokid.mediacollector.model.service.ReleaseAreaService
 import com.zorrokid.mediacollector.model.service.StorageService
-import com.zorrokid.mediacollector.screens.MyBasicJetpackComposeAppViewModel
+import com.zorrokid.mediacollector.screens.MediaCollectorViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -23,7 +23,7 @@ class AddItemViewModel @Inject constructor(
     private val barcodeScanService: BarcodeScanService,
     private val releaseAreaService: ReleaseAreaService,
     private val conditionClassificationService: ConditionClassificationService,
-) : MyBasicJetpackComposeAppViewModel(logService) {
+) : MediaCollectorViewModel(logService) {
     val releaseAreas = releaseAreaService.releaseAreas
     val conditionClassifications = conditionClassificationService.conditionClassifications
 

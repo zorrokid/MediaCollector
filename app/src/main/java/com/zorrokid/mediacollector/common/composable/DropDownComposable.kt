@@ -22,7 +22,7 @@ import com.zorrokid.mediacollector.model.ReleaseArea
 @Composable
 fun <T: IdAndNameObject> DropDownWithTextField(
     onSelect: (T) -> Unit,
-    selected: T,
+    selected: T?,
     items: List<T>,
     label: String,
     modifier: Modifier = Modifier
@@ -35,7 +35,7 @@ fun <T: IdAndNameObject> DropDownWithTextField(
         onExpandedChange = { expanded = !expanded}
     ) {
         OutlinedTextField(
-            value = selected.name,
+            value = selected?.name ?: "",
             onValueChange = {},
             modifier = Modifier
                 .fillMaxWidth()

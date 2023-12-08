@@ -11,4 +11,8 @@ enum class MyBasicJetpackComposeScreen(@StringRes val title: Int) {
     Settings(title = R.string.settings),
     AddItem(title = R.string.add_item),
     Search(title = R.string.search),
+    EditItem(title = R.string.edit_item),
 }
+
+const val ID = "id"
+const val ID_ARG = "?$ID={$ID}"

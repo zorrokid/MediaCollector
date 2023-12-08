@@ -5,7 +5,7 @@ import com.zorrokid.mediacollector.MyBasicJetpackComposeScreen
 import com.zorrokid.mediacollector.common.ext.isValidEmail
 import com.zorrokid.mediacollector.model.service.AccountService
 import com.zorrokid.mediacollector.model.service.LogService
-import com.zorrokid.mediacollector.screens.MyBasicJetpackComposeAppViewModel
+import com.zorrokid.mediacollector.screens.MediaCollectorViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -14,7 +14,7 @@ import javax.inject.Inject
 class SignUpViewModel @Inject constructor(
     private val accountService: AccountService,
     logService: LogService
-) : MyBasicJetpackComposeAppViewModel(logService) {
+) : MediaCollectorViewModel(logService) {
     var uiState = mutableStateOf(SignUpUiState())
         private set
 

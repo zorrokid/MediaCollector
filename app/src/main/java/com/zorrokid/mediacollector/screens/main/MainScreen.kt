@@ -30,7 +30,9 @@ fun MainScreen(
         onSettingsClick = viewModel::onSettingsClick,
         openScreen = openScreen,
         collectionItems = collectionItems.value,
-        onAddItemClick = viewModel::onAddItemClick
+        onAddItemClick = viewModel::onAddItemClick,
+        onEditItemClick = viewModel::onEditItemClick,
+        onDeleteItemClick = viewModel::onDeleteItemClick,
     )
 }
 
@@ -40,6 +42,8 @@ fun MainScreenContent(
     modifier: Modifier = Modifier,
     onSettingsClick: ((String) -> Unit) -> Unit,
     onAddItemClick: ((String) -> Unit) -> Unit,
+    onEditItemClick: ((String) -> Unit, id: String) -> Unit,
+    onDeleteItemClick: (String) -> Unit,
     openScreen: (String) -> Unit,
     collectionItems: List<CollectionItem>
 ) {
@@ -60,7 +64,12 @@ fun MainScreenContent(
                         }
                     }
                 })
-                ItemList(collectionItems =  collectionItems)
+                ItemList(
+                    collectionItems = collectionItems,
+                    onEdit = onEditItemClick,
+                    onDelete = onDeleteItemClick,
+                    openScreen = openScreen
+                )
             }
         },
         bottomBar = {

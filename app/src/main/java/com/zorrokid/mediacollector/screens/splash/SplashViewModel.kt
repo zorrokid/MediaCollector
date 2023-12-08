@@ -5,7 +5,7 @@ import com.google.firebase.auth.FirebaseAuthException
 import com.zorrokid.mediacollector.MyBasicJetpackComposeScreen
 import com.zorrokid.mediacollector.model.service.AccountService
 import com.zorrokid.mediacollector.model.service.LogService
-import com.zorrokid.mediacollector.screens.MyBasicJetpackComposeAppViewModel
+import com.zorrokid.mediacollector.screens.MediaCollectorViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -14,7 +14,7 @@ class SplashViewModel @Inject constructor(
     // TODO configurationService: ConfigurationService,
     private val accountService: AccountService,
     logService: LogService
-) : MyBasicJetpackComposeAppViewModel(logService) {
+) : MediaCollectorViewModel(logService) {
     val showError = mutableStateOf(false)
 
     /* TODO

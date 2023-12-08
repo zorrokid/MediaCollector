@@ -1,10 +1,11 @@
 package com.zorrokid.mediacollector.screens.search
 
 import androidx.compose.runtime.mutableStateOf
+import com.zorrokid.mediacollector.MyBasicJetpackComposeScreen
 import com.zorrokid.mediacollector.model.service.BarcodeScanService
 import com.zorrokid.mediacollector.model.service.LogService
 import com.zorrokid.mediacollector.model.service.StorageService
-import com.zorrokid.mediacollector.screens.MyBasicJetpackComposeAppViewModel
+import com.zorrokid.mediacollector.screens.MediaCollectorViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -14,7 +15,7 @@ class SearchViewModel @Inject constructor(
     logService: LogService,
     private val barcodeScanService: BarcodeScanService,
     private val storageService: StorageService
-) : MyBasicJetpackComposeAppViewModel(logService) {
+) : MediaCollectorViewModel(logService) {
 
     var uiState = mutableStateOf(SearchUiState())
         private set
@@ -40,4 +41,8 @@ class SearchViewModel @Inject constructor(
         val results = storageService.collectionItems.map {  it.filter { item -> item.barcode == barcode }}
         uiState.value = uiState.value.copy(searchResults = results)
     }
+
+    fun onEditItemClick(openScreen: (String) -> Unit, id: String)
+            = openScreen("${MyBasicJetpackComposeScreen.EditItem.name}?id=$id")
+    fun onDeleteItemClick(id: String) { /* TODO */}
 }
