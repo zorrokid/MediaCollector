@@ -73,3 +73,26 @@ Table: releaseAreas
 |Finland|FI|
 |Sweden|SE|
 |...|...|
+
+# Deploy
+
+## Build Variants
+
+Currently there's one variant configured for full feature release: "full"
+
+To build this variant, select "Build" > "Select Build Variant" > "fullDebug" / "fullRelease"
+
+## Build Signed Bundle
+
+Select: "Build" > "Generate Signed Bundle / APK" > APK
+
+To install build apk-package:
+
+default: 
+    
+    adb install app/release/app-release.apk
+
+full variant:  
+
+    adb install app/full/release/app-full-release.apk
+
