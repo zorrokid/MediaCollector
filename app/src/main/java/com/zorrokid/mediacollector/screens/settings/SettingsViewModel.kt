@@ -3,7 +3,7 @@ package com.zorrokid.mediacollector.screens.settings
 import com.zorrokid.mediacollector.MyBasicJetpackComposeScreen
 import com.zorrokid.mediacollector.model.service.AccountService
 import com.zorrokid.mediacollector.model.service.LogService
-import com.zorrokid.mediacollector.screens.MyBasicJetpackComposeAppViewModel
+import com.zorrokid.mediacollector.screens.MediaCollectorViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -12,7 +12,7 @@ import javax.inject.Inject
 class SettingsViewModel @Inject constructor(
     logService: LogService,
     private val accountService: AccountService,
-) : MyBasicJetpackComposeAppViewModel(logService) {
+) : MediaCollectorViewModel(logService) {
     val uiState = accountService.currentUser.map {
         SettingsUiState(it.isAnonymous)
     }

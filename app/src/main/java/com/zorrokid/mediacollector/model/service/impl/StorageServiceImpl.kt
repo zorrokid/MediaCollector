@@ -2,6 +2,7 @@ package com.zorrokid.mediacollector.model.service.impl
 
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.dataObjects
+import com.google.firebase.firestore.toObject
 import com.zorrokid.mediacollector.model.CollectionItem
 import com.zorrokid.mediacollector.model.service.AccountService
 import com.zorrokid.mediacollector.model.service.StorageService
@@ -16,12 +17,17 @@ class StorageServiceImpl
     StorageService {
     override val collectionItems: Flow<List<CollectionItem>>
         get() = auth.currentUser.flatMapLatest { user ->
-            firestore.collection(COLLECTION_ITEM_COLLECTION).whereEqualTo(USER_ID_FIELD, user.id).dataObjects()
+            firestore.collection(COLLECTION_ITEM_COLLECTION)
+                .whereEqualTo(USER_ID_FIELD, user.id)
+                .dataObjects()
         }
 
-    override suspend fun getItem(itemId: String): CollectionItem? {
-        TODO("Not yet implemented")
-    }
+    override suspend fun getItem(itemId: String): CollectionItem? =
+        firestore.collection(COLLECTION_ITEM_COLLECTION)
+            .document(itemId)
+            .get()
+            .await()
+            .toObject()
 
     override suspend fun save(collectionItem: CollectionItem): String {
         val collectionItemWithUserId = collectionItem.copy(userId = auth.currentUserId)
@@ -29,11 +35,17 @@ class StorageServiceImpl
     }
 
     override suspend fun update(task: CollectionItem) {
-        TODO("Not yet implemented")
+        firestore.collection(COLLECTION_ITEM_COLLECTION)
+            .document(task.id)
+            .set(task)
+            .await()
     }
 
     override suspend fun delete(itemId: String) {
-        TODO("Not yet implemented")
+        firestore.collection(COLLECTION_ITEM_COLLECTION)
+            .document(itemId)
+            .delete()
+            .await()
     }
 
     companion object {

@@ -1,11 +1,14 @@
-package com.zorrokid.mediacollector.screens.add_item
+package com.zorrokid.mediacollector.screens.edit_item
 
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.SavedStateHandle
+import com.zorrokid.mediacollector.ID
+import com.zorrokid.mediacollector.ID_ARG
 import com.zorrokid.mediacollector.MyBasicJetpackComposeScreen
-import com.zorrokid.mediacollector.model.ConditionClassification
+import com.zorrokid.mediacollector.common.ext.idFromParameter
 import com.zorrokid.mediacollector.model.CollectionItem
+import com.zorrokid.mediacollector.model.ConditionClassification
 import com.zorrokid.mediacollector.model.ReleaseArea
-import com.zorrokid.mediacollector.model.service.AccountService
 import com.zorrokid.mediacollector.model.service.BarcodeScanService
 import com.zorrokid.mediacollector.model.service.ConditionClassificationService
 import com.zorrokid.mediacollector.model.service.LogService
@@ -16,64 +19,65 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class AddItemViewModel @Inject constructor(
+class EditItemViewModel @Inject constructor(
+    // SavedStateHandle is key-value map that will let you retrieve value from the saved state with key.
+    // See: https://developersbreach.com/savedstatehandle-viewmodel-android/
+    savedStateHandle: SavedStateHandle,
     logService: LogService,
     private val storageService: StorageService,
-    private val accountService: AccountService,
-    private val barcodeScanService: BarcodeScanService,
     private val releaseAreaService: ReleaseAreaService,
+    private val barcodeScanService: BarcodeScanService,
     private val conditionClassificationService: ConditionClassificationService,
 ) : MediaCollectorViewModel(logService) {
+    val collectionItem = mutableStateOf(CollectionItem())
     val releaseAreas = releaseAreaService.releaseAreas
     val conditionClassifications = conditionClassificationService.conditionClassifications
 
-    var uiState = mutableStateOf(AddItemUiState())
-        private set
+    init {
+        val collectionItemId = savedStateHandle.get<String>(ID)
+        if (collectionItemId != null) {
+            launchCatching {
+                collectionItem.value = storageService.getItem(
+                    collectionItemId
+                ) ?: CollectionItem()
+            }
+        }
+    }
 
-    private val barcode
-        get() = uiState.value.barcode
-
-    private val releaseArea
-        get() = uiState.value.releaseArea
-
-    private val collectionClassification
-        get() = uiState.value.conditionClassification
 
     fun onBarcodeChange(newValue: String) {
-        uiState.value = uiState.value.copy(barcode = newValue)
+        collectionItem.value = collectionItem.value.copy(barcode = newValue)
     }
 
     fun onScanBarcodeClick() {
         launchCatching {
             barcodeScanService.startScanning().collect{
                 if (!it.isNullOrEmpty()){
-                    uiState.value = uiState.value.copy(barcode = it)
+                    collectionItem.value = collectionItem.value.copy(barcode = it)
                 }
             }
         }
     }
 
     fun onReleaseAreaSelect(releaseArea: ReleaseArea) {
-        uiState.value = uiState.value.copy(releaseArea = releaseArea)
+        collectionItem.value = collectionItem.value.copy(
+            releaseAreaId = releaseArea.id,
+            releaseAreaName = releaseArea.name
+        )
     }
 
     fun onConditionClassificationSelect(conditionClassification: ConditionClassification) {
-        uiState.value = uiState.value.copy(conditionClassification = conditionClassification)
+        collectionItem.value = collectionItem.value.copy(
+            collectionClassificationId = conditionClassification.id,
+            collectionClassificationName = conditionClassification.name
+        )
     }
 
     fun onSubmitClick(
         openAndPopUp: (String, String) -> Unit
     ) {
         launchCatching {
-            val collectionItem = CollectionItem(
-                barcode = barcode,
-                userId = accountService.currentUserId,
-                releaseAreaId = releaseArea.id,
-                releaseAreaName = releaseArea.name,
-                collectionClassificationId = collectionClassification.id,
-                collectionClassificationName = collectionClassification.name,
-            )
-            storageService.save(collectionItem)
+           storageService.update(collectionItem.value)
             openAndPopUp(MyBasicJetpackComposeScreen.Main.name, MyBasicJetpackComposeScreen.AddItem.name)
         }}
 }

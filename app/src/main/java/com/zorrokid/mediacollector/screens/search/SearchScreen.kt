@@ -31,7 +31,9 @@ fun SearchScreen(
         onBarcodeChange = viewModel::onBarcodeChange,
         onScanBarcodeClick = viewModel::onScanBarcodeClick,
         openScreen = openScreen,
-        searchResults = searchResults.value
+        searchResults = searchResults.value,
+        onDeleteClicked = viewModel::onDeleteItemClick,
+        onEditClicked = viewModel::onEditItemClick,
     )
 }
 
@@ -44,7 +46,9 @@ fun SearchScreenContent(
     onBarcodeChange: (String) -> Unit,
     onScanBarcodeClick: () -> Unit,
     openScreen: (String) -> Unit,
-    searchResults: List<CollectionItem>
+    searchResults: List<CollectionItem>,
+    onEditClicked: ((String) -> Unit, id: String) -> Unit,
+    onDeleteClicked: (String) -> Unit,
 ) {
     Scaffold (
         floatingActionButton = {
@@ -59,7 +63,12 @@ fun SearchScreenContent(
                     onScanBarcodeClick = onScanBarcodeClick,
                     barcode = uiState.barcode,
                 )
-                ItemList(collectionItems = searchResults)
+                ItemList(
+                    collectionItems = searchResults,
+                    onEdit = onEditClicked,
+                    onDelete = onDeleteClicked,
+                    openScreen = openScreen,
+                )
             }
         },
         bottomBar = {
