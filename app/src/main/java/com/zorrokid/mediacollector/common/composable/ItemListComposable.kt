@@ -25,8 +25,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.zorrokid.mediacollector.R
+import com.zorrokid.mediacollector.common.snackbar.SnackbarManager
 import com.zorrokid.mediacollector.model.CollectionItem
 
 @Composable
@@ -56,7 +59,7 @@ fun ItemList(
     when {
         openAlertDialog.value -> {
             ConfirmDialog(
-                message = "Are you sure you want to delete this item?",
+                message =  stringResource(R.string.confirm_delete),
                 onDismiss = {
                     openAlertDialog.value = false
                     deleteId.value = ""
@@ -64,6 +67,7 @@ fun ItemList(
                 onConfirm = {
                     openAlertDialog.value = false
                     onDelete(deleteId.value)
+                    SnackbarManager.showMessage(R.string.item_deleted)
                     deleteId.value = ""
                 }
             )
@@ -93,21 +97,26 @@ fun ItemListCard(
             Text(text = collectionItem.releaseAreaName, modifier = modifier.padding(8.dp))
 
             Box(
-                modifier = Modifier.fillMaxSize().wrapContentSize(Alignment.TopStart)
+                modifier = Modifier
+                    .fillMaxSize()
+                    .wrapContentSize(Alignment.TopStart)
             ) {
                 IconButton(onClick = {expanded = !expanded}) {
-                    Icon(Icons.Filled.MoreVert, "Actions for collection items")
+                    Icon(
+                        Icons.Filled.MoreVert,
+                        stringResource(id = R.string.collection_item_menu_icon_description)
+                    )
                 }
                 DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
                     DropdownMenuItem(
-                        text = { Text("Edit") },
+                        text = { Text(stringResource(id = R.string.edit_item)) },
                         onClick = {
                             expanded = false
                             onEdit(openScreen, collectionItem.id)
                         }
                     )
                     DropdownMenuItem(
-                        text = { Text("Delete") },
+                        text = { Text(stringResource(id = R.string.delete_item)) },
                         onClick = {
                             expanded = false
                             onDelete(collectionItem.id)
