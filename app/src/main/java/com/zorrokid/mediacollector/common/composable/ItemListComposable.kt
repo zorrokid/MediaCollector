@@ -25,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.zorrokid.mediacollector.model.CollectionItem
 
@@ -117,14 +118,18 @@ fun ItemListCard(
         }
     }}
 
-/*@Composable
+@Composable
 @Preview
 fun ItemListCardPreview() {
+
+
     ItemListCard(collectionItem = CollectionItem(
         id = "1234",
         barcode = "123456789",
         releaseAreaName = "Nordic countries",
-        ), onEdit = {}, onDelete = {}, openScreen = {})
+        ), onEdit = {
+            openScreen, id -> openScreen("EditItemScreen/$id")
+    }, onDelete = {}, openScreen = {})
 }
 
 @Composable
@@ -137,7 +142,9 @@ fun ItemListPreview() {
                 barcode = "123456789",
                 releaseAreaName = "Test"
             )
-        ), onDelete = {}, onEdit = {}, openScreen = {}
+        ), onDelete = {}, onEdit = {
+            openScreen, id -> openScreen("EditItemScreen/$id")
+        }, openScreen = {}
     )
 }
-*/
+

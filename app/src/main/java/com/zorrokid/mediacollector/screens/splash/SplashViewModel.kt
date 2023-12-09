@@ -2,7 +2,7 @@ package com.zorrokid.mediacollector.screens.splash
 
 import androidx.compose.runtime.mutableStateOf
 import com.google.firebase.auth.FirebaseAuthException
-import com.zorrokid.mediacollector.MyBasicJetpackComposeScreen
+import com.zorrokid.mediacollector.MediaCollectorScreen
 import com.zorrokid.mediacollector.model.service.AccountService
 import com.zorrokid.mediacollector.model.service.LogService
 import com.zorrokid.mediacollector.screens.MediaCollectorViewModel
@@ -25,7 +25,7 @@ class SplashViewModel @Inject constructor(
     fun onAppStart(openAndPopUp: (String, String) -> Unit) {
 
         showError.value = false
-        if (accountService.hasUser) openAndPopUp(MyBasicJetpackComposeScreen.Main.name, MyBasicJetpackComposeScreen.Splash.name)
+        if (accountService.hasUser) openAndPopUp(MediaCollectorScreen.Main.name, MediaCollectorScreen.Splash.name)
         else createAnonymousAccount(openAndPopUp)
     }
 
@@ -37,7 +37,7 @@ class SplashViewModel @Inject constructor(
                 showError.value = true
                 throw ex
             }
-            openAndPopUp(MyBasicJetpackComposeScreen.Main.name, MyBasicJetpackComposeScreen.Splash.name)
+            openAndPopUp(MediaCollectorScreen.Main.name, MediaCollectorScreen.Splash.name)
         }
     }
 }

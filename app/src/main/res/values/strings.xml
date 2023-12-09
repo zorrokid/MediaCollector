@@ -19,4 +19,5 @@
     <string name="scan_barcode">Scan barcode</string>
     <string name="search">Search</string>
     <string name="edit_item">Edit item</string>
+    <string name="item_updated">Item updated</string>
 </resources>

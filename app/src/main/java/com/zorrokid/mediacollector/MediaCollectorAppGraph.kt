@@ -13,46 +13,46 @@ import com.zorrokid.mediacollector.screens.signup.SignUpScreen
 import com.zorrokid.mediacollector.screens.splash.SplashScreen
 import com.zorrokid.mediacollector.screens.start.StartScreen
 
-fun NavGraphBuilder.myBasicJetpackComposeAppGraph(appState: MyJetpackComposeAppState) {
-    composable(route = MyBasicJetpackComposeScreen.Splash.name) {
+fun NavGraphBuilder.mediaCollectorAppGraph(appState: MediaCollectorAppState) {
+    composable(route = MediaCollectorScreen.Splash.name) {
         SplashScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp)})
     }
-    composable(route = MyBasicJetpackComposeScreen.Main.name){
+    composable(route = MediaCollectorScreen.Main.name){
         MainScreen(openScreen = { route -> appState.navigate(route) })
     }
-    composable(route = MyBasicJetpackComposeScreen.Start.name){
+    composable(route = MediaCollectorScreen.Start.name){
         StartScreen(onLoginButtonClicked = {
-            appState.navigate(MyBasicJetpackComposeScreen.LogIn.name)
+            appState.navigate(MediaCollectorScreen.LogIn.name)
         })
     }
-    composable(route = MyBasicJetpackComposeScreen.SignUp.name){
+    composable(route = MediaCollectorScreen.SignUp.name){
         SignUpScreen(
             openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) }
         )
     }
-    composable(route = MyBasicJetpackComposeScreen.LogIn.name){
+    composable(route = MediaCollectorScreen.LogIn.name){
         LogInScreen(
             openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) }
         )
     }
-    composable(route = MyBasicJetpackComposeScreen.Settings.name){
+    composable(route = MediaCollectorScreen.Settings.name){
         SettingsScreen(
             openScreen = { route -> appState.navigate(route) },
             restartApp = { route -> appState.clearAndNavigate(route) }
         )
     }
-    composable(route = MyBasicJetpackComposeScreen.AddItem.name){
+    composable(route = MediaCollectorScreen.AddItem.name){
         AddItemScreen(
             openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) }
         )
     }
-    composable(route = MyBasicJetpackComposeScreen.Search.name){
+    composable(route = MediaCollectorScreen.Search.name){
         SearchScreen(
             openScreen = { route -> appState.navigate(route) }
         )
     }
     composable(
-        route = "${MyBasicJetpackComposeScreen.EditItem.name}$ID_ARG",
+        route = "${MediaCollectorScreen.EditItem.name}$ID_ARG",
         arguments = listOf(navArgument(ID) {
                 nullable = true
                 defaultValue = null
