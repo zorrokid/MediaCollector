@@ -11,15 +11,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import com.zorrokid.mediacollector.MyBasicJetpackComposeScreen
+import com.zorrokid.mediacollector.MediaCollectorScreen
 
 @Composable
 fun MainNavigationBar(openScreen: (String) -> Unit) {
     var selectedItem by remember { mutableStateOf(0) }
     val items = listOf(
-        MyBasicJetpackComposeScreen.Main.name,
-        MyBasicJetpackComposeScreen.Search.name,
-        MyBasicJetpackComposeScreen.Settings.name
+        MediaCollectorScreen.Main.name,
+        MediaCollectorScreen.Search.name,
+        MediaCollectorScreen.Settings.name
     )
     NavigationBar{
         items.forEachIndexed { index, item ->

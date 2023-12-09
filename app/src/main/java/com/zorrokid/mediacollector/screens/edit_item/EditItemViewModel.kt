@@ -3,7 +3,9 @@ package com.zorrokid.mediacollector.screens.edit_item
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import com.zorrokid.mediacollector.ID
-import com.zorrokid.mediacollector.MyBasicJetpackComposeScreen
+import com.zorrokid.mediacollector.MediaCollectorScreen
+import com.zorrokid.mediacollector.R
+import com.zorrokid.mediacollector.common.snackbar.SnackbarManager
 import com.zorrokid.mediacollector.model.CollectionItem
 import com.zorrokid.mediacollector.model.ConditionClassification
 import com.zorrokid.mediacollector.model.ReleaseArea
@@ -76,6 +78,7 @@ class EditItemViewModel @Inject constructor(
     ) {
         launchCatching {
            storageService.update(collectionItem.value)
-            openAndPopUp(MyBasicJetpackComposeScreen.Main.name, MyBasicJetpackComposeScreen.AddItem.name)
+            openAndPopUp(MediaCollectorScreen.Main.name, MediaCollectorScreen.AddItem.name)
+            SnackbarManager.showMessage(R.string.item_updated)
         }}
 }

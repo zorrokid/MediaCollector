@@ -1,7 +1,7 @@
 package com.zorrokid.mediacollector.screens.login
 
 import androidx.compose.runtime.mutableStateOf
-import com.zorrokid.mediacollector.MyBasicJetpackComposeScreen
+import com.zorrokid.mediacollector.MediaCollectorScreen
 import com.zorrokid.mediacollector.common.ext.isValidEmail
 import com.zorrokid.mediacollector.model.service.AccountService
 import com.zorrokid.mediacollector.model.service.LogService
@@ -57,7 +57,7 @@ class LoginViewModel @Inject constructor(
         }
         launchCatching {
             accountService.authenticate(email, password)
-            openAndPopUp(MyBasicJetpackComposeScreen.Settings.name, MyBasicJetpackComposeScreen.LogIn.name)
+            openAndPopUp(MediaCollectorScreen.Settings.name, MediaCollectorScreen.LogIn.name)
         }
     }
 }

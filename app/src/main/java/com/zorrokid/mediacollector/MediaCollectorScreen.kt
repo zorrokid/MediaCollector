@@ -2,7 +2,7 @@ package com.zorrokid.mediacollector
 
 import androidx.annotation.StringRes
 
-enum class MyBasicJetpackComposeScreen(@StringRes val title: Int) {
+enum class MediaCollectorScreen(@StringRes val title: Int) {
     Start(title = R.string.start),
     LogIn(title = R.string.login),
     SignUp(title = R.string.signup),

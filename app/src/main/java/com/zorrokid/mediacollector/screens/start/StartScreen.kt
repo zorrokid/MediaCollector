@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.zorrokid.mediacollector.ui.theme.MyBasicJetpackComposeAppTheme
+import com.zorrokid.mediacollector.ui.theme.MediaCollectoAppTheme
 
 @Composable
 fun StartScreen(onLoginButtonClicked: () -> Unit, modifier: Modifier = Modifier,) {
@@ -37,7 +37,7 @@ fun LogInButton(onClick: () -> Unit) {
 @Composable
 @Preview
 fun LoginButtonPreview(){
-    MyBasicJetpackComposeAppTheme {
+    MediaCollectoAppTheme {
         LogInButton(onClick = { /*TODO*/ })
     }
 }

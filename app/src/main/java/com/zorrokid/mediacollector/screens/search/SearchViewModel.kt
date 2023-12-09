@@ -1,7 +1,7 @@
 package com.zorrokid.mediacollector.screens.search
 
 import androidx.compose.runtime.mutableStateOf
-import com.zorrokid.mediacollector.MyBasicJetpackComposeScreen
+import com.zorrokid.mediacollector.MediaCollectorScreen
 import com.zorrokid.mediacollector.model.service.BarcodeScanService
 import com.zorrokid.mediacollector.model.service.LogService
 import com.zorrokid.mediacollector.model.service.StorageService
@@ -43,6 +43,6 @@ class SearchViewModel @Inject constructor(
     }
 
     fun onEditItemClick(openScreen: (String) -> Unit, id: String)
-            = openScreen("${MyBasicJetpackComposeScreen.EditItem.name}?id=$id")
+            = openScreen("${MediaCollectorScreen.EditItem.name}?id=$id")
     fun onDeleteItemClick(id: String) { /* TODO */}
 }
