@@ -94,6 +94,7 @@ dependencies {
     // Google Play services
     implementation("com.google.android.gms:play-services-code-scanner:16.1.0")
     implementation("com.google.android.gms:play-services-mlkit-barcode-scanning:18.3.0")
+    implementation("com.google.android.gms:play-services-mlkit-text-recognition:19.0.0")
 
     // camerax
     val cameraxVersion = "1.4.0-alpha02"
