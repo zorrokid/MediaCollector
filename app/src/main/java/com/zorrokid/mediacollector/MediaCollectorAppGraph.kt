@@ -12,6 +12,7 @@ import com.zorrokid.mediacollector.screens.settings.SettingsScreen
 import com.zorrokid.mediacollector.screens.signup.SignUpScreen
 import com.zorrokid.mediacollector.screens.splash.SplashScreen
 import com.zorrokid.mediacollector.screens.start.StartScreen
+import com.zorrokid.mediacollector.screens.text_recognition.TextRecognitionScreen
 
 fun NavGraphBuilder.mediaCollectorAppGraph(appState: MediaCollectorAppState) {
     composable(route = MediaCollectorScreen.Splash.name) {
@@ -43,7 +44,8 @@ fun NavGraphBuilder.mediaCollectorAppGraph(appState: MediaCollectorAppState) {
     }
     composable(route = MediaCollectorScreen.AddItem.name){
         AddItemScreen(
-            openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) }
+            openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) },
+            navigate = { route -> appState.navigate(route) }
         )
     }
     composable(route = MediaCollectorScreen.Search.name){
@@ -61,5 +63,8 @@ fun NavGraphBuilder.mediaCollectorAppGraph(appState: MediaCollectorAppState) {
         EditItemScreen(
             openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) }
         )
+    }
+    composable(route = MediaCollectorScreen.TextRecognition.name){
+        TextRecognitionScreen()
     }
 }

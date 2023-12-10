@@ -61,6 +61,10 @@ class AddItemViewModel @Inject constructor(
         uiState.value = uiState.value.copy(conditionClassification = conditionClassification)
     }
 
+    fun onScanText(navigate: (String) -> Unit) {
+        navigate(MediaCollectorScreen.TextRecognition.name)
+    }
+
     fun onSubmitClick(
         openAndPopUp: (String, String) -> Unit
     ) {

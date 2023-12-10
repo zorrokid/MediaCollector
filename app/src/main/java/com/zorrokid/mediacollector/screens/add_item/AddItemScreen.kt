@@ -4,10 +4,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -22,7 +24,8 @@ import com.zorrokid.mediacollector.model.ReleaseArea
 @Composable
 fun AddItemScreen(
     viewModel: AddItemViewModel = hiltViewModel(),
-    openAndPopUp: (String, String) -> Unit
+    openAndPopUp: (String, String) -> Unit,
+    navigate: (String) -> Unit
 ) {
     val uiState by viewModel.uiState
 
@@ -38,6 +41,7 @@ fun AddItemScreen(
         releaseAreas = releaseAreas.value,
         onConditionClassificationSelect = viewModel::onConditionClassificationSelect,
         conditionClassifications = conditionClassifications.value,
+        onScanText = { viewModel.onScanText(navigate) }
     )
 }
 
@@ -53,6 +57,7 @@ fun AddItemScreenContent(
     releaseAreas: List<ReleaseArea>,
     onConditionClassificationSelect: (ConditionClassification) -> Unit,
     conditionClassifications: List<ConditionClassification>,
+    onScanText: () -> Unit
 ) {
     Scaffold (
         floatingActionButton = {
@@ -79,6 +84,9 @@ fun AddItemScreenContent(
                     items = conditionClassifications,
                     label = "Condition"
                 )
+                Button(onClick = onScanText) {
+                    Text(text = "Scan text")
+                }
             }
         }
     )
@@ -88,7 +96,7 @@ fun AddItemScreenContent(
 @Preview
 fun AddItemScreenContentPreview(){
     val selectedArea = ReleaseArea("Test")
-    val uiState = AddItemUiState("12345", selectedArea);
+    val uiState = AddItemUiState("12345", selectedArea)
     val releaseAreas: List<ReleaseArea> = listOf(selectedArea)
     AddItemScreenContent(
         uiState = uiState,
@@ -98,7 +106,8 @@ fun AddItemScreenContentPreview(){
         onReleaseAreaSelect = {},
         releaseAreas = releaseAreas,
         onConditionClassificationSelect = {},
-        conditionClassifications = listOf(ConditionClassification("Test"))
+        conditionClassifications = listOf(ConditionClassification("Test")),
+        onScanText = {}
     )
 }
 
