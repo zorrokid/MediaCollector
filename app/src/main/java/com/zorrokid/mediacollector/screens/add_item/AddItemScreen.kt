@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.zorrokid.mediacollector.common.composable.BarcodeInput
 import com.zorrokid.mediacollector.common.composable.DropDownWithTextField
 import com.zorrokid.mediacollector.model.ConditionClassification
@@ -41,7 +42,7 @@ fun AddItemScreen(
         releaseAreas = releaseAreas.value,
         onConditionClassificationSelect = viewModel::onConditionClassificationSelect,
         conditionClassifications = conditionClassifications.value,
-        onScanText = { viewModel.onScanText(navigate) }
+        onScanText = { viewModel.onScanText(navigate) },
     )
 }
 
@@ -57,9 +58,9 @@ fun AddItemScreenContent(
     releaseAreas: List<ReleaseArea>,
     onConditionClassificationSelect: (ConditionClassification) -> Unit,
     conditionClassifications: List<ConditionClassification>,
-    onScanText: () -> Unit
+    onScanText: () -> Unit,
 ) {
-    Scaffold (
+   Scaffold (
         floatingActionButton = {
             FloatingActionButton(onClick = onSubmitClick) {
                 Icon(Icons.Filled.Check, "Add")
@@ -107,7 +108,7 @@ fun AddItemScreenContentPreview(){
         releaseAreas = releaseAreas,
         onConditionClassificationSelect = {},
         conditionClassifications = listOf(ConditionClassification("Test")),
-        onScanText = {}
+        onScanText = {},
     )
 }
 

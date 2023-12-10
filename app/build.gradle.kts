@@ -78,6 +78,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-compose:${lifecycleVersion}")
 
     implementation("androidx.activity:activity-compose:1.8.1")
+    implementation("androidx.fragment:fragment-ktx:1.6.2")
     implementation("androidx.navigation:navigation-compose:2.7.5")
 
     // dependency injection
@@ -98,6 +99,10 @@ dependencies {
     val cameraxVersion = "1.4.0-alpha02"
     implementation("androidx.camera:camera-camera2:${cameraxVersion}")
     implementation("androidx.camera:camera-mlkit-vision:${cameraxVersion}")
+
+    // accompanist libraries
+    val accompanistVersion = "0.32.0"
+    implementation("com.google.accompanist:accompanist-permissions:${accompanistVersion}")
 
     // test & debugging
     testImplementation("junit:junit:4.13.2")

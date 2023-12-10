@@ -9,4 +9,10 @@ import javax.inject.Inject
 class TextRecognitionViewModel @Inject constructor(
     logService: LogService
 ) : MediaCollectorViewModel(logService) {
+    fun onPermissionGranted(
+        permission: String,
+        isGranted: Boolean,
+    ) {
+        // TODO
+    }
 }
