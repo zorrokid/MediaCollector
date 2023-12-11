@@ -98,6 +98,7 @@ dependencies {
 
     // camerax
     val cameraxVersion = "1.4.0-alpha02"
+    implementation("androidx.camera:camera-core:${cameraxVersion}")
     implementation("androidx.camera:camera-camera2:${cameraxVersion}")
     implementation("androidx.camera:camera-mlkit-vision:${cameraxVersion}")
 

@@ -5,6 +5,9 @@ import androidx.annotation.OptIn
 import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
+import androidx.camera.view.PreviewView
+import androidx.camera.view.TransformExperimental
+import androidx.camera.view.transform.ImageProxyTransformFactory
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.Text
 import com.google.mlkit.vision.text.TextRecognition
@@ -23,7 +26,7 @@ import kotlin.coroutines.suspendCoroutine
  * Inspired by https://www.youtube.com/watch?v=wCADCaeS8-A&t=501s
  */
 class TextRecognitionAnalyzer(
-    private val onDetectedTextUpdated: (String) -> Unit
+    private val onDetectedTextUpdated: (Text, Int, Int) -> Unit,
 ) : ImageAnalysis.Analyzer {
 
     companion object {
@@ -33,7 +36,7 @@ class TextRecognitionAnalyzer(
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
     private val textRecognizer: TextRecognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
 
-    @OptIn(ExperimentalGetImage::class)
+    @OptIn(TransformExperimental::class, ExperimentalGetImage::class)
     override fun analyze(imageProxy: ImageProxy) {
         scope.launch {
             val mediaImage: Image = imageProxy.image ?: run { imageProxy.close(); return@launch }
@@ -47,7 +50,7 @@ class TextRecognitionAnalyzer(
                     .addOnSuccessListener { visionText: Text ->
                         val detectedText: String = visionText.text
                         if (detectedText.isNotBlank()) {
-                            onDetectedTextUpdated(detectedText)
+                            onDetectedTextUpdated(visionText, mediaImage.width, mediaImage.height)
                         }
                     }
                     .addOnCompleteListener {
@@ -56,6 +59,7 @@ class TextRecognitionAnalyzer(
             }
 
             delay(THROTTLE_TIMEOUT_MS)
+
         }.invokeOnCompletion { exception ->
             exception?.printStackTrace()
             imageProxy.close()
