@@ -1,6 +1,7 @@
 package com.zorrokid.mediacollector.screens.text_recognition
 
 import android.content.Context
+import android.graphics.Bitmap
 import androidx.camera.view.LifecycleCameraController
 import androidx.camera.view.PreviewView
 import androidx.compose.runtime.mutableStateOf
@@ -8,7 +9,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import com.google.mlkit.vision.text.Text
-import com.zorrokid.mediacollector.common.text_recognition.TextRecognitionAnalyzer
+import com.zorrokid.mediacollector.common.analyzers.TextRecognitionAnalyzer
 import com.zorrokid.mediacollector.model.service.LogService
 import com.zorrokid.mediacollector.screens.MediaCollectorViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -28,6 +29,10 @@ class TextRecognitionViewModel @Inject constructor(
     private val pointerOffset
         get() = uiState.value.pointerOffset
 
+    fun onTouchEvent(offset: Offset, cameraController: LifecycleCameraController) {
+        cameraController.clearImageAnalysisAnalyzer()
+        onPointerOffsetChanged(offset)
+    }
     fun onPointerOffsetChanged(newOffset: Offset) {
         uiState.value = uiState.value.copy(pointerOffset = newOffset)
     }
@@ -35,8 +40,8 @@ class TextRecognitionViewModel @Inject constructor(
     fun onDetectedTextUpdated(text: Text, imageWidth: Int, imageHeight: Int) {
         uiState.value = uiState.value.copy(
             recognizedText = text,
+            imageWidth = imageWidth,
             imageHeight = imageHeight,
-            imageWidth = imageWidth
         )
     }
     fun startTextRecognition(
@@ -53,5 +58,18 @@ class TextRecognitionViewModel @Inject constructor(
         )
         cameraController.bindToLifecycle(lifecycleOwner)
         previewView.controller = cameraController
+    }
+
+    fun onStopTextRecognition(cameraController: LifecycleCameraController, onTextRecognitionResultReady: (String) -> Unit) {
+        cameraController.clearImageAnalysisAnalyzer()
+        cameraController.unbind()
+        onTextRecognitionResultReady(recognizedText.text)
+    }
+
+    fun onPhotoCaptured(context: Context, bitmap: Bitmap) {
+        val filename = "${System.currentTimeMillis()}.jpg"
+        context.openFileOutput(filename, Context.MODE_PRIVATE).use {
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, it)
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.zorrokid.mediacollector.screens.text_recognition
 
+import android.graphics.Bitmap
 import androidx.compose.ui.geometry.Offset
 import com.google.mlkit.vision.text.Text
 

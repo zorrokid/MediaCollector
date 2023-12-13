@@ -33,6 +33,11 @@ class MediaCollectorAppState(
         navController.navigate(route) { launchSingleTop = true }
     }
 
+    fun<T> popBackWithState(key: String, value: T) {
+        navController.previousBackStackEntry?.savedStateHandle?.set(key, value)
+        navController.popBackStack()
+    }
+
     fun navigateAndPopUp(route: String, popUp: String) {
         navController.navigate(route) {
             launchSingleTop = true

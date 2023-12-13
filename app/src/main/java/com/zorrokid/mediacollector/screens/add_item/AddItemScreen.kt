@@ -23,7 +23,7 @@ import com.zorrokid.mediacollector.model.ReleaseArea
 
 @Composable
 fun AddItemScreen(
-    viewModel: AddItemViewModel = hiltViewModel(),
+    viewModel: AddItemViewModel, // = hiltViewModel(),
     openAndPopUp: (String, String) -> Unit,
     navigate: (String) -> Unit
 ) {
@@ -84,6 +84,7 @@ fun AddItemScreenContent(
                     items = conditionClassifications,
                     label = "Condition"
                 )
+                Text(text = uiState.textRecognitionResult)
                 Button(onClick = onScanText) {
                     Text(text = "Scan text")
                 }
