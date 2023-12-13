@@ -26,17 +26,6 @@ class TextRecognitionViewModel @Inject constructor(
     private val recognizedText
         get() = uiState.value.recognizedText
 
-    private val pointerOffset
-        get() = uiState.value.pointerOffset
-
-    fun onTouchEvent(offset: Offset, cameraController: LifecycleCameraController) {
-        cameraController.clearImageAnalysisAnalyzer()
-        onPointerOffsetChanged(offset)
-    }
-    fun onPointerOffsetChanged(newOffset: Offset) {
-        uiState.value = uiState.value.copy(pointerOffset = newOffset)
-    }
-
     fun onDetectedTextUpdated(text: Text, imageWidth: Int, imageHeight: Int) {
         uiState.value = uiState.value.copy(
             recognizedText = text,
@@ -60,16 +49,14 @@ class TextRecognitionViewModel @Inject constructor(
         previewView.controller = cameraController
     }
 
-    fun onStopTextRecognition(cameraController: LifecycleCameraController, onTextRecognitionResultReady: (String) -> Unit) {
+    fun onStopTextRecognition(
+        cameraController: LifecycleCameraController,
+        onTextRecognitionResultReady: (String) -> Unit,
+        popUp: () -> Unit
+    ) {
         cameraController.clearImageAnalysisAnalyzer()
         cameraController.unbind()
         onTextRecognitionResultReady(recognizedText.text)
-    }
-
-    fun onPhotoCaptured(context: Context, bitmap: Bitmap) {
-        val filename = "${System.currentTimeMillis()}.jpg"
-        context.openFileOutput(filename, Context.MODE_PRIVATE).use {
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, it)
-        }
+        popUp()
     }
 }
