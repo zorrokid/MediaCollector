@@ -38,24 +38,6 @@ class TextRecognitionAnalyzer(
 
     @OptIn(TransformExperimental::class, ExperimentalGetImage::class)
     override fun analyze(imageProxy: ImageProxy) {
-        /*imageProxy.image?.let { image ->
-            val inputImage = InputImage.fromMediaImage(
-                image,
-                imageProxy.imageInfo.rotationDegrees
-            )
-
-            textRecognizer.process(inputImage)
-                .addOnSuccessListener { visionText: Text ->
-                    onDetectedTextUpdated(visionText, image.width, image.height)
-                    imageProxy.close()
-                }
-               .addOnFailureListener {
-                   it.printStackTrace()
-                   Log.e("TextRecognitionAnalyzer", "Failed to process image: ${it.message}", it)
-                   imageProxy.close()
-                }
-        }*/
-
         scope.launch {
             val mediaImage: Image = imageProxy.image ?: run { imageProxy.close(); return@launch }
             val inputImage: InputImage = InputImage.fromMediaImage(

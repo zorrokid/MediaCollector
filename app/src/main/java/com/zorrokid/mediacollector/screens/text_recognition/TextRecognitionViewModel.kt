@@ -26,7 +26,7 @@ class TextRecognitionViewModel @Inject constructor(
     private val recognizedText
         get() = uiState.value.recognizedText
 
-    fun onDetectedTextUpdated(text: Text, imageWidth: Int, imageHeight: Int) {
+    private fun onDetectedTextUpdated(text: Text, imageWidth: Int, imageHeight: Int) {
         uiState.value = uiState.value.copy(
             recognizedText = text,
             imageWidth = imageWidth,
