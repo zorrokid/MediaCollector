@@ -29,6 +29,7 @@ import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.ContentDrawScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.viewinterop.AndroidView
@@ -154,6 +155,58 @@ fun CameraPreview(
     val screenWidth = remember { mutableStateOf(context.resources.displayMetrics.widthPixels) }
     val screenHeight = remember { mutableStateOf(context.resources.displayMetrics.heightPixels) }
 
+    fun drawRectacles(drawScope: ContentDrawScope) {
+        uiState.recognizedText.textBlocks.forEach { textBlock ->
+            textBlock.lines.forEach { line ->
+                line.elements.forEach { element ->
+                    val point = adjustPoint(
+                        MyPoint(
+                            element.boundingBox?.left?.toFloat() ?: 0f,
+                            element.boundingBox?.top?.toFloat() ?: 0f
+                        ),
+                        uiState.imageWidth,
+                        uiState.imageHeight,
+                        screenHeight.value,
+                        screenWidth.value,
+                    )
+                    val size = adjustSize(
+                        Size(
+                            element.boundingBox
+                                ?.width()
+                                ?.toFloat() ?: 0f,
+                            element.boundingBox
+                                ?.height()
+                                ?.toFloat() ?: 0f
+                        ),
+                        uiState.imageWidth,
+                        uiState.imageHeight,
+                        screenHeight.value,
+                        screenWidth.value,
+                    )
+
+                    Log.d(
+                        "TextRecognitionScreen",
+                        "Picture size: ${uiState.imageWidth}x${uiState.imageHeight} " +
+                                "screen size: ${screenWidth.value}x${screenHeight.value} " +
+                                "original point: (${element.boundingBox?.left},${element.boundingBox?.top})" +
+                                "scaled point: (${point.x},${point.y}) " +
+                                "original size: ${element.boundingBox?.width()}x${element.boundingBox?.height()} " +
+                                "scaled size: ${size.width}x${size.height}"
+                    )
+
+                    drawScope.drawRect(
+                        color = Color.Red,
+                        topLeft = Offset(
+                            x = point.x,
+                            y = point.y
+                        ),
+                        size = size,
+                    )
+                }
+            }
+        }
+    }
+
     Scaffold(
         floatingActionButton = {
            FloatingActionButton(
@@ -173,59 +226,13 @@ fun CameraPreview(
             ) {
                 Column (
                     modifier = modifier
-                        .fillMaxWidth()
-                        .padding(padding)
+                       .fillMaxWidth()
+                       .padding(padding)
                        .drawWithContent {
-                            drawContent()
-                            uiState.recognizedText.textBlocks.forEach { textBlock ->
-                                textBlock.lines.forEach { line ->
-                                    line.elements.forEach { element ->
-                                        val point = adjustPoint(
-                                            MyPoint(
-                                                element.boundingBox?.left?.toFloat() ?: 0f,
-                                                element.boundingBox?.top?.toFloat() ?: 0f
-                                            ),
-                                            uiState.imageWidth,
-                                            uiState.imageHeight,
-                                            screenHeight.value,
-                                            screenWidth.value,
-                                        )
-                                        val size = adjustSize(
-                                            Size(
-                                                element.boundingBox
-                                                    ?.width()
-                                                    ?.toFloat() ?: 0f,
-                                                element.boundingBox
-                                                    ?.height()
-                                                    ?.toFloat() ?: 0f
-                                            ),
-                                            uiState.imageWidth,
-                                            uiState.imageHeight,
-                                            screenHeight.value,
-                                            screenWidth.value,
-                                        )
-
-                                        Log.d(
-                                            "TextRecognitionScreen",
-                                            "Picture size: ${uiState.imageWidth}x${uiState.imageHeight} " +
-                                                    "screen size: ${screenWidth.value}x${screenHeight.value} " +
-                                                    "original point: (${element.boundingBox?.left},${element.boundingBox?.top})" +
-                                                    "scaled point: (${point.x},${point.y}) " +
-                                                    "original size: ${element.boundingBox?.width()}x${element.boundingBox?.height()} " +
-                                                    "scaled size: ${size.width}x${size.height}"
-                                        )
-
-                                        drawRect(
-                                            color = Color.Red,
-                                            topLeft = Offset(
-                                                x = point.x,
-                                                y = point.y
-                                            ),
-                                            size = size,
-                                        )
-                                    }
-                                }
-                            }
+                           // Modifier.drawWithContent lets you execute DrawScope operations before or after the content of the composable.
+                           // Call drawContent to render the actual content of the composable.
+                           drawContent()
+                           drawRectacles(this)
                         }
                ){
 
