@@ -16,7 +16,6 @@ import com.zorrokid.mediacollector.model.service.LogService
 import com.zorrokid.mediacollector.model.service.ReleaseAreaService
 import com.zorrokid.mediacollector.model.service.StorageService
 import com.zorrokid.mediacollector.screens.MediaCollectorViewModel
-import com.zorrokid.mediacollector.screens.edit_item.EditItemUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

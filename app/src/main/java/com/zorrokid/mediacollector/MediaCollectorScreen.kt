@@ -12,7 +12,6 @@ enum class MediaCollectorScreen(@StringRes val title: Int) {
     AddItem(title = R.string.add_item),
     AddItemParent(title = R.string.add_item),
     Search(title = R.string.search),
-    EditItem(title = R.string.edit_item),
     TextRecognition(title = R.string.text_recognition),
 }
 

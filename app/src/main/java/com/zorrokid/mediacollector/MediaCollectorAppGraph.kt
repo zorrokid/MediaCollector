@@ -8,7 +8,6 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
 import com.zorrokid.mediacollector.screens.add_item.AddItemScreen
 import com.zorrokid.mediacollector.screens.add_item.AddItemViewModel
-import com.zorrokid.mediacollector.screens.edit_item.EditItemScreen
 import com.zorrokid.mediacollector.screens.login.LogInScreen
 import com.zorrokid.mediacollector.screens.main.MainScreen
 import com.zorrokid.mediacollector.screens.search.SearchScreen
@@ -91,16 +90,4 @@ fun NavGraphBuilder.mediaCollectorAppGraph(appState: MediaCollectorAppState) {
             openScreen = { route -> appState.navigate(route) }
         )
     }
-    composable(
-        route = "${MediaCollectorScreen.EditItem.name}$ID_ARG",
-        arguments = listOf(navArgument(ID) {
-                nullable = true
-                defaultValue = null
-            })
-    ){
-        EditItemScreen(
-            openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) }
-        )
-    }
-
 }
