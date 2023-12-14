@@ -42,10 +42,6 @@ class AddItemViewModel @Inject constructor(
     private val collectionClassification
         get() = uiState.value.conditionClassification
 
-
-    private val textRecognitionResult
-        get() = uiState.value.textRecognitionResult
-
     fun onNameChange(newValue: String) {
         uiState.value = uiState.value.copy(name = newValue)
     }
@@ -77,7 +73,7 @@ class AddItemViewModel @Inject constructor(
     }
 
     fun onTextRecognitionResultReady(text: String) {
-        uiState.value = uiState.value.copy(textRecognitionResult = text)
+        uiState.value = uiState.value.copy(name = text)
     }
 
     fun onSubmitClick(

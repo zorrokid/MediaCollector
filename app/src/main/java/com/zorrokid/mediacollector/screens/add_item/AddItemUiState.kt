@@ -8,5 +8,4 @@ data class AddItemUiState(
     val barcode: String = "",
     val releaseArea: ReleaseArea = ReleaseArea(),
     val conditionClassification: ConditionClassification = ConditionClassification(),
-    val textRecognitionResult: String = "",
 )

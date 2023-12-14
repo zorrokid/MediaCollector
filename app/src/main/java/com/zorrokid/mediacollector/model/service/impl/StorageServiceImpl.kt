@@ -34,10 +34,11 @@ class StorageServiceImpl
         return firestore.collection(COLLECTION_ITEM_COLLECTION).add(collectionItemWithUserId).await().id
     }
 
-    override suspend fun update(task: CollectionItem) {
+    override suspend fun update(collectionItem: CollectionItem) {
+        val collectionItemWithUserId = collectionItem.copy(userId = auth.currentUserId)
         firestore.collection(COLLECTION_ITEM_COLLECTION)
-            .document(task.id)
-            .set(task)
+            .document(collectionItemWithUserId.id)
+            .set(collectionItemWithUserId)
             .await()
     }
 

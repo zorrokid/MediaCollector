@@ -26,11 +26,11 @@ fun EditItemScreen(
     viewModel: EditItemViewModel = hiltViewModel(),
     openAndPopUp: (String, String) -> Unit
 ) {
-    val collectionItem by viewModel.collectionItem
+    val uiState by viewModel.uiState
     val releaseAreas = viewModel.releaseAreas.collectAsStateWithLifecycle(emptyList())
     val conditionClassifications = viewModel.conditionClassifications.collectAsStateWithLifecycle(emptyList())
     EditItemScreenContent(
-        collectionItem = collectionItem,
+        uiState = uiState,
         onSubmitClick = { viewModel.onSubmitClick(openAndPopUp) },
         onBarcodeChange = viewModel::onBarcodeChange,
         onScanBarcodeClick = viewModel::onScanBarcodeClick,
@@ -38,7 +38,7 @@ fun EditItemScreen(
         releaseAreas = releaseAreas.value,
         onConditionClassificationSelect = viewModel::onConditionClassificationSelect,
         conditionClassifications = conditionClassifications.value,
-        onNameChange = viewModel::onNameChange
+        onNameChange = viewModel::onNameChange,
     )
 }
 
@@ -46,7 +46,7 @@ fun EditItemScreen(
 @Composable
 fun EditItemScreenContent(
     modifier: Modifier = Modifier,
-    collectionItem: CollectionItem,
+    uiState: EditItemUiState,
     onSubmitClick: () -> Unit,
     onBarcodeChange: (String) -> Unit,
     onScanBarcodeClick: () -> Unit,
@@ -64,21 +64,21 @@ fun EditItemScreenContent(
         },
         content = { padding ->
             Column(modifier = modifier.padding(padding)){
-                FreeTextField(value = collectionItem.name, onNewValue = onNameChange, placeholder = R.string.name)
+                FreeTextField(value = uiState.name, onNewValue = onNameChange, placeholder = R.string.name)
                 BarcodeInput(
                     onBarcodeChange = onBarcodeChange,
                     onScanBarcodeClick = onScanBarcodeClick,
-                    barcode = collectionItem.barcode
+                    barcode = uiState.barcode
                 )
                 DropDownWithTextField(
                     onSelect = onReleaseAreaSelect,
-                    selected = releaseAreas.find {  it.id == collectionItem.releaseAreaId },
+                    selected = releaseAreas.find {  it.id == uiState.releaseAreaId },
                     items = releaseAreas,
-                    label = "Release area"
+                    label = "Release area!"
                 )
                 DropDownWithTextField(
                     onSelect = onConditionClassificationSelect,
-                    selected = conditionClassifications.find { it.id == collectionItem.collectionClassificationId},
+                    selected = conditionClassifications.find { it.id == uiState.conditionClassificationId},
                     items = conditionClassifications,
                     label = "Condition"
                 )

@@ -1,6 +1,7 @@
 package com.zorrokid.mediacollector.screens.add_item
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
@@ -71,7 +72,14 @@ fun AddItemScreenContent(
         },
         content = { padding ->
             Column(modifier = modifier.padding(padding)){
-                FreeTextField(value = uiState.name, onNewValue = onNameChange, placeholder = R.string.name)
+                Row(
+                    modifier = modifier,
+                ) {
+                    FreeTextField(value = uiState.name, onNewValue = onNameChange, placeholder = R.string.name)
+                    Button(onClick = onScanText) {
+                        Text(text = "Scan text")
+                    }
+                }
                 BarcodeInput(
                     onBarcodeChange = onBarcodeChange,
                     onScanBarcodeClick = onScanBarcodeClick,
@@ -89,10 +97,6 @@ fun AddItemScreenContent(
                     items = conditionClassifications,
                     label = "Condition"
                 )
-                Text(text = uiState.textRecognitionResult)
-                Button(onClick = onScanText) {
-                    Text(text = "Scan text")
-                }
             }
         }
     )
