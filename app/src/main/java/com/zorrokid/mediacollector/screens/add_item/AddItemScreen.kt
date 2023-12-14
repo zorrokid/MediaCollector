@@ -16,8 +16,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.zorrokid.mediacollector.R
 import com.zorrokid.mediacollector.common.composable.BarcodeInput
 import com.zorrokid.mediacollector.common.composable.DropDownWithTextField
+import com.zorrokid.mediacollector.common.composable.FreeTextField
 import com.zorrokid.mediacollector.model.ConditionClassification
 import com.zorrokid.mediacollector.model.ReleaseArea
 
@@ -42,6 +44,7 @@ fun AddItemScreen(
         onConditionClassificationSelect = viewModel::onConditionClassificationSelect,
         conditionClassifications = conditionClassifications.value,
         onScanText = { viewModel.onScanText(navigate) },
+        onNameChange = viewModel::onNameChange
     )
 }
 
@@ -58,6 +61,7 @@ fun AddItemScreenContent(
     onConditionClassificationSelect: (ConditionClassification) -> Unit,
     conditionClassifications: List<ConditionClassification>,
     onScanText: () -> Unit,
+    onNameChange: (String) -> Unit,
 ) {
    Scaffold (
         floatingActionButton = {
@@ -67,6 +71,7 @@ fun AddItemScreenContent(
         },
         content = { padding ->
             Column(modifier = modifier.padding(padding)){
+                FreeTextField(value = uiState.name, onNewValue = onNameChange, placeholder = R.string.name)
                 BarcodeInput(
                     onBarcodeChange = onBarcodeChange,
                     onScanBarcodeClick = onScanBarcodeClick,
@@ -97,7 +102,7 @@ fun AddItemScreenContent(
 @Preview
 fun AddItemScreenContentPreview(){
     val selectedArea = ReleaseArea("Test")
-    val uiState = AddItemUiState("12345", selectedArea)
+    val uiState = AddItemUiState("Name", "123456", selectedArea)
     val releaseAreas: List<ReleaseArea> = listOf(selectedArea)
     AddItemScreenContent(
         uiState = uiState,
@@ -109,6 +114,7 @@ fun AddItemScreenContentPreview(){
         onConditionClassificationSelect = {},
         conditionClassifications = listOf(ConditionClassification("Test")),
         onScanText = {},
+        onNameChange = {}
     )
 }
 

@@ -6,6 +6,7 @@ import com.google.firebase.firestore.DocumentId
  * Represents a collection item.
  *
  * @property id The ID of the collection item. Id is a Firestore document ID.
+ * @property name The name of the collection item.
  * @property barcode The barcode of the collection item.
  * @property userId The ID of the user who owns the collection item.
  * @property releaseAreaId The ID of the release area of the collection item.
@@ -15,6 +16,7 @@ import com.google.firebase.firestore.DocumentId
  */
 data class CollectionItem(
     @DocumentId val id: String = "",
+    val name: String = "",
     val barcode: String = "",
     val userId: String = "",
     val releaseAreaId: String = "",

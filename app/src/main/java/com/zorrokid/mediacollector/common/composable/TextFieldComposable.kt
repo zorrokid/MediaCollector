@@ -25,6 +25,23 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import com.zorrokid.mediacollector.R
 
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+fun FreeTextField(
+    value: String,
+    onNewValue: (String) -> Unit,
+    @StringRes placeholder: Int,
+    modifier: Modifier = Modifier
+) {
+    OutlinedTextField(
+        modifier = modifier,
+        value = value,
+        onValueChange = { onNewValue(it) },
+        placeholder = { Text(text = stringResource(placeholder)) },
+        leadingIcon = { Icon(imageVector = Icons.Default.Edit, contentDescription = stringResource(placeholder)) }
+    )
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EmailField(value: String, onNewValue: (String) -> Unit, modifier: Modifier = Modifier) {

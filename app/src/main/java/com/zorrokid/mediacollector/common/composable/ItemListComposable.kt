@@ -93,6 +93,7 @@ fun ItemListCard(
             mutableStateOf(false)
         }
         Column {
+            Text(text = collectionItem.name, modifier = modifier.padding(8.dp))
             Text(text = collectionItem.barcode, modifier = modifier.padding(8.dp))
             Text(text = collectionItem.releaseAreaName, modifier = modifier.padding(8.dp))
 

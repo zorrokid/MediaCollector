@@ -30,6 +30,9 @@ class AddItemViewModel @Inject constructor(
     var uiState = mutableStateOf(AddItemUiState())
         private set
 
+    private val name
+        get() = uiState.value.name
+
     private val barcode
         get() = uiState.value.barcode
 
@@ -39,8 +42,13 @@ class AddItemViewModel @Inject constructor(
     private val collectionClassification
         get() = uiState.value.conditionClassification
 
+
     private val textRecognitionResult
         get() = uiState.value.textRecognitionResult
+
+    fun onNameChange(newValue: String) {
+        uiState.value = uiState.value.copy(name = newValue)
+    }
 
     fun onBarcodeChange(newValue: String) {
         uiState.value = uiState.value.copy(barcode = newValue)
@@ -77,6 +85,7 @@ class AddItemViewModel @Inject constructor(
     ) {
         launchCatching {
             val collectionItem = CollectionItem(
+                name = name,
                 barcode = barcode,
                 userId = accountService.currentUserId,
                 releaseAreaId = releaseArea.id,
