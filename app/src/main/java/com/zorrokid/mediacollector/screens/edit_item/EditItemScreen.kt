@@ -13,8 +13,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.zorrokid.mediacollector.R
 import com.zorrokid.mediacollector.common.composable.BarcodeInput
 import com.zorrokid.mediacollector.common.composable.DropDownWithTextField
+import com.zorrokid.mediacollector.common.composable.FreeTextField
 import com.zorrokid.mediacollector.model.CollectionItem
 import com.zorrokid.mediacollector.model.ConditionClassification
 import com.zorrokid.mediacollector.model.ReleaseArea
@@ -36,6 +38,7 @@ fun EditItemScreen(
         releaseAreas = releaseAreas.value,
         onConditionClassificationSelect = viewModel::onConditionClassificationSelect,
         conditionClassifications = conditionClassifications.value,
+        onNameChange = viewModel::onNameChange
     )
 }
 
@@ -51,6 +54,7 @@ fun EditItemScreenContent(
     releaseAreas: List<ReleaseArea>,
     onConditionClassificationSelect: (ConditionClassification) -> Unit,
     conditionClassifications: List<ConditionClassification>,
+    onNameChange: (String) -> Unit,
 ) {
     Scaffold (
         floatingActionButton = {
@@ -60,6 +64,7 @@ fun EditItemScreenContent(
         },
         content = { padding ->
             Column(modifier = modifier.padding(padding)){
+                FreeTextField(value = collectionItem.name, onNewValue = onNameChange, placeholder = R.string.name)
                 BarcodeInput(
                     onBarcodeChange = onBarcodeChange,
                     onScanBarcodeClick = onScanBarcodeClick,

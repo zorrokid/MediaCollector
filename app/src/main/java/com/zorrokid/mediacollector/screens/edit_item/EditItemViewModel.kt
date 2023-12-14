@@ -44,6 +44,9 @@ class EditItemViewModel @Inject constructor(
         }
     }
 
+    fun onNameChange(newValue: String) {
+        collectionItem.value = collectionItem.value.copy(name = newValue)
+    }
 
     fun onBarcodeChange(newValue: String) {
         collectionItem.value = collectionItem.value.copy(barcode = newValue)
