@@ -24,8 +24,21 @@ class AddItemViewModel @Inject constructor(
     private val releaseAreaService: ReleaseAreaService,
     private val conditionClassificationService: ConditionClassificationService,
 ) : MediaCollectorViewModel(logService) {
-    val releaseAreas = releaseAreaService.releaseAreas
-    val conditionClassifications = conditionClassificationService.conditionClassifications
+    val releaseAreas = mutableListOf<ReleaseArea>()
+    val conditionClassifications = mutableListOf<ConditionClassification>()
+
+    init {
+        launchCatching {
+            releaseAreaService.releaseAreas.collect {
+                releaseAreas.addAll(it)
+            }
+        }
+        launchCatching {
+            conditionClassificationService.conditionClassifications.collect {
+                conditionClassifications.addAll(it)
+            }
+        }
+    }
 
     var uiState = mutableStateOf(AddItemUiState())
         private set
@@ -36,11 +49,11 @@ class AddItemViewModel @Inject constructor(
     private val barcode
         get() = uiState.value.barcode
 
-    private val releaseArea
-        get() = uiState.value.releaseArea
+    private val releaseAreaId
+        get() = uiState.value.releaseAreaId
 
-    private val collectionClassification
-        get() = uiState.value.conditionClassification
+    private val conditionClassificationId
+        get() = uiState.value.conditionClassificationId
 
     fun onNameChange(newValue: String) {
         uiState.value = uiState.value.copy(name = newValue)
@@ -61,11 +74,11 @@ class AddItemViewModel @Inject constructor(
     }
 
     fun onReleaseAreaSelect(releaseArea: ReleaseArea) {
-        uiState.value = uiState.value.copy(releaseArea = releaseArea)
+        uiState.value = uiState.value.copy(releaseAreaId = releaseArea.id)
     }
 
     fun onConditionClassificationSelect(conditionClassification: ConditionClassification) {
-        uiState.value = uiState.value.copy(conditionClassification = conditionClassification)
+        uiState.value = uiState.value.copy(conditionClassificationId = conditionClassification.id)
     }
 
     fun onScanText(navigate: (String) -> Unit) {
@@ -84,10 +97,10 @@ class AddItemViewModel @Inject constructor(
                 name = name,
                 barcode = barcode,
                 userId = accountService.currentUserId,
-                releaseAreaId = releaseArea.id,
-                releaseAreaName = releaseArea.name,
-                collectionClassificationId = collectionClassification.id,
-                collectionClassificationName = collectionClassification.name,
+                releaseAreaId = releaseAreaId,
+                releaseAreaName = releaseAreas.find { it.id == releaseAreaId }?.name ?: "",
+                conditionClassificationId = conditionClassificationId,
+                conditionClassificationName = conditionClassifications.find { it.id == conditionClassificationId }?.name ?: "",
             )
             storageService.save(collectionItem)
             openAndPopUp(MediaCollectorScreen.Main.name, MediaCollectorScreen.AddItem.name)

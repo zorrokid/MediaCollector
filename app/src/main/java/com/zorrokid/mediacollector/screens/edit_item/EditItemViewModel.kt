@@ -15,7 +15,6 @@ import com.zorrokid.mediacollector.model.service.LogService
 import com.zorrokid.mediacollector.model.service.ReleaseAreaService
 import com.zorrokid.mediacollector.model.service.StorageService
 import com.zorrokid.mediacollector.screens.MediaCollectorViewModel
-import com.zorrokid.mediacollector.screens.add_item.AddItemUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -30,13 +29,23 @@ class EditItemViewModel @Inject constructor(
     private val barcodeScanService: BarcodeScanService,
     private val conditionClassificationService: ConditionClassificationService,
 ) : MediaCollectorViewModel(logService) {
-    val releaseAreas = releaseAreaService.releaseAreas
-    val conditionClassifications = conditionClassificationService.conditionClassifications
+    val releaseAreas = mutableListOf<ReleaseArea>()
+    val conditionClassifications = mutableListOf<ConditionClassification>()
 
     var uiState = mutableStateOf(EditItemUiState())
         private set
 
     init {
+        launchCatching {
+            releaseAreaService.releaseAreas.collect {
+                releaseAreas.addAll(it)
+            }
+        }
+        launchCatching {
+            conditionClassificationService.conditionClassifications.collect {
+                conditionClassifications.addAll(it)
+            }
+        }
         val collectionItemId = savedStateHandle.get<String>(ID)
         if (collectionItemId != null) {
             launchCatching {
@@ -49,7 +58,7 @@ class EditItemViewModel @Inject constructor(
                     name = collectionItem.name,
                     barcode = collectionItem.barcode,
                     releaseAreaId = collectionItem.releaseAreaId,
-                    conditionClassificationId = collectionItem.collectionClassificationId,
+                    conditionClassificationId = collectionItem.conditionClassificationId,
                 )
             }
         }
@@ -89,13 +98,15 @@ class EditItemViewModel @Inject constructor(
         openAndPopUp: (String, String) -> Unit
     ) {
         launchCatching {
-           storageService.update(CollectionItem(
+           storageService.update(
+               CollectionItem(
                id = uiState.value.id,
                name = uiState.value.name,
                barcode = uiState.value.barcode,
                releaseAreaId = uiState.value.releaseAreaId,
-               collectionClassificationId = uiState.value.conditionClassificationId,
-               ))
+               conditionClassificationId = uiState.value.conditionClassificationId,
+               )
+           )
             openAndPopUp(MediaCollectorScreen.Main.name, MediaCollectorScreen.EditItem.name)
             SnackbarManager.showMessage(R.string.item_updated)
         }}

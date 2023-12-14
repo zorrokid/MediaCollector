@@ -27,17 +27,15 @@ fun EditItemScreen(
     openAndPopUp: (String, String) -> Unit
 ) {
     val uiState by viewModel.uiState
-    val releaseAreas = viewModel.releaseAreas.collectAsStateWithLifecycle(emptyList())
-    val conditionClassifications = viewModel.conditionClassifications.collectAsStateWithLifecycle(emptyList())
     EditItemScreenContent(
         uiState = uiState,
         onSubmitClick = { viewModel.onSubmitClick(openAndPopUp) },
         onBarcodeChange = viewModel::onBarcodeChange,
         onScanBarcodeClick = viewModel::onScanBarcodeClick,
         onReleaseAreaSelect = viewModel::onReleaseAreaSelect,
-        releaseAreas = releaseAreas.value,
+        releaseAreas = viewModel.releaseAreas,
         onConditionClassificationSelect = viewModel::onConditionClassificationSelect,
-        conditionClassifications = conditionClassifications.value,
+        conditionClassifications = viewModel.conditionClassifications,
         onNameChange = viewModel::onNameChange,
     )
 }

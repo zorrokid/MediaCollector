@@ -32,18 +32,15 @@ fun AddItemScreen(
 ) {
     val uiState by viewModel.uiState
 
-    val releaseAreas = viewModel.releaseAreas.collectAsStateWithLifecycle(emptyList())
-    val conditionClassifications = viewModel.conditionClassifications.collectAsStateWithLifecycle(emptyList())
-
     AddItemScreenContent(
         uiState = uiState,
         onSubmitClick = { viewModel.onSubmitClick(openAndPopUp) },
         onBarcodeChange = viewModel::onBarcodeChange,
         onScanBarcodeClick = viewModel::onScanBarcodeClick,
         onReleaseAreaSelect = viewModel::onReleaseAreaSelect,
-        releaseAreas = releaseAreas.value,
+        releaseAreas = viewModel.releaseAreas,
         onConditionClassificationSelect = viewModel::onConditionClassificationSelect,
-        conditionClassifications = conditionClassifications.value,
+        conditionClassifications = viewModel.conditionClassifications,
         onScanText = { viewModel.onScanText(navigate) },
         onNameChange = viewModel::onNameChange
     )
@@ -87,13 +84,13 @@ fun AddItemScreenContent(
                 )
                DropDownWithTextField(
                     onSelect = onReleaseAreaSelect,
-                    selected = uiState.releaseArea,
+                    selected = releaseAreas.find { it.id == uiState.releaseAreaId },
                     items = releaseAreas,
                     label = "Release area"
                 )
                 DropDownWithTextField(
                     onSelect = onConditionClassificationSelect,
-                    selected = uiState.conditionClassification,
+                    selected = conditionClassifications.find { it.id == uiState.conditionClassificationId },
                     items = conditionClassifications,
                     label = "Condition"
                 )
@@ -105,16 +102,13 @@ fun AddItemScreenContent(
 @Composable
 @Preview
 fun AddItemScreenContentPreview(){
-    val selectedArea = ReleaseArea("Test")
-    val uiState = AddItemUiState("Name", "123456", selectedArea)
-    val releaseAreas: List<ReleaseArea> = listOf(selectedArea)
     AddItemScreenContent(
-        uiState = uiState,
+        uiState = AddItemUiState(),
         onSubmitClick = {},
         onBarcodeChange = {},
         onScanBarcodeClick = {},
         onReleaseAreaSelect = {},
-        releaseAreas = releaseAreas,
+        releaseAreas = listOf(ReleaseArea("123", "Test")),
         onConditionClassificationSelect = {},
         conditionClassifications = listOf(ConditionClassification("Test")),
         onScanText = {},
