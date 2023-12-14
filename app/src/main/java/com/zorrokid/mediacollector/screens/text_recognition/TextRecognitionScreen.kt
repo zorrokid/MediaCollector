@@ -22,6 +22,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -40,6 +41,7 @@ import com.google.accompanist.permissions.PermissionStatus
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
+import com.google.mlkit.vision.text.Text
 import com.zorrokid.mediacollector.common.composable.PermissionDialog
 import com.zorrokid.mediacollector.common.util.MyPoint
 import com.zorrokid.mediacollector.common.util.adjustPoint
@@ -152,11 +154,18 @@ fun CameraPreview(
         LifecycleCameraController(context)
     }
 
-    val screenWidth = remember { mutableStateOf(context.resources.displayMetrics.widthPixels) }
-    val screenHeight = remember { mutableStateOf(context.resources.displayMetrics.heightPixels) }
+    val screenWidth = remember { mutableIntStateOf(context.resources.displayMetrics.widthPixels) }
+    val screenHeight = remember { mutableIntStateOf(context.resources.displayMetrics.heightPixels) }
 
-    fun drawRectacles(drawScope: ContentDrawScope) {
-        uiState.recognizedText.textBlocks.forEach { textBlock ->
+    fun drawRectangles(
+        drawScope: ContentDrawScope,
+        screenWidth: Int,
+        screenHeight: Int,
+        imageWidth: Int,
+        imageHeight: Int,
+        recognizedText: Text,
+    ) {
+        recognizedText.textBlocks.forEach { textBlock ->
             textBlock.lines.forEach { line ->
                 line.elements.forEach { element ->
                     val point = adjustPoint(
@@ -164,10 +173,10 @@ fun CameraPreview(
                             element.boundingBox?.left?.toFloat() ?: 0f,
                             element.boundingBox?.top?.toFloat() ?: 0f
                         ),
-                        uiState.imageWidth,
-                        uiState.imageHeight,
-                        screenHeight.value,
-                        screenWidth.value,
+                        imageWidth,
+                        imageHeight,
+                        screenHeight,
+                        screenWidth,
                     )
                     val size = adjustSize(
                         Size(
@@ -178,16 +187,16 @@ fun CameraPreview(
                                 ?.height()
                                 ?.toFloat() ?: 0f
                         ),
-                        uiState.imageWidth,
-                        uiState.imageHeight,
-                        screenHeight.value,
-                        screenWidth.value,
+                        imageWidth,
+                        imageHeight,
+                        screenHeight,
+                        screenWidth,
                     )
 
                     Log.d(
                         "TextRecognitionScreen",
                         "Picture size: ${uiState.imageWidth}x${uiState.imageHeight} " +
-                                "screen size: ${screenWidth.value}x${screenHeight.value} " +
+                                "screen size: ${screenWidth}x${screenHeight} " +
                                 "original point: (${element.boundingBox?.left},${element.boundingBox?.top})" +
                                 "scaled point: (${point.x},${point.y}) " +
                                 "original size: ${element.boundingBox?.width()}x${element.boundingBox?.height()} " +
@@ -232,7 +241,14 @@ fun CameraPreview(
                            // Modifier.drawWithContent lets you execute DrawScope operations before or after the content of the composable.
                            // Call drawContent to render the actual content of the composable.
                            drawContent()
-                           drawRectacles(this)
+                           drawRectangles(
+                               this,
+                               screenWidth.value,
+                               screenHeight.value,
+                               uiState.imageWidth,
+                               uiState.imageHeight,
+                               uiState.recognizedText,
+                           )
                         }
                ){
 

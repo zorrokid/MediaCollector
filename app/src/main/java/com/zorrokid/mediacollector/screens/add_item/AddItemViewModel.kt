@@ -15,12 +15,6 @@ import com.zorrokid.mediacollector.screens.MediaCollectorViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
-// TODO: Create a base view model for add item and text recognition view models
-// base view model will contain shared state!
-// store recognized text in base view model
-// -->  https://www.youtube.com/watch?v=h61Wqy3qcKg
-// https://rhythamnegi.com/mastering-data-sharing-between-screens-with-jetpack-compose-5-key-techniques
-// https://developer.android.com/jetpack/compose/stateString
 @HiltViewModel
 class AddItemViewModel @Inject constructor(
     logService: LogService,
