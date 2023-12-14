@@ -6,8 +6,8 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
-import com.zorrokid.mediacollector.screens.add_item.AddItemScreen
-import com.zorrokid.mediacollector.screens.add_item.AddItemViewModel
+import com.zorrokid.mediacollector.screens.add_or_edit_item.AddItemScreen
+import com.zorrokid.mediacollector.screens.add_or_edit_item.AddOrEditItemViewModel
 import com.zorrokid.mediacollector.screens.login.LogInScreen
 import com.zorrokid.mediacollector.screens.main.MainScreen
 import com.zorrokid.mediacollector.screens.search.SearchScreen
@@ -47,24 +47,24 @@ fun NavGraphBuilder.mediaCollectorAppGraph(appState: MediaCollectorAppState) {
     }
 
     navigation(
-        route = "${MediaCollectorScreen.AddItemParent.name}$ID_ARG",
-        startDestination = MediaCollectorScreen.AddItem.name,
+        route = "${MediaCollectorScreen.AddOrEditItem.name}$ID_ARG",
+        startDestination = MediaCollectorScreen.AddOrEditItemForm.name,
         arguments = listOf(navArgument(ID) {
                 nullable = true
                 defaultValue = null
             })
     ){
         composable(
-            route = MediaCollectorScreen.AddItem.name,
+            route = MediaCollectorScreen.AddOrEditItemForm.name,
             arguments = listOf(navArgument(ID) {
                     nullable = true
                     defaultValue = null
                 })
         ){
             val parentEntry = remember(it){
-                appState.navController.getBackStackEntry(MediaCollectorScreen.AddItemParent.name)
+                appState.navController.getBackStackEntry(MediaCollectorScreen.AddOrEditItem.name)
             }
-            var parentViewModel = hiltViewModel<AddItemViewModel>(parentEntry)
+            var parentViewModel = hiltViewModel<AddOrEditItemViewModel>(parentEntry)
 
             val id = parentEntry.arguments?.getString(ID)
             parentViewModel.uiState.value = parentViewModel.uiState.value.copy(id = id ?: "")
@@ -76,9 +76,9 @@ fun NavGraphBuilder.mediaCollectorAppGraph(appState: MediaCollectorAppState) {
         }
         composable(route = MediaCollectorScreen.TextRecognition.name){
             val parentEntry = remember(it){
-                appState.navController.getBackStackEntry(MediaCollectorScreen.AddItemParent.name)
+                appState.navController.getBackStackEntry(MediaCollectorScreen.AddOrEditItem.name)
             }
-            val parentViewModel = hiltViewModel<AddItemViewModel>(parentEntry)
+            val parentViewModel = hiltViewModel<AddOrEditItemViewModel>(parentEntry)
             TextRecognitionScreen(
                 sharedViewModel = parentViewModel,
                 popUp = { appState.popUp() }

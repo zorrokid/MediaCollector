@@ -9,8 +9,8 @@ enum class MediaCollectorScreen(@StringRes val title: Int) {
     Main(title = R.string.main),
     Splash(title = R.string.splash),
     Settings(title = R.string.settings),
-    AddItem(title = R.string.add_item),
-    AddItemParent(title = R.string.add_item),
+    AddOrEditItemForm(title = R.string.add_or_edit_item),
+    AddOrEditItem(title = R.string.add_or_edit_item),
     Search(title = R.string.search),
     TextRecognition(title = R.string.text_recognition),
 }

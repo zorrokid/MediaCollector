@@ -1,4 +1,4 @@
-package com.zorrokid.mediacollector.screens.add_item
+package com.zorrokid.mediacollector.screens.add_or_edit_item
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
@@ -20,7 +20,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class AddItemViewModel @Inject constructor(
+class AddOrEditItemViewModel @Inject constructor(
     // SavedStateHandle is key-value map that will let you retrieve value from the saved state with key.
     // See: https://developersbreach.com/savedstatehandle-viewmodel-android/
     savedStateHandle: SavedStateHandle,
@@ -34,7 +34,7 @@ class AddItemViewModel @Inject constructor(
     val releaseAreas = mutableListOf<ReleaseArea>()
     val conditionClassifications = mutableListOf<ConditionClassification>()
 
-    var uiState = mutableStateOf(AddItemUiState())
+    var uiState = mutableStateOf(AddOrEditItemUiState())
         private set
 
     init {
@@ -55,7 +55,7 @@ class AddItemViewModel @Inject constructor(
                     collectionItemId
                 ) ?: CollectionItem()
 
-                uiState.value = AddItemUiState(
+                uiState.value = AddOrEditItemUiState(
                     id = collectionItem.id,
                     name = collectionItem.name,
                     barcode = collectionItem.barcode,
@@ -136,7 +136,7 @@ class AddItemViewModel @Inject constructor(
             }
             var messageId = if (isUpdate) R.string.item_updated else R.string.item_added
             SnackbarManager.showMessage(messageId)
-            openAndPopUp(MediaCollectorScreen.Main.name, MediaCollectorScreen.AddItem.name)
+            openAndPopUp(MediaCollectorScreen.Main.name, MediaCollectorScreen.AddOrEditItemForm.name)
         }
     }
 }

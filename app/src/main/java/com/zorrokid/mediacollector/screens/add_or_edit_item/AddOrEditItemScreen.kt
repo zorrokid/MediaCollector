@@ -1,4 +1,4 @@
-package com.zorrokid.mediacollector.screens.add_item
+package com.zorrokid.mediacollector.screens.add_or_edit_item
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,8 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zorrokid.mediacollector.R
 import com.zorrokid.mediacollector.common.composable.BarcodeInput
 import com.zorrokid.mediacollector.common.composable.DropDownWithTextField
@@ -26,7 +24,7 @@ import com.zorrokid.mediacollector.model.ReleaseArea
 
 @Composable
 fun AddItemScreen(
-    viewModel: AddItemViewModel, // = hiltViewModel(),
+    viewModel: AddOrEditItemViewModel, // = hiltViewModel(),
     openAndPopUp: (String, String) -> Unit,
     navigate: (String) -> Unit
 ) {
@@ -50,7 +48,7 @@ fun AddItemScreen(
 @Composable
 fun AddItemScreenContent(
     modifier: Modifier = Modifier,
-    uiState: AddItemUiState,
+    uiState: AddOrEditItemUiState,
     onSubmitClick: () -> Unit,
     onBarcodeChange: (String) -> Unit,
     onScanBarcodeClick: () -> Unit,
@@ -103,7 +101,7 @@ fun AddItemScreenContent(
 @Preview
 fun AddItemScreenContentPreview(){
     AddItemScreenContent(
-        uiState = AddItemUiState(),
+        uiState = AddOrEditItemUiState(),
         onSubmitClick = {},
         onBarcodeChange = {},
         onScanBarcodeClick = {},

@@ -46,12 +46,12 @@ import com.zorrokid.mediacollector.common.composable.PermissionDialog
 import com.zorrokid.mediacollector.common.util.MyPoint
 import com.zorrokid.mediacollector.common.util.adjustPoint
 import com.zorrokid.mediacollector.common.util.adjustSize
-import com.zorrokid.mediacollector.screens.add_item.AddItemViewModel
+import com.zorrokid.mediacollector.screens.add_or_edit_item.AddOrEditItemViewModel
 
 @Composable
 fun TextRecognitionScreen(
     viewModel: TextRecognitionViewModel = hiltViewModel(),
-    sharedViewModel: AddItemViewModel,
+    sharedViewModel: AddOrEditItemViewModel,
     popUp: () -> Unit,
 ) {
     val uiState by viewModel.uiState
