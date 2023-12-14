@@ -4,8 +4,8 @@ import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
-import androidx.navigation.navigation
 import com.zorrokid.mediacollector.screens.add_item.AddItemScreen
 import com.zorrokid.mediacollector.screens.add_item.AddItemViewModel
 import com.zorrokid.mediacollector.screens.edit_item.EditItemScreen
@@ -46,19 +46,33 @@ fun NavGraphBuilder.mediaCollectorAppGraph(appState: MediaCollectorAppState) {
             restartApp = { route -> appState.clearAndNavigate(route) }
         )
     }
+
     navigation(
-        route = MediaCollectorScreen.AddItemParent.name,
+        route = "${MediaCollectorScreen.AddItemParent.name}$ID_ARG",
         startDestination = MediaCollectorScreen.AddItem.name,
+        arguments = listOf(navArgument(ID) {
+                nullable = true
+                defaultValue = null
+            })
     ){
-        composable(route = MediaCollectorScreen.AddItem.name){
+        composable(
+            route = MediaCollectorScreen.AddItem.name,
+            arguments = listOf(navArgument(ID) {
+                    nullable = true
+                    defaultValue = null
+                })
+        ){
             val parentEntry = remember(it){
                 appState.navController.getBackStackEntry(MediaCollectorScreen.AddItemParent.name)
             }
-            val parentViewModel = hiltViewModel<AddItemViewModel>(parentEntry)
+            var parentViewModel = hiltViewModel<AddItemViewModel>(parentEntry)
+
+            val id = parentEntry.arguments?.getString(ID)
+            parentViewModel.uiState.value = parentViewModel.uiState.value.copy(id = id ?: "")
             AddItemScreen(
                 openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) },
                 navigate = { route -> appState.navigate(route) },
-                viewModel = parentViewModel
+                viewModel = parentViewModel,
             )
         }
         composable(route = MediaCollectorScreen.TextRecognition.name){

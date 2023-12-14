@@ -17,7 +17,7 @@ class MainViewModel @Inject constructor(
     fun onSettingsClick(openScreen: (String) -> Unit) = openScreen(MediaCollectorScreen.Settings.name)
     fun onAddItemClick(openScreen: (String) -> Unit) = openScreen(MediaCollectorScreen.AddItemParent.name)
     fun onEditItemClick(openScreen: (String) -> Unit, id: String){
-         openScreen("${MediaCollectorScreen.EditItem.name}?$ID=$id")
+         openScreen("${MediaCollectorScreen.AddItemParent.name}?$ID=$id")
     }
     fun onDeleteItemClick(id: String) { launchCatching {
         storageService.delete(id)
