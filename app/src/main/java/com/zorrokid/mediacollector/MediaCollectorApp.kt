@@ -53,7 +53,7 @@ fun rememberAppState(
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
     snackbarManager: SnackbarManager = SnackbarManager,
     resources: Resources = resources(),
-    coroutineScope: CoroutineScope = rememberCoroutineScope()
+    coroutineScope: CoroutineScope = rememberCoroutineScope(),
 ) =
     remember(navController) {
         MediaCollectorAppState(

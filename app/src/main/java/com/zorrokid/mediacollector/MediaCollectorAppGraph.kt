@@ -1,10 +1,13 @@
 package com.zorrokid.mediacollector
 
+import androidx.compose.runtime.remember
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
-import com.zorrokid.mediacollector.screens.add_item.AddItemScreen
-import com.zorrokid.mediacollector.screens.edit_item.EditItemScreen
+import com.zorrokid.mediacollector.screens.add_or_edit_item.AddItemScreen
+import com.zorrokid.mediacollector.screens.add_or_edit_item.AddOrEditItemViewModel
 import com.zorrokid.mediacollector.screens.login.LogInScreen
 import com.zorrokid.mediacollector.screens.main.MainScreen
 import com.zorrokid.mediacollector.screens.search.SearchScreen
@@ -12,6 +15,7 @@ import com.zorrokid.mediacollector.screens.settings.SettingsScreen
 import com.zorrokid.mediacollector.screens.signup.SignUpScreen
 import com.zorrokid.mediacollector.screens.splash.SplashScreen
 import com.zorrokid.mediacollector.screens.start.StartScreen
+import com.zorrokid.mediacollector.screens.text_recognition.TextRecognitionScreen
 
 fun NavGraphBuilder.mediaCollectorAppGraph(appState: MediaCollectorAppState) {
     composable(route = MediaCollectorScreen.Splash.name) {
@@ -41,25 +45,49 @@ fun NavGraphBuilder.mediaCollectorAppGraph(appState: MediaCollectorAppState) {
             restartApp = { route -> appState.clearAndNavigate(route) }
         )
     }
-    composable(route = MediaCollectorScreen.AddItem.name){
-        AddItemScreen(
-            openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) }
-        )
-    }
-    composable(route = MediaCollectorScreen.Search.name){
-        SearchScreen(
-            openScreen = { route -> appState.navigate(route) }
-        )
-    }
-    composable(
-        route = "${MediaCollectorScreen.EditItem.name}$ID_ARG",
+
+    navigation(
+        route = "${MediaCollectorScreen.AddOrEditItem.name}$ID_ARG",
+        startDestination = MediaCollectorScreen.AddOrEditItemForm.name,
         arguments = listOf(navArgument(ID) {
                 nullable = true
                 defaultValue = null
             })
     ){
-        EditItemScreen(
-            openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) }
+        composable(
+            route = MediaCollectorScreen.AddOrEditItemForm.name,
+            arguments = listOf(navArgument(ID) {
+                    nullable = true
+                    defaultValue = null
+                })
+        ){
+            val parentEntry = remember(it){
+                appState.navController.getBackStackEntry(MediaCollectorScreen.AddOrEditItem.name)
+            }
+            var parentViewModel = hiltViewModel<AddOrEditItemViewModel>(parentEntry)
+
+            val id = parentEntry.arguments?.getString(ID)
+            parentViewModel.uiState.value = parentViewModel.uiState.value.copy(id = id ?: "")
+            AddItemScreen(
+                openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) },
+                navigate = { route -> appState.navigate(route) },
+                viewModel = parentViewModel,
+            )
+        }
+        composable(route = MediaCollectorScreen.TextRecognition.name){
+            val parentEntry = remember(it){
+                appState.navController.getBackStackEntry(MediaCollectorScreen.AddOrEditItem.name)
+            }
+            val parentViewModel = hiltViewModel<AddOrEditItemViewModel>(parentEntry)
+            TextRecognitionScreen(
+                sharedViewModel = parentViewModel,
+                popUp = { appState.popUp() }
+            )
+        }
+    }
+    composable(route = MediaCollectorScreen.Search.name){
+        SearchScreen(
+            openScreen = { route -> appState.navigate(route) }
         )
     }
 }

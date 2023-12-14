@@ -12,6 +12,12 @@ This is very much inspired by the following article and example app and codelab:
 - https://firebase.blog/posts/2022/05/adding-firebase-auth-to-jetpack-compose-app/
 - https://firebase.google.com/codelabs/build-android-app-with-firebase-compose
 
+# Permissions
+
+Text recognition feature needs camera permsission.
+
+Barcode scan feature uses Google Play services for Barcode Scanning so no permissions are needed for that.
+
 # Authentication and data storeage
 
 Unsing [Firebase](https://firebase.google.com/docs/android/setup) authentication and Firestore database.

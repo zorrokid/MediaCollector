@@ -43,6 +43,6 @@ class SearchViewModel @Inject constructor(
     }
 
     fun onEditItemClick(openScreen: (String) -> Unit, id: String)
-            = openScreen("${MediaCollectorScreen.EditItem.name}?id=$id")
+            = openScreen("${MediaCollectorScreen.AddOrEditItem.name}?id=$id")
     fun onDeleteItemClick(id: String) { /* TODO */}
 }

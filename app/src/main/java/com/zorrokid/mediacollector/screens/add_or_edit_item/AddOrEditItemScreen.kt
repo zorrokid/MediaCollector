@@ -1,49 +1,54 @@
-package com.zorrokid.mediacollector.screens.edit_item
+package com.zorrokid.mediacollector.screens.add_or_edit_item
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.compose.ui.tooling.preview.Preview
+import com.zorrokid.mediacollector.R
 import com.zorrokid.mediacollector.common.composable.BarcodeInput
 import com.zorrokid.mediacollector.common.composable.DropDownWithTextField
-import com.zorrokid.mediacollector.model.CollectionItem
+import com.zorrokid.mediacollector.common.composable.FreeTextField
 import com.zorrokid.mediacollector.model.ConditionClassification
 import com.zorrokid.mediacollector.model.ReleaseArea
 
 @Composable
-fun EditItemScreen(
-    viewModel: EditItemViewModel = hiltViewModel(),
-    openAndPopUp: (String, String) -> Unit
+fun AddItemScreen(
+    viewModel: AddOrEditItemViewModel, // = hiltViewModel(),
+    openAndPopUp: (String, String) -> Unit,
+    navigate: (String) -> Unit
 ) {
-    val collectionItem by viewModel.collectionItem
-    val releaseAreas = viewModel.releaseAreas.collectAsStateWithLifecycle(emptyList())
-    val conditionClassifications = viewModel.conditionClassifications.collectAsStateWithLifecycle(emptyList())
-    EditItemScreenContent(
-        collectionItem = collectionItem,
+    val uiState by viewModel.uiState
+
+    AddItemScreenContent(
+        uiState = uiState,
         onSubmitClick = { viewModel.onSubmitClick(openAndPopUp) },
         onBarcodeChange = viewModel::onBarcodeChange,
         onScanBarcodeClick = viewModel::onScanBarcodeClick,
         onReleaseAreaSelect = viewModel::onReleaseAreaSelect,
-        releaseAreas = releaseAreas.value,
+        releaseAreas = viewModel.releaseAreas,
         onConditionClassificationSelect = viewModel::onConditionClassificationSelect,
-        conditionClassifications = conditionClassifications.value,
+        conditionClassifications = viewModel.conditionClassifications,
+        onScanText = { viewModel.onScanText(navigate) },
+        onNameChange = viewModel::onNameChange
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EditItemScreenContent(
+fun AddItemScreenContent(
     modifier: Modifier = Modifier,
-    collectionItem: CollectionItem,
+    uiState: AddOrEditItemUiState,
     onSubmitClick: () -> Unit,
     onBarcodeChange: (String) -> Unit,
     onScanBarcodeClick: () -> Unit,
@@ -51,29 +56,39 @@ fun EditItemScreenContent(
     releaseAreas: List<ReleaseArea>,
     onConditionClassificationSelect: (ConditionClassification) -> Unit,
     conditionClassifications: List<ConditionClassification>,
+    onScanText: () -> Unit,
+    onNameChange: (String) -> Unit,
 ) {
-    Scaffold (
+   Scaffold (
         floatingActionButton = {
             FloatingActionButton(onClick = onSubmitClick) {
-                Icon(Icons.Filled.Check, "Update")
+                Icon(Icons.Filled.Check, "Add")
             }
         },
         content = { padding ->
             Column(modifier = modifier.padding(padding)){
+                Row(
+                    modifier = modifier,
+                ) {
+                    FreeTextField(value = uiState.name, onNewValue = onNameChange, placeholder = R.string.name)
+                    Button(onClick = onScanText) {
+                        Text(text = "Scan text")
+                    }
+                }
                 BarcodeInput(
                     onBarcodeChange = onBarcodeChange,
                     onScanBarcodeClick = onScanBarcodeClick,
-                    barcode = collectionItem.barcode
+                    barcode = uiState.barcode
                 )
-                DropDownWithTextField(
+               DropDownWithTextField(
                     onSelect = onReleaseAreaSelect,
-                    selected = releaseAreas.find {  it.id == collectionItem.releaseAreaId },
+                    selected = releaseAreas.find { it.id == uiState.releaseAreaId },
                     items = releaseAreas,
                     label = "Release area"
                 )
                 DropDownWithTextField(
                     onSelect = onConditionClassificationSelect,
-                    selected = conditionClassifications.find { it.id == collectionItem.collectionClassificationId},
+                    selected = conditionClassifications.find { it.id == uiState.conditionClassificationId },
                     items = conditionClassifications,
                     label = "Condition"
                 )
@@ -81,3 +96,21 @@ fun EditItemScreenContent(
         }
     )
 }
+
+@Composable
+@Preview
+fun AddItemScreenContentPreview(){
+    AddItemScreenContent(
+        uiState = AddOrEditItemUiState(),
+        onSubmitClick = {},
+        onBarcodeChange = {},
+        onScanBarcodeClick = {},
+        onReleaseAreaSelect = {},
+        releaseAreas = listOf(ReleaseArea("123", "Test")),
+        onConditionClassificationSelect = {},
+        conditionClassifications = listOf(ConditionClassification("Test")),
+        onScanText = {},
+        onNameChange = {}
+    )
+}
+
