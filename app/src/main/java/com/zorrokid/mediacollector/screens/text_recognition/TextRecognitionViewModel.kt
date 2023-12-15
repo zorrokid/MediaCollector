@@ -23,9 +23,6 @@ class TextRecognitionViewModel @Inject constructor(
     var uiState = mutableStateOf(TextRecognitionUiState())
         private set
 
-    private val recognizedText
-        get() = uiState.value.recognizedText
-
     private fun onDetectedTextUpdated(text: Text, imageWidth: Int, imageHeight: Int) {
         uiState.value = uiState.value.copy(
             recognizedText = text,
@@ -51,12 +48,11 @@ class TextRecognitionViewModel @Inject constructor(
 
     fun onStopTextRecognition(
         cameraController: LifecycleCameraController,
-        onTextRecognitionResultReady: (String) -> Unit,
-        popUp: () -> Unit
     ) {
         cameraController.clearImageAnalysisAnalyzer()
         cameraController.unbind()
-        onTextRecognitionResultReady(recognizedText.text)
-        popUp()
+        uiState.value = uiState.value.copy(
+            recognitionDone = true
+        )
     }
 }
