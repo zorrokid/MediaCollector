@@ -22,7 +22,10 @@ fun NavGraphBuilder.mediaCollectorAppGraph(appState: MediaCollectorAppState) {
         SplashScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp)})
     }
     composable(route = MediaCollectorScreen.Main.name){
-        MainScreen(openScreen = { route -> appState.navigate(route) })
+        MainScreen(
+            openScreen = { route -> appState.navigate(route) },
+            navController = appState.navController,
+        )
     }
     composable(route = MediaCollectorScreen.Start.name){
         StartScreen(onLoginButtonClicked = {
@@ -42,7 +45,8 @@ fun NavGraphBuilder.mediaCollectorAppGraph(appState: MediaCollectorAppState) {
     composable(route = MediaCollectorScreen.Settings.name){
         SettingsScreen(
             openScreen = { route -> appState.navigate(route) },
-            restartApp = { route -> appState.clearAndNavigate(route) }
+            restartApp = { route -> appState.clearAndNavigate(route) },
+            navController = appState.navController,
         )
     }
 
@@ -87,7 +91,8 @@ fun NavGraphBuilder.mediaCollectorAppGraph(appState: MediaCollectorAppState) {
     }
     composable(route = MediaCollectorScreen.Search.name){
         SearchScreen(
-            openScreen = { route -> appState.navigate(route) }
+            openScreen = { route -> appState.navigate(route) },
+            navController = appState.navController,
         )
     }
 }

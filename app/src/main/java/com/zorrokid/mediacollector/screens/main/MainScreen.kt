@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavHostController
 import com.zorrokid.mediacollector.common.composable.ItemList
 import com.zorrokid.mediacollector.common.composable.MainNavigationBar
 import com.zorrokid.mediacollector.model.CollectionItem
@@ -24,7 +25,9 @@ import com.zorrokid.mediacollector.model.CollectionItem
 @Composable
 fun MainScreen(
     openScreen: (String) -> Unit,
-    viewModel: MainViewModel = hiltViewModel()) {
+    viewModel: MainViewModel = hiltViewModel(),
+    navController: NavHostController,
+    ) {
     val collectionItems = viewModel.collectionItems.collectAsStateWithLifecycle(emptyList())
     MainScreenContent(
         onSettingsClick = viewModel::onSettingsClick,
@@ -33,6 +36,7 @@ fun MainScreen(
         onAddItemClick = viewModel::onAddItemClick,
         onEditItemClick = viewModel::onEditItemClick,
         onDeleteItemClick = viewModel::onDeleteItemClick,
+        navController = navController,
     )
 }
 
@@ -45,7 +49,8 @@ fun MainScreenContent(
     onEditItemClick: ((String) -> Unit, id: String) -> Unit,
     onDeleteItemClick: (String) -> Unit,
     openScreen: (String) -> Unit,
-    collectionItems: List<CollectionItem>
+    collectionItems: List<CollectionItem>,
+    navController: NavHostController,
 ) {
     Scaffold (
         floatingActionButton = {
@@ -73,7 +78,7 @@ fun MainScreenContent(
             }
         },
         bottomBar = {
-           MainNavigationBar(openScreen)
+           MainNavigationBar(navController)
         }
     )
 }

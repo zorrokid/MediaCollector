@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import com.zorrokid.mediacollector.R
 import com.zorrokid.mediacollector.common.composable.MainNavigationBar
 
@@ -24,7 +25,8 @@ import com.zorrokid.mediacollector.common.composable.MainNavigationBar
 fun SettingsScreen(
     restartApp: (String) -> Unit,
     openScreen: (String) -> Unit,
-    viewModel: SettingsViewModel = hiltViewModel()
+    viewModel: SettingsViewModel = hiltViewModel(),
+    navController: NavHostController,
 ) {
     val uiState by viewModel.uiState.collectAsState(
         initial = SettingsUiState()
@@ -36,7 +38,7 @@ fun SettingsScreen(
         onSignUpClick = { viewModel.onSignUpClick(openScreen) },
         onSignOutClick = { viewModel.onSignOutClick(restartApp) },
         onDeleteMyAccountClick = { viewModel.onDeleteMyAccountClick(restartApp) },
-        openScreen = openScreen
+        navController = navController,
     )
 }
 
@@ -49,7 +51,7 @@ fun SettingsScreenContent(
     onSignUpClick: () -> Unit,
     onSignOutClick: () -> Unit,
     onDeleteMyAccountClick: () -> Unit,
-    openScreen: (String) -> Unit
+    navController: NavHostController,
 ){
     Scaffold (
         content = { padding ->
@@ -71,7 +73,6 @@ fun SettingsScreenContent(
                     }
 
                 } else {
-                    // Sign out button
                     Button(onClick = { onSignOutClick() }) {
                         Text(text = stringResource(id = R.string.sign_out))
                     }
@@ -82,8 +83,7 @@ fun SettingsScreenContent(
             }
         },
         bottomBar = {
-            MainNavigationBar(openScreen)
+            MainNavigationBar(navController)
         }
     )
-
 }
