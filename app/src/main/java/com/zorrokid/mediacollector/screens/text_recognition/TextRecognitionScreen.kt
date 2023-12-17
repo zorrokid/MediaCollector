@@ -7,14 +7,20 @@ import android.widget.LinearLayout
 import androidx.camera.view.LifecycleCameraController
 import androidx.camera.view.PreviewView
 import androidx.camera.view.TransformExperimental
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -33,6 +39,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.ContentDrawScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.LifecycleOwner
@@ -42,6 +49,7 @@ import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
 import com.google.mlkit.vision.text.Text
+import com.google.mlkit.vision.text.Text.TextBlock
 import com.zorrokid.mediacollector.common.composable.PermissionDialog
 import com.zorrokid.mediacollector.common.util.MyPoint
 import com.zorrokid.mediacollector.common.util.adjustPoint
@@ -60,7 +68,7 @@ fun TextRecognitionScreen(
         uiState = uiState,
         onStartTextRecognition = viewModel::startTextRecognition,
         onStopTextRecognition = viewModel::onStopTextRecognition,
-        onTextRecognitionResultReady = sharedViewModel::onTextRecognitionResultReady,
+        onTextSelected = sharedViewModel::onTextSelected,
         popUp = popUp,
     )
 }
@@ -71,31 +79,101 @@ fun TextRecognitionScreenContent(
     modifier: Modifier = Modifier,
     uiState: TextRecognitionUiState,
     onStartTextRecognition: (Context, LifecycleCameraController, LifecycleOwner, PreviewView) -> Unit,
-    onStopTextRecognition: (LifecycleCameraController, (String) -> Unit, () -> Unit) -> Unit,
-    onTextRecognitionResultReady: (String) -> Unit,
+    onStopTextRecognition: (LifecycleCameraController) -> Unit,
+    onTextSelected: (List<String>, () -> Unit) -> Unit,
     popUp: () -> Unit,
 ) {
-    val cameraPermissionState = rememberPermissionState(
-        Manifest.permission.CAMERA
-    )
-    if (cameraPermissionState.status.isGranted) {
-        CameraPreview(
-            modifier,
-            onStartTextRecognition,
-            uiState,
-            onStopTextRecognition,
-            onTextRecognitionResultReady,
-            popUp,
+
+    if (uiState.recognitionDone) {
+        TextScanResultSelector(
+            modifier = modifier,
+            recognizedText = uiState.recognizedText,
+            onTextSelected = onTextSelected,
+            popUp = popUp,
         )
     }
     else {
-        NoPermissionScreen(
-            modifier = modifier,
-            permissionStatus = cameraPermissionState.status,
-            onPermissionRequested = {
-                cameraPermissionState.launchPermissionRequest()
-            }
+        val cameraPermissionState = rememberPermissionState(
+            Manifest.permission.CAMERA
         )
+        if (cameraPermissionState.status.isGranted) {
+            CameraPreview(
+                modifier,
+                onStartTextRecognition,
+                uiState,
+                onStopTextRecognition,
+            )
+        } else {
+            NoPermissionScreen(
+                modifier = modifier,
+                permissionStatus = cameraPermissionState.status,
+                onPermissionRequested = {
+                    cameraPermissionState.launchPermissionRequest()
+                }
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TextScanResultSelector(
+    modifier: Modifier = Modifier,
+    recognizedText: Text,
+    onTextSelected: (List<String>, () -> Unit) -> Unit,
+    popUp: () -> Unit,
+) {
+    val selectedTexts = remember { mutableStateOf(emptyList<String>()) }
+
+    Scaffold (
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = { onTextSelected(selectedTexts.value, popUp) },
+            ) {
+                Icon(Icons.Filled.Done, "Add")
+            }
+        },
+        content = { padding ->
+            LazyColumn (modifier = modifier.padding(padding)) {
+                itemsIndexed(recognizedText.textBlocks) { index, textBlock ->
+                    TextScanResultCard(modifier, textBlock, onTextSelected =  {
+                        selectedTexts.value = selectedTexts.value + it
+                    }, index)
+                }
+            }
+        },
+    )
+}
+
+@Composable
+fun TextScanResultCard(
+    modifier: Modifier = Modifier,
+    textBlock: TextBlock,
+    onTextSelected: (String) -> Unit,
+    index: Int,
+) {
+    val isSelected = remember { mutableStateOf(false) }
+    Card(modifier = modifier) {
+        Column(modifier = modifier.padding(8.dp)) {
+            Row(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Checkbox(checked = isSelected.value, onCheckedChange = {
+                    isSelected.value = it
+                    if (it) {
+                        onTextSelected(textBlock.text)
+                    }
+                })
+                textBlock.lines.forEach { line ->
+                    line.elements.forEach { element ->
+                        Text(text = element.text)
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -143,9 +221,7 @@ fun CameraPreview(
     modifier: Modifier = Modifier,
     onStartTextRecognition: (Context, LifecycleCameraController, LifecycleOwner, PreviewView) -> Unit,
     uiState: TextRecognitionUiState,
-    onStopTextRecognition: (LifecycleCameraController, (String) -> Unit, () -> Unit) -> Unit,
-    onTextRecognitionResultReady: (String) -> Unit,
-    popUp: () -> Unit,
+    onStopTextRecognition: (LifecycleCameraController) -> Unit,
 ){
 
     val context = LocalContext.current
@@ -165,6 +241,8 @@ fun CameraPreview(
         imageHeight: Int,
         recognizedText: Text,
     ) {
+        val imageSize = Size(imageWidth.toFloat(), imageHeight.toFloat())
+        val screenSize = Size(screenWidth.toFloat(), screenHeight.toFloat())
         recognizedText.textBlocks.forEach { textBlock ->
             textBlock.lines.forEach { line ->
                 line.elements.forEach { element ->
@@ -173,10 +251,8 @@ fun CameraPreview(
                             element.boundingBox?.left?.toFloat() ?: 0f,
                             element.boundingBox?.top?.toFloat() ?: 0f
                         ),
-                        imageWidth,
-                        imageHeight,
-                        screenHeight,
-                        screenWidth,
+                        imageSize,
+                        screenSize,
                     )
                     val size = adjustSize(
                         Size(
@@ -187,10 +263,8 @@ fun CameraPreview(
                                 ?.height()
                                 ?.toFloat() ?: 0f
                         ),
-                        imageWidth,
-                        imageHeight,
-                        screenHeight,
-                        screenWidth,
+                        imageSize,
+                        screenSize,
                     )
 
                     Log.d(
@@ -219,9 +293,7 @@ fun CameraPreview(
     Scaffold(
         floatingActionButton = {
            FloatingActionButton(
-               onClick = {
-                   onStopTextRecognition(cameraController, onTextRecognitionResultReady, popUp)
-                         },
+               onClick = { onStopTextRecognition(cameraController) },
           ){
                Icon(Icons.Filled.Done, "Add")
            }
@@ -235,20 +307,20 @@ fun CameraPreview(
             ) {
                 Column (
                     modifier = modifier
-                       .fillMaxWidth()
-                       .padding(padding)
-                       .drawWithContent {
-                           // Modifier.drawWithContent lets you execute DrawScope operations before or after the content of the composable.
-                           // Call drawContent to render the actual content of the composable.
-                           drawContent()
-                           drawRectangles(
-                               this,
-                               screenWidth.value,
-                               screenHeight.value,
-                               uiState.imageWidth,
-                               uiState.imageHeight,
-                               uiState.recognizedText,
-                           )
+                        .fillMaxWidth()
+                        .padding(padding)
+                        .drawWithContent {
+                            // Modifier.drawWithContent lets you execute DrawScope operations before or after the content of the composable.
+                            // Call drawContent to render the actual content of the composable.
+                            drawContent()
+                            drawRectangles(
+                                this,
+                                screenWidth.value,
+                                screenHeight.value,
+                                uiState.imageWidth,
+                                uiState.imageHeight,
+                                uiState.recognizedText,
+                            )
                         }
                ){
 

@@ -109,8 +109,10 @@ class AddOrEditItemViewModel @Inject constructor(
         navigate(MediaCollectorScreen.TextRecognition.name)
     }
 
-    fun onTextRecognitionResultReady(text: String) {
+    fun onTextSelected(textList: List<String>, popUp: () -> Unit) {
+        val text = textList.joinToString(" ")
         uiState.value = uiState.value.copy(name = text)
+        popUp()
     }
 
     fun onSubmitClick(

@@ -13,6 +13,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavHostController
 import com.zorrokid.mediacollector.common.composable.BarcodeInput
 import com.zorrokid.mediacollector.common.composable.ItemList
 import com.zorrokid.mediacollector.common.composable.MainNavigationBar
@@ -21,7 +22,8 @@ import com.zorrokid.mediacollector.model.CollectionItem
 @Composable
 fun SearchScreen(
     viewModel: SearchViewModel = hiltViewModel(),
-    openScreen: (String) -> Unit
+    openScreen: (String) -> Unit,
+    navController: NavHostController,
 ) {
     val uiState by viewModel.uiState
     val searchResults = uiState.searchResults.collectAsStateWithLifecycle(emptyList())
@@ -34,6 +36,7 @@ fun SearchScreen(
         searchResults = searchResults.value,
         onDeleteClicked = viewModel::onDeleteItemClick,
         onEditClicked = viewModel::onEditItemClick,
+        navController = navController,
     )
 }
 
@@ -49,6 +52,7 @@ fun SearchScreenContent(
     searchResults: List<CollectionItem>,
     onEditClicked: ((String) -> Unit, id: String) -> Unit,
     onDeleteClicked: (String) -> Unit,
+    navController: NavHostController,
 ) {
     Scaffold (
         floatingActionButton = {
@@ -72,7 +76,7 @@ fun SearchScreenContent(
             }
         },
         bottomBar = {
-            MainNavigationBar(openScreen)
+            MainNavigationBar(navController)
         }
     )
 

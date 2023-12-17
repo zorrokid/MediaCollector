@@ -11,33 +11,27 @@ class ScreenUtilTest {
     @Test
     fun adjustPoint_imageAndScreenSizeEqual_pointValuesAreNotChanged() {
         val imagePoint = MyPoint(1.0f, 1.0f)
-        val imageWidth = 1
-        val imageHeight = 1
-        val screenWidth = 1
-        val screenHeight = 1
-        val result = adjustPoint(imagePoint, imageWidth, imageHeight, screenWidth, screenHeight)
+        val imageSize = Size(1.0f, 1.0f)
+        val screenSize = Size(1.0f, 1.0f)
+        val result = adjustPoint(imagePoint, imageSize, screenSize)
         assertEquals(1.0f, result.x)
         assertEquals(1.0f, result.y)
     }
     @Test
     fun adjustPoint_screenSizeIsDoubleToImageSize_pointIsScaledAccordingly() {
         val imagePoint = MyPoint(1.0f, 1.0f)
-        val imageWidth = 1
-        val imageHeight = 1
-        val screenWidth = 2
-        val screenHeight = 2
-        val result = adjustPoint(imagePoint, imageWidth, imageHeight, screenWidth, screenHeight)
+        val imageSize = Size(1.0f, 1.0f)
+        val screenSize = Size(2.0f, 2.0f)
+        val result = adjustPoint(imagePoint, imageSize, screenSize)
         assertEquals(2.0f, result.x)
         assertEquals(2.0f, result.y)
     }
     @Test
     fun adjustPoint_imageSizeIsDoubleToscreenSize_pointIsScaledAccordingly() {
         val imagePoint = MyPoint(2.0f, 2.0f)
-        val imageWidth = 2
-        val imageHeight = 2
-        val screenWidth = 1
-        val screenHeight = 1
-        val result = adjustPoint(imagePoint, imageWidth, imageHeight, screenWidth, screenHeight)
+        val imageSize = Size(2.0f, 2.0f)
+        val screenSize = Size(1.0f, 1.0f)
+        val result = adjustPoint(imagePoint, imageSize, screenSize)
         assertEquals(1.0f, result.x)
         assertEquals(1.0f, result.y)
     }
@@ -45,11 +39,9 @@ class ScreenUtilTest {
     @Test
     fun adjustSize_imageWidthAndScreenWidthEqual_sizeWidthIsNotChanged() {
         val size = Size(1.0f, 1.0f)
-        val imageWidth = 1
-        val imageHeight = 1
-        val screenWidth = 1
-        val screenHeight = 1
-        val result = adjustSize(size, imageWidth, imageHeight, screenWidth, screenHeight)
+        val imageSize = Size(1.0f, 1.0f)
+        val screenSize = Size(1.0f, 1.0f)
+        val result = adjustSize(size, imageSize,  screenSize)
         assertEquals(1.0f, result.width)
         assertEquals(1.0f, result.height)
     }
@@ -57,11 +49,9 @@ class ScreenUtilTest {
     @Test
     fun adjustSize_screenWidthDoubleToImageWidth_sizeIsScaledAccordingly() {
         val size = Size(1.0f, 1.0f)
-        val imageWidth = 1
-        val imageHeight = 1
-        val screenWidth = 2
-        val screenHeight = 2
-        val result = adjustSize(size, imageWidth, imageHeight, screenWidth, screenHeight)
+        val imageSize = Size(1.0f, 1.0f)
+        val screenSize = Size(2.0f, 2.0f)
+        val result = adjustSize(size, imageSize, screenSize)
         assertEquals(2.0f, result.width)
         assertEquals(2.0f, result.height)
     }
@@ -69,11 +59,9 @@ class ScreenUtilTest {
     @Test
     fun adjustSize_imageWidthDoubleToScreenWidth_sizeIsScaledAccordingly() {
         val size = Size(2.0f, 2.0f)
-        val imageWidth = 2
-        val imageHeight = 2
-        val screenWidth = 1
-        val screenHeight = 1
-        val result = adjustSize(size, imageWidth, imageHeight, screenWidth, screenHeight)
+        val imageSize = Size(2.0f, 2.0f)
+        val screenSize = Size(1.0f, 1.0f)
+        val result = adjustSize(size, imageSize, screenSize)
         assertEquals(1.0f, result.width)
         assertEquals(1.0f, result.height)
     }
