@@ -1,5 +1,6 @@
 package com.zorrokid.mediacollector.screens.settings
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,6 +17,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.zorrokid.mediacollector.R
@@ -58,10 +60,12 @@ fun SettingsScreenContent(
             Column(
                 modifier = modifier
                     .padding(padding)
+                    .padding(bottom = 56.dp)
                     .fillMaxWidth()
                     .fillMaxHeight()
                     .verticalScroll(rememberScrollState()),
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Bottom,
             ) {
                 if (uiState.isAnonymousAccount) {
                     Button(onClick = { onLoginClick() }) {
