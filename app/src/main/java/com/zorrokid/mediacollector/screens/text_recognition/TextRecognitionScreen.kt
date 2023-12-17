@@ -251,8 +251,8 @@ fun CameraPreview(
                             element.boundingBox?.left?.toFloat() ?: 0f,
                             element.boundingBox?.top?.toFloat() ?: 0f
                         ),
-                        screenSize,
                         imageSize,
+                        screenSize,
                     )
                     val size = adjustSize(
                         Size(
@@ -263,8 +263,8 @@ fun CameraPreview(
                                 ?.height()
                                 ?.toFloat() ?: 0f
                         ),
-                        screenSize,
                         imageSize,
+                        screenSize,
                     )
 
                     Log.d(
