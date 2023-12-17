@@ -241,6 +241,8 @@ fun CameraPreview(
         imageHeight: Int,
         recognizedText: Text,
     ) {
+        val imageSize = Size(imageWidth.toFloat(), imageHeight.toFloat())
+        val screenSize = Size(screenWidth.toFloat(), screenHeight.toFloat())
         recognizedText.textBlocks.forEach { textBlock ->
             textBlock.lines.forEach { line ->
                 line.elements.forEach { element ->
@@ -249,10 +251,8 @@ fun CameraPreview(
                             element.boundingBox?.left?.toFloat() ?: 0f,
                             element.boundingBox?.top?.toFloat() ?: 0f
                         ),
-                        imageWidth,
-                        imageHeight,
-                        screenHeight,
-                        screenWidth,
+                        screenSize,
+                        imageSize,
                     )
                     val size = adjustSize(
                         Size(
@@ -263,10 +263,8 @@ fun CameraPreview(
                                 ?.height()
                                 ?.toFloat() ?: 0f
                         ),
-                        imageWidth,
-                        imageHeight,
-                        screenHeight,
-                        screenWidth,
+                        screenSize,
+                        imageSize,
                     )
 
                     Log.d(
