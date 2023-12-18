@@ -36,6 +36,7 @@ import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawOutline
 import androidx.compose.ui.graphics.drawscope.ContentDrawScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -237,11 +238,9 @@ fun CameraPreview(
         drawScope: ContentDrawScope,
         screenWidth: Int,
         screenHeight: Int,
-        imageWidth: Int,
-        imageHeight: Int,
+        imageSize: Size,
         recognizedText: Text,
     ) {
-        val imageSize = Size(imageWidth.toFloat(), imageHeight.toFloat())
         val screenSize = Size(screenWidth.toFloat(), screenHeight.toFloat())
         recognizedText.textBlocks.forEach { textBlock ->
             textBlock.lines.forEach { line ->
@@ -253,6 +252,7 @@ fun CameraPreview(
                         ),
                         imageSize,
                         screenSize,
+                        uiState.rotation,
                     )
                     val size = adjustSize(
                         Size(
@@ -265,20 +265,12 @@ fun CameraPreview(
                         ),
                         imageSize,
                         screenSize,
-                    )
-
-                    Log.d(
-                        "TextRecognitionScreen",
-                        "Picture size: ${uiState.imageWidth}x${uiState.imageHeight} " +
-                                "screen size: ${screenWidth}x${screenHeight} " +
-                                "original point: (${element.boundingBox?.left},${element.boundingBox?.top})" +
-                                "scaled point: (${point.x},${point.y}) " +
-                                "original size: ${element.boundingBox?.width()}x${element.boundingBox?.height()} " +
-                                "scaled size: ${size.width}x${size.height}"
+                        uiState.rotation,
                     )
 
                     drawScope.drawRect(
                         color = Color.Red,
+                        alpha = 0.5f,
                         topLeft = Offset(
                             x = point.x,
                             y = point.y
@@ -317,8 +309,7 @@ fun CameraPreview(
                                 this,
                                 screenWidth.value,
                                 screenHeight.value,
-                                uiState.imageWidth,
-                                uiState.imageHeight,
+                                uiState.imageSize,
                                 uiState.recognizedText,
                             )
                         }
