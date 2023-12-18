@@ -14,11 +14,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.zorrokid.mediacollector.R
 import com.zorrokid.mediacollector.common.composable.BarcodeInput
 import com.zorrokid.mediacollector.common.composable.DropDownWithTextField
 import com.zorrokid.mediacollector.common.composable.FreeTextField
+import com.zorrokid.mediacollector.common.composable.TextRecognitionInput
 import com.zorrokid.mediacollector.model.ConditionClassification
 import com.zorrokid.mediacollector.model.ReleaseArea
 
@@ -67,15 +69,13 @@ fun AddItemScreenContent(
         },
         content = { padding ->
             Column(modifier = modifier.padding(padding)){
-                Row(
-                    modifier = modifier,
-                ) {
-                    FreeTextField(value = uiState.name, onNewValue = onNameChange, placeholder = R.string.name)
-                    Button(onClick = onScanText) {
-                        Text(text = "Scan text")
-                    }
-                }
-                BarcodeInput(
+                TextRecognitionInput(
+                    onTextChange = onNameChange,
+                    onScanText = onScanText,
+                    text = uiState.name,
+                    placeHolder = R.string.name,
+                )
+               BarcodeInput(
                     onBarcodeChange = onBarcodeChange,
                     onScanBarcodeClick = onScanBarcodeClick,
                     barcode = uiState.barcode

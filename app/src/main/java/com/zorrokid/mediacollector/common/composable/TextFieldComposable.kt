@@ -126,3 +126,27 @@ private fun PasswordField(
         visualTransformation = visualTransformation
     )
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun NameField(
+    text: String,
+    onTextChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    @StringRes placeHolder: Int
+) {
+    OutlinedTextField(
+        singleLine = true,
+        modifier = modifier,
+        value = text,
+        onValueChange = onTextChange,
+        placeholder = { Text(stringResource(placeHolder)) },
+        leadingIcon = {
+            Icon(
+                imageVector = Icons.Default.Edit,
+                contentDescription = stringResource(placeHolder)
+            )
+        },
+        label = { Text(stringResource(placeHolder)) }
+    )
+}
