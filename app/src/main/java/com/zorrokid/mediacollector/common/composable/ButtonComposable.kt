@@ -37,3 +37,10 @@ fun BarcodeScanButton(onScanBarcodeClick: () -> Unit, modifier: Modifier = Modif
 fun BarcodeScanButtonPreview(){
     BarcodeScanButton(onScanBarcodeClick = { /*TODO*/ })
 }
+
+@Composable
+fun TextRecognitionButton(onScanText: () -> Unit, modifier: Modifier = Modifier) {
+    Button(onClick = onScanText, modifier = modifier.padding(8.dp)) {
+        Icon(painter = painterResource(R.drawable.camer_focus), "Scan text")
+    }
+}
