@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
@@ -13,6 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.zorrokid.mediacollector.R
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.zorrokid.mediacollector.common.composable.EmailField
@@ -50,9 +52,10 @@ fun LogInScreenContent(
         modifier
             .fillMaxWidth()
             .fillMaxHeight()
+            .padding(16.dp)
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ){
         EmailField(value = uiState.email, onNewValue = onEmailChange)
         PasswordField(value = uiState.password, onNewValue = onPasswordChange)
