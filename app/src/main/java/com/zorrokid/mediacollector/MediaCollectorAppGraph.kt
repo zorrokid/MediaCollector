@@ -76,6 +76,7 @@ fun NavGraphBuilder.mediaCollectorAppGraph(appState: MediaCollectorAppState) {
                 openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) },
                 navigate = { route -> appState.navigate(route) },
                 viewModel = parentViewModel,
+                popUp = appState::popUp
             )
         }
         composable(route = MediaCollectorScreen.TextRecognition.name){

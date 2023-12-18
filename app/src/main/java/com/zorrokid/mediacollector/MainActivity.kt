@@ -3,6 +3,7 @@ package com.zorrokid.mediacollector
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.core.view.WindowCompat
 import dagger.hilt.android.AndroidEntryPoint
 
 // @AndroidEntryPoint generates an individual Hilt component for each Android class in your project.

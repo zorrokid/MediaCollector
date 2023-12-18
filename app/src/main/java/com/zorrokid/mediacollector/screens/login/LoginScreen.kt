@@ -4,17 +4,18 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import com.zorrokid.mediacollector.R
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.zorrokid.mediacollector.R
 import com.zorrokid.mediacollector.common.composable.EmailField
 import com.zorrokid.mediacollector.common.composable.PasswordField
 
@@ -34,10 +35,12 @@ fun LogInScreen(
         uiState = uiState,
         onEmailChange = viewModel::onEmailChange,
         onPasswordChange = viewModel::onPasswordChange,
-        onSignInClick =  { viewModel.onSignInClick(openAndPopUp) }
+        onSignInClick =  { viewModel.onSignInClick(openAndPopUp) },
+        modifier = Modifier.padding(8.dp)
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LogInScreenContent(
     modifier: Modifier = Modifier,
@@ -45,20 +48,29 @@ fun LogInScreenContent(
     onEmailChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
     onSignInClick: () -> Unit,
-    ) {
-    Column(
+) {
+   Column(
         modifier
             .fillMaxWidth()
-            .fillMaxHeight()
-            .verticalScroll(rememberScrollState()),
+            .fillMaxHeight(),
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ){
-        EmailField(value = uiState.email, onNewValue = onEmailChange)
-        PasswordField(value = uiState.password, onNewValue = onPasswordChange)
-        Button(onClick = onSignInClick) {
+        EmailField(
+            value = uiState.email,
+            onNewValue = onEmailChange,
+            modifier = modifier
+        )
+        PasswordField(
+            value = uiState.password,
+            onNewValue = onPasswordChange,
+            modifier = modifier
+        )
+        Button(
+            onClick = onSignInClick,
+            modifier = modifier
+        ) {
             Text(stringResource(id = R.string.login))
         }
     }
 }
-
