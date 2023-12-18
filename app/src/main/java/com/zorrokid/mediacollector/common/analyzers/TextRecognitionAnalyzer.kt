@@ -7,11 +7,13 @@ import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import androidx.camera.view.TransformExperimental
+import androidx.compose.ui.geometry.Size
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.Text
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.TextRecognizer
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
+import com.zorrokid.mediacollector.model.TextRecognitionInfo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -26,7 +28,7 @@ import kotlin.coroutines.suspendCoroutine
  * and https://github.com/chouaibMo/MLKit-Jetpack-Compose
  */
 class TextRecognitionAnalyzer(
-    private val onDetectedTextUpdated: (Text, Int, Int) -> Unit,
+    private val onDetectedTextUpdated: (TextRecognitionInfo) -> Unit,
 ) : ImageAnalysis.Analyzer {
 
     companion object {
@@ -45,15 +47,21 @@ class TextRecognitionAnalyzer(
                 imageProxy.imageInfo.rotationDegrees
             )
 
-            Log.d("TextRecognitionScreen", "image rotation: ${inputImage.rotationDegrees}")
-            Log.d("TextRecognitionScreen", "image size: ${inputImage.width}x${inputImage.height}")
             suspendCoroutine { continuation ->
                 textRecognizer.process(inputImage)
                     .addOnSuccessListener { visionText: Text ->
                         val detectedText: String = visionText.text
-                        Log.d("TextRecognitionScreen", "detected text: $detectedText")
                         if (detectedText.isNotBlank()) {
-                            onDetectedTextUpdated(visionText, inputImage.width, inputImage.height)
+                            onDetectedTextUpdated(
+                                TextRecognitionInfo(
+                                    visionText,
+                                    Size(
+                                        inputImage.width.toFloat(),
+                                        inputImage.height.toFloat()
+                                    ),
+                                    inputImage.rotationDegrees
+                                )
+                            )
                         }
                     }
                     .addOnCompleteListener {
