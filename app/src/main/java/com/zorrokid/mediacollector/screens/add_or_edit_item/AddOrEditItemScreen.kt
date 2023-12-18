@@ -1,34 +1,37 @@
 package com.zorrokid.mediacollector.screens.add_or_edit_item
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.zorrokid.mediacollector.MediaCollectorScreen
 import com.zorrokid.mediacollector.R
 import com.zorrokid.mediacollector.common.composable.BarcodeInput
+import com.zorrokid.mediacollector.common.composable.BasicTopAppBar
 import com.zorrokid.mediacollector.common.composable.DropDownWithTextField
-import com.zorrokid.mediacollector.common.composable.FreeTextField
 import com.zorrokid.mediacollector.common.composable.TextRecognitionInput
 import com.zorrokid.mediacollector.model.ConditionClassification
 import com.zorrokid.mediacollector.model.ReleaseArea
 
 @Composable
 fun AddItemScreen(
-    viewModel: AddOrEditItemViewModel, // = hiltViewModel(),
+    viewModel: AddOrEditItemViewModel,
     openAndPopUp: (String, String) -> Unit,
-    navigate: (String) -> Unit
+    navigate: (String) -> Unit,
+    popUp: () -> Unit,
 ) {
     val uiState by viewModel.uiState
 
@@ -42,7 +45,9 @@ fun AddItemScreen(
         onConditionClassificationSelect = viewModel::onConditionClassificationSelect,
         conditionClassifications = viewModel.conditionClassifications,
         onScanText = { viewModel.onScanText(navigate) },
-        onNameChange = viewModel::onNameChange
+        onNameChange = viewModel::onNameChange,
+        popUp = popUp,
+        isEditing = uiState.id != null,
     )
 }
 
@@ -60,9 +65,18 @@ fun AddItemScreenContent(
     conditionClassifications: List<ConditionClassification>,
     onScanText: () -> Unit,
     onNameChange: (String) -> Unit,
+    popUp: () -> Unit,
+    isEditing: Boolean = false,
 ) {
    Scaffold (
-        floatingActionButton = {
+       topBar = {
+           val titleResourceId = if (isEditing)
+               R.string.edit_item
+           else
+               R.string.add_item
+           BasicTopAppBar(titleResourceId = titleResourceId, popUp = popUp)
+        } ,
+       floatingActionButton = {
             FloatingActionButton(onClick = onSubmitClick) {
                 Icon(Icons.Filled.Check, "Add")
             }
@@ -110,7 +124,8 @@ fun AddItemScreenContentPreview(){
         onConditionClassificationSelect = {},
         conditionClassifications = listOf(ConditionClassification("Test")),
         onScanText = {},
-        onNameChange = {}
+        onNameChange = {},
+        popUp = {},
     )
 }
 

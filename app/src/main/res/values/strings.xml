@@ -18,6 +18,7 @@
     <string name="add_or_edit_item">Add or edit item</string>
     <string name="scan_barcode">Scan barcode</string>
     <string name="search">Search</string>
+    <string name="add_item">Add item</string>
     <string name="edit_item">Edit item</string>
     <string name="item_updated">Item updated</string>
     <string name="item_added">Item added</string>
@@ -25,7 +26,8 @@
     <string name="confirm_delete">Are you sure you want to delete this item?</string>
     <string name="collection_item_menu_icon_description">Actions for collection items</string>
     <string name="delete_item">Delete item</string>
-    <string name="text_recognition">Text recognition</string>
     <string name="name">Name</string>
     <string name="invalid_credentials">Invalid credentials</string>
+    <string name="back">Back</string>
+    <string name="text_recognition">Scan text</string>
 </resources>

@@ -51,6 +51,8 @@ import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
 import com.google.mlkit.vision.text.Text
 import com.google.mlkit.vision.text.Text.TextBlock
+import com.zorrokid.mediacollector.R
+import com.zorrokid.mediacollector.common.composable.BasicTopAppBar
 import com.zorrokid.mediacollector.common.composable.PermissionDialog
 import com.zorrokid.mediacollector.common.util.MyPoint
 import com.zorrokid.mediacollector.common.util.adjustPoint
@@ -127,6 +129,9 @@ fun TextScanResultSelector(
     val selectedTexts = remember { mutableStateOf(emptyList<String>()) }
 
     Scaffold (
+        topBar = {
+           BasicTopAppBar(titleResourceId = R.string.text_recognition, popUp = popUp)
+        },
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { onTextSelected(selectedTexts.value, popUp) },

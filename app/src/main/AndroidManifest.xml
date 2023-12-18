@@ -15,6 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyBasicJetpackComposeApp"
         android:name=".MediaCollectorHiltApp"
+        android:windowSoftInputMode="adjustResize"
         tools:targetApi="31">
         <activity
             android:name=".MainActivity"
