@@ -54,7 +54,6 @@ class LoginViewModel @Inject constructor(
         openAndPopUp: (String, String) -> Unit
     ) {
         if (!email.isValidEmail() || password.isBlank()) {
-            SnackbarManager.showMessage(R.string.invalid_credentials)
             setInvalidCredentials(true)
             return
         }

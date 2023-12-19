@@ -57,6 +57,12 @@ fun SignUpScreenContent(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        if (uiState.hasError) {
+            Text(
+                stringResource(id = uiState.errorMessageId),
+                modifier = Modifier.padding(8.dp)
+            )
+        }
         EmailField(
             value = uiState.email,
             onNewValue = onEmailChange,
