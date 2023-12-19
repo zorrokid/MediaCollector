@@ -1,6 +1,7 @@
 package com.zorrokid.mediacollector.screens.login
 
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.res.stringResource
 import com.zorrokid.mediacollector.MediaCollectorScreen
 import com.zorrokid.mediacollector.R
 import com.zorrokid.mediacollector.common.ext.isValidEmail
@@ -43,15 +44,23 @@ class LoginViewModel @Inject constructor(
         }
     }
 
+    fun setInvalidCredentials(isInvalidCredentials: Boolean) {
+        uiState.value = uiState.value.copy(
+            isInvalidCredentials = isInvalidCredentials,
+        )
+    }
+
     fun onSignInClick(
         openAndPopUp: (String, String) -> Unit
     ) {
         if (!email.isValidEmail() || password.isBlank()) {
             SnackbarManager.showMessage(R.string.invalid_credentials)
+            setInvalidCredentials(true)
             return
         }
 
-       launchCatching {
+        setInvalidCredentials(false)
+        launchCatching {
             accountService.authenticate(email, password)
             openAndPopUp(MediaCollectorScreen.Settings.name, MediaCollectorScreen.LogIn.name)
         }

@@ -56,6 +56,12 @@ fun LogInScreenContent(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ){
+        if (uiState.isInvalidCredentials) {
+            Text(
+                stringResource(id = R.string.invalid_credentials),
+                modifier = Modifier.padding(8.dp)
+            )
+        }
         EmailField(
             value = uiState.email,
             onNewValue = onEmailChange,
