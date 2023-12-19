@@ -2,6 +2,8 @@ package com.zorrokid.mediacollector.common.composable
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -86,55 +88,81 @@ fun ItemListCard(
 ) {
     Card(
         modifier = modifier
-            .padding(8.dp, 0.dp, 8.dp, 8.dp)
+            .padding(8.dp)
             .fillMaxWidth(),
     ){
-        var expanded by remember {
-            mutableStateOf(false)
-        }
-        Column {
-            Text(text = collectionItem.name, modifier = modifier.padding(8.dp))
-            Text(text = collectionItem.barcode, modifier = modifier.padding(8.dp))
-            Text(text = collectionItem.releaseAreaName, modifier = modifier.padding(8.dp))
-
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .wrapContentSize(Alignment.TopStart)
+        Column (modifier = modifier.padding(16.dp)) {
+            Row(
+                modifier = modifier
+                    .fillMaxWidth(),
             ) {
-                IconButton(onClick = {expanded = !expanded}) {
-                    Icon(
-                        Icons.Filled.MoreVert,
-                        stringResource(id = R.string.collection_item_menu_icon_description)
-                    )
-                }
-                DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-                    DropdownMenuItem(
-                        text = { Text(stringResource(id = R.string.edit_item)) },
-                        onClick = {
-                            expanded = false
-                            onEdit(openScreen, collectionItem.id)
-                        }
-                    )
-                    DropdownMenuItem(
-                        text = { Text(stringResource(id = R.string.delete_item)) },
-                        onClick = {
-                            expanded = false
-                            onDelete(collectionItem.id)
-                        }
-                    )
-                }
+                Text(
+                    text = collectionItem.name,
+                    maxLines = 1
+                )
+                Spacer(modifier = modifier.weight(1.0f))
+                ItemCardMenu(
+                    id = collectionItem.id,
+                    onEdit = onEdit,
+                    onDelete = onDelete,
+                    openScreen = openScreen,
+                    modifier = modifier
+                )
             }
+            Text(text = collectionItem.barcode, modifier = modifier)
+            Text(text = collectionItem.releaseAreaName, modifier = modifier)
         }
-    }}
+    }
+}
+
+@Composable
+fun ItemCardMenu(
+    id: String,
+    onEdit: ((String) -> Unit, id: String) -> Unit,
+    onDelete: (id: String) -> Unit,
+    openScreen: (String) -> Unit,
+    modifier: Modifier,
+) {
+    var expanded by remember {
+        mutableStateOf(false)
+    }
+    Box(
+        modifier = modifier
+    ) {
+        IconButton(onClick = {expanded = !expanded}) {
+            Icon(
+                Icons.Filled.MoreVert,
+                stringResource(id = R.string.collection_item_menu_icon_description)
+            )
+        }
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            DropdownMenuItem(
+                text = { Text(stringResource(id = R.string.edit_item)) },
+                onClick = {
+                    expanded = false
+                    onEdit(openScreen, id)
+                }
+            )
+            DropdownMenuItem(
+                text = { Text(stringResource(id = R.string.delete_item)) },
+                onClick = {
+                    expanded = false
+                    onDelete(id)
+                }
+            )
+        }
+    }
+}
 
 @Composable
 @Preview
 fun ItemListCardPreview() {
-
-
     ItemListCard(collectionItem = CollectionItem(
         id = "1234",
+        name = "Test",
         barcode = "123456789",
         releaseAreaName = "Nordic countries",
         ), onEdit = {
