@@ -32,12 +32,17 @@ android {
             )
         }
     }
-    flavorDimensions += "full"
+    flavorDimensions += "version"
     productFlavors {
         create("full") {
-            dimension = "full"
+            dimension = "version"
             applicationIdSuffix = ".full"
             versionNameSuffix = "-full"
+        }
+        create("demo") {
+            dimension = "version"
+            applicationIdSuffix = ".demo"
+            versionNameSuffix = "-demo"
         }
     }
 
