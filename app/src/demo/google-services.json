@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "189704813913",
+    "project_id": "media-collector-demo",
+    "storage_bucket": "media-collector-demo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:189704813913:android:8913f5addde4b932eb6048",
+        "android_client_info": {
+          "package_name": "com.zorrokid.mediacollector.demo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCaLu4Bj4rYNRrBimUpZVnUIorVaUIQKs8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

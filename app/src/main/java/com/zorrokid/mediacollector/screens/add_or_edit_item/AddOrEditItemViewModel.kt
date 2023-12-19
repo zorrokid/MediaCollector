@@ -5,6 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import com.zorrokid.mediacollector.ID
 import com.zorrokid.mediacollector.MediaCollectorScreen
 import com.zorrokid.mediacollector.R
+import com.zorrokid.mediacollector.common.ext.capitalizeWords
 import com.zorrokid.mediacollector.common.snackbar.SnackbarManager
 import com.zorrokid.mediacollector.model.CollectionItem
 import com.zorrokid.mediacollector.model.ConditionClassification
@@ -110,7 +111,7 @@ class AddOrEditItemViewModel @Inject constructor(
     }
 
     fun onTextSelected(textList: List<String>, popUp: () -> Unit) {
-        val text = textList.joinToString(" ")
+        val text = textList.joinToString(" ").capitalizeWords()
         uiState.value = uiState.value.copy(name = text)
         popUp()
     }

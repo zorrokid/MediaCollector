@@ -30,4 +30,8 @@
     <string name="invalid_credentials">Invalid credentials</string>
     <string name="back">Back</string>
     <string name="text_recognition">Scan text</string>
+    <string name="collection">Collection</string>
+    <string name="invalid_email">Invalid email</string>
+    <string name="invalid_password">Invalid password</string>
+    <string name="invalid_repeat_password">Passwords are not matching</string>
 </resources>

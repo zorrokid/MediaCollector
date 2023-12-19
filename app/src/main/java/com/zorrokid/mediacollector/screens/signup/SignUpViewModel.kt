@@ -2,6 +2,7 @@ package com.zorrokid.mediacollector.screens.signup
 
 import androidx.compose.runtime.mutableStateOf
 import com.zorrokid.mediacollector.MediaCollectorScreen
+import com.zorrokid.mediacollector.R
 import com.zorrokid.mediacollector.common.ext.isValidEmail
 import com.zorrokid.mediacollector.model.service.AccountService
 import com.zorrokid.mediacollector.model.service.LogService
@@ -35,16 +36,26 @@ class SignUpViewModel @Inject constructor(
         uiState.value = uiState.value.copy(repeatPassword = newValue)
     }
 
+    fun setErrorMessage(resId: Int) {
+        uiState.value = uiState.value.copy(
+            hasError = true,
+            errorMessageId = resId
+        )
+    }
+
     fun onSignUpClick(openAndPopUp: (String, String) -> Unit) {
         if (!email.isValidEmail()) {
+            setErrorMessage(R.string.invalid_email)
             return
         }
 
         if (password.isBlank()) {
+            setErrorMessage(R.string.invalid_password)
             return
         }
 
         if (password != uiState.value.repeatPassword) {
+            setErrorMessage(R.string.invalid_repeat_password)
             return
         }
 

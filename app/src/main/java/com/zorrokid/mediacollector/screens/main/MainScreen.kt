@@ -15,9 +15,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
+import com.zorrokid.mediacollector.R
 import com.zorrokid.mediacollector.common.composable.ItemList
 import com.zorrokid.mediacollector.common.composable.MainNavigationBar
 import com.zorrokid.mediacollector.model.CollectionItem
@@ -62,7 +64,7 @@ fun MainScreenContent(
         },
         content = { padding ->
             Column(modifier = modifier.padding(padding)) {
-                TopAppBar(title = { Text("Main screen") }, actions = {
+                TopAppBar(title = { Text(stringResource(id = R.string.collection)) }, actions = {
                     Box(modifier){
                         IconButton(onClick = { onSettingsClick(openScreen) }) {
                             Icon(Icons.Filled.Settings, "Settings")

@@ -173,11 +173,12 @@ fun TextScanResultCard(
                         onTextSelected(textBlock.text)
                     }
                 })
-                textBlock.lines.forEach { line ->
+                Text(text = textBlock.text)
+                /*textBlock.lines.forEach { line ->
                     line.elements.forEach { element ->
                         Text(text = element.text)
                     }
-                }
+                }*/
             }
         }
     }
