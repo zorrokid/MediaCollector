@@ -2,7 +2,6 @@ package com.zorrokid.mediacollector.screens.text_recognition
 
 import android.Manifest
 import android.content.Context
-import android.util.Log
 import android.widget.LinearLayout
 import androidx.camera.view.LifecycleCameraController
 import androidx.camera.view.PreviewView
@@ -24,7 +23,9 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.InputChip
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -36,7 +37,6 @@ import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.drawOutline
 import androidx.compose.ui.graphics.drawscope.ContentDrawScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -128,6 +128,10 @@ fun TextScanResultSelector(
 ) {
     val selectedTexts = remember { mutableStateOf(emptyList<String>()) }
 
+    var showSingleWordSelection = remember {
+        mutableStateOf(false)
+    }
+
     Scaffold (
         topBar = {
            BasicTopAppBar(titleResourceId = R.string.text_recognition, popUp = popUp)
@@ -140,11 +144,36 @@ fun TextScanResultSelector(
             }
         },
         content = { padding ->
-            LazyColumn (modifier = modifier.padding(padding)) {
-                itemsIndexed(recognizedText.textBlocks) { index, textBlock ->
-                    TextScanResultCard(modifier, textBlock, onTextSelected =  {
-                        selectedTexts.value = selectedTexts.value + it
-                    }, index)
+            Column(
+                modifier = modifier
+                    .fillMaxSize()
+                    .padding(padding)
+            ) {
+                Row (
+                    modifier = modifier
+                        .padding(8.dp),
+                    verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
+                ) {
+                    Switch(checked = showSingleWordSelection.value, onCheckedChange = {
+                        showSingleWordSelection.value = it
+                    })
+                    Text(text = "Show single word selection")
+                }
+                LazyColumn (
+                    modifier = modifier
+                        .fillMaxSize()
+                ) {
+                    itemsIndexed(recognizedText.textBlocks) { index, textBlock ->
+                        TextScanResultCard(
+                            modifier = modifier.padding(8.dp),
+                            textBlock,
+                            onTextSelected =  {
+                                selectedTexts.value = selectedTexts.value + it
+                            },
+                            index,
+                            showSingleWordSelection.value,
+                        )
+                    }
                 }
             }
         },
@@ -157,30 +186,72 @@ fun TextScanResultCard(
     textBlock: TextBlock,
     onTextSelected: (String) -> Unit,
     index: Int,
+    showSingleWordSelection: Boolean,
 ) {
-    val isSelected = remember { mutableStateOf(false) }
     Card(modifier = modifier) {
         Column(modifier = modifier.padding(8.dp)) {
-            Row(
-                modifier = modifier
-                    .fillMaxWidth()
-                    .padding(8.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Checkbox(checked = isSelected.value, onCheckedChange = {
-                    isSelected.value = it
-                    if (it) {
-                        onTextSelected(textBlock.text)
+            if (showSingleWordSelection){
+                Row(
+                    modifier = modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                ) {
+                    textBlock.lines.forEach { line ->
+                        line.elements.forEach {
+                            SingleWorldSelection(
+                                textElement = it,
+                                onSelected = onTextSelected
+                            )
+                        }
                     }
-                })
-                Text(text = textBlock.text)
-                /*textBlock.lines.forEach { line ->
-                    line.elements.forEach { element ->
-                        Text(text = element.text)
-                    }
-                }*/
+                }
+            } else {
+                TextBlockSelection(
+                    textBlock = textBlock,
+                    onSelected = onTextSelected,
+                    modifier = modifier
+                )
             }
         }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SingleWorldSelection(
+    textElement: Text.Element,
+    onSelected: (String) -> Unit,
+) {
+    val isSelected = remember { mutableStateOf(false) }
+    InputChip(
+        selected = isSelected.value,
+        onClick = {
+            isSelected.value = !isSelected.value
+            onSelected(textElement.text)
+          },
+        label = { Text(textElement.text) }
+    )
+}
+
+@Composable
+fun TextBlockSelection(
+    textBlock: TextBlock,
+    onSelected: (String) -> Unit,
+    modifier: Modifier,
+) {
+    val isSelected = remember { mutableStateOf(false) }
+
+    Row(modifier = modifier.fillMaxWidth()) {
+
+    Checkbox(checked = isSelected.value, onCheckedChange = {
+            isSelected.value = it
+            if (it) {
+                onSelected(textBlock.text)
+            }
+        })
+        Text(
+            text = textBlock.text,
+            modifier = modifier.weight(1.0f)
+        )
     }
 }
 
