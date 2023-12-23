@@ -1,6 +1,7 @@
 package com.zorrokid.mediacollector.common.composable
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
@@ -18,7 +19,7 @@ fun BarcodeInput(
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        BarcodeField(barcode, onBarcodeChange, modifier)
+        BarcodeField(barcode, onBarcodeChange, modifier = modifier.weight(1f))
         BarcodeScanButton(onScanBarcodeClick, modifier)
     }
 }
@@ -39,7 +40,9 @@ fun TextRecognitionInput(
             text = text,
             onTextChange = onTextChange,
             placeHolder = placeHolder,
-            modifier = modifier
+            // prevent text field from expanding and pushing the button out of the screen
+            // (button gets measured first and then the text field can use the remaining space)
+            modifier = modifier.weight(1f)
         )
         TextRecognitionButton(onScanText, modifier)
     }

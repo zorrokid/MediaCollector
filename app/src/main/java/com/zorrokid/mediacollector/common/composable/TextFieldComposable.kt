@@ -147,6 +147,6 @@ fun NameField(
                 contentDescription = stringResource(placeHolder)
             )
         },
-        label = { Text(stringResource(placeHolder)) }
+        label = { Text(stringResource(placeHolder)) },
     )
 }

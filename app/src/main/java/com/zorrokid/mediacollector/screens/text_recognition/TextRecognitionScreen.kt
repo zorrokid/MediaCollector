@@ -32,6 +32,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
@@ -196,7 +197,7 @@ fun TextScanResultCard(
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     textBlock.lines.forEach { line ->
-                        line.elements.forEach {
+                        line.elements.filter{ it.text.isNotBlank() }.forEach {
                             SingleWorldSelection(
                                 textElement = it,
                                 onSelected = onTextSelected
@@ -238,6 +239,9 @@ fun TextBlockSelection(
     onSelected: (String) -> Unit,
     modifier: Modifier,
 ) {
+    fun filterText(textBlock: TextBlock): String {
+        return textBlock.text.lines().filter { it.isNotBlank() }.joinToString(" ")
+    }
     val isSelected = remember { mutableStateOf(false) }
 
     Row(modifier = modifier.fillMaxWidth()) {
@@ -245,17 +249,17 @@ fun TextBlockSelection(
     Checkbox(checked = isSelected.value, onCheckedChange = {
             isSelected.value = it
             if (it) {
-                onSelected(textBlock.text)
+                onSelected(filterText(textBlock))
             }
         })
         Text(
-            text = textBlock.text,
+            text = filterText(textBlock),
             modifier = modifier.weight(1.0f)
         )
     }
 }
 
-@OptIn(ExperimentalPermissionsApi::class)
+@OptIn(ExperimentalPermissionsApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun NoPermissionScreen(
     modifier: Modifier = Modifier,
@@ -264,14 +268,23 @@ fun NoPermissionScreen(
 ) {
 
     val openPermissionDialog = remember { mutableStateOf(false) }
-    Column(modifier = modifier) {
-        Text(text = "Camera permission is needed to scan text.")
-        Button(onClick = {
-            openPermissionDialog.value = true
-        }) {
-            Text("Permissions")
+    Scaffold(content = {
+        // TODO Back arrow
+        Column(
+            modifier = modifier.padding(paddingValues = it).fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Text(text = "Camera permission is needed to scan text.", modifier = modifier.padding(8.dp))
+            Button(
+                onClick = { openPermissionDialog.value = true },
+                modifier.padding(8.dp)
+            ) {
+                Text("Set permissions")
+            }
         }
-    }
+    })
+
 
     when {
         openPermissionDialog.value -> {
