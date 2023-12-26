@@ -41,6 +41,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.ContentDrawScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -189,6 +190,9 @@ fun TextScanResultCard(
     index: Int,
     showSingleWordSelection: Boolean,
 ) {
+    fun filterText(textBlock: TextBlock): String {
+        return textBlock.text.lines().filter { it.isNotBlank() }.joinToString(" ")
+    }
     Card(modifier = modifier) {
         Column(modifier = modifier.padding(8.dp)) {
             if (showSingleWordSelection){
@@ -199,7 +203,7 @@ fun TextScanResultCard(
                     textBlock.lines.forEach { line ->
                         line.elements.filter{ it.text.isNotBlank() }.forEach {
                             SingleWorldSelection(
-                                textElement = it,
+                                text = it.text,
                                 onSelected = onTextSelected
                             )
                         }
@@ -207,7 +211,7 @@ fun TextScanResultCard(
                 }
             } else {
                 TextBlockSelection(
-                    textBlock = textBlock,
+                    text= filterText(textBlock),
                     onSelected = onTextSelected,
                     modifier = modifier
                 )
@@ -216,10 +220,22 @@ fun TextScanResultCard(
     }
 }
 
+@Preview
+@Composable
+fun TextScanResultCardPreview() {
+    val text = Text("", listOf(""))
+    TextScanResultCard(
+        textBlock = text.textBlocks.first(),
+        onTextSelected = {},
+        index = 0,
+        showSingleWordSelection = false,
+    )
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SingleWorldSelection(
-    textElement: Text.Element,
+    text: String,
     onSelected: (String) -> Unit,
 ) {
     val isSelected = remember { mutableStateOf(false) }
@@ -227,36 +243,57 @@ fun SingleWorldSelection(
         selected = isSelected.value,
         onClick = {
             isSelected.value = !isSelected.value
-            onSelected(textElement.text)
+            onSelected(text)
           },
-        label = { Text(textElement.text) }
+        label = { Text(text) }
+    )
+}
+
+@Preview
+@Composable
+fun SingleWorldSelectionPreview() {
+    SingleWorldSelection(
+        text = "Example selection",
+        onSelected = {},
     )
 }
 
 @Composable
 fun TextBlockSelection(
-    textBlock: TextBlock,
+    text: String,
     onSelected: (String) -> Unit,
     modifier: Modifier,
 ) {
-    fun filterText(textBlock: TextBlock): String {
-        return textBlock.text.lines().filter { it.isNotBlank() }.joinToString(" ")
-    }
     val isSelected = remember { mutableStateOf(false) }
 
-    Row(modifier = modifier.fillMaxWidth()) {
-
-    Checkbox(checked = isSelected.value, onCheckedChange = {
-            isSelected.value = it
-            if (it) {
-                onSelected(filterText(textBlock))
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Checkbox(
+            checked = isSelected.value,
+            onCheckedChange = {
+                isSelected.value = it
+                if (it) {
+                    onSelected(text)
+                }
             }
-        })
+        )
         Text(
-            text = filterText(textBlock),
+            text = text,
             modifier = modifier.weight(1.0f)
         )
     }
+}
+
+@Composable
+@Preview
+fun TextBlockSelectionPreview() {
+    TextBlockSelection(
+        text= "Example selection",
+        onSelected = {},
+        modifier = Modifier,
+    )
 }
 
 @OptIn(ExperimentalPermissionsApi::class, ExperimentalMaterial3Api::class)
