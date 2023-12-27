@@ -150,24 +150,23 @@ fun TextScanResultSelector(
                 modifier = modifier
                     .fillMaxSize()
                     .padding(padding)
+                    .padding(8.dp)
             ) {
-                Row (
-                    modifier = modifier
-                        .padding(8.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Switch(checked = showSingleWordSelection.value, onCheckedChange = {
+                SwitchWithLabel(
+                    label = "Show single word selection",
+                    checked = showSingleWordSelection.value,
+                    onCheckedChange = {
                         showSingleWordSelection.value = it
-                    })
-                    Text(text = "Show single word selection")
-                }
+                    },
+                    modifier = modifier
+                )
                 LazyColumn (
                     modifier = modifier
                         .fillMaxSize()
                 ) {
                     itemsIndexed(recognizedText) { index, textBlock ->
                         TextScanResultCard(
-                            modifier = modifier.padding(8.dp),
+                            modifier = modifier,
                             textBlock,
                             onTextSelected =  {
                                 selectedTexts.value = selectedTexts.value + it
@@ -183,6 +182,33 @@ fun TextScanResultSelector(
 }
 
 @Composable
+fun SwitchWithLabel(
+    modifier: Modifier = Modifier,
+    label: String,
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Switch(checked = checked, onCheckedChange = onCheckedChange)
+        Text(text = label,
+            modifier = modifier.padding(horizontal = 8.dp))
+    }
+}
+
+@Preview
+@Composable
+fun SwitchWithLabelPreview() {
+    SwitchWithLabel(
+        label = "Example label",
+        checked = false,
+        onCheckedChange = {},
+    )
+}
+
+@Composable
 fun TextScanResultCard(
     modifier: Modifier = Modifier,
     textBlock: TextBlock,
@@ -194,14 +220,14 @@ fun TextScanResultCard(
         return textBlock.text.lines().filter { it.isNotBlank() }.joinToString(" ")
     }
     Card(modifier = modifier) {
-        Column(modifier = modifier.padding(8.dp)) {
+        Column(modifier = modifier) {
             if (showSingleWordSelection){
                 Row(
                     modifier = modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     textBlock.lines.forEach { line ->
-                        line.words /*.filter{ it.text.isNotBlank() }.*/.forEach {
+                        line.words.forEach {
                             SingleWorldSelection(
                                 text = it,
                                 onSelected = onTextSelected
@@ -307,7 +333,9 @@ fun NoPermissionScreen(
     Scaffold(content = {
         // TODO Back arrow
         Column(
-            modifier = modifier.padding(paddingValues = it).fillMaxSize(),
+            modifier = modifier
+                .padding(paddingValues = it)
+                .fillMaxSize(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
@@ -432,17 +460,17 @@ fun CameraPreview(
                             )
                             this.drawRect(
                                 color = Color.Green,
-                                topLeft = Offset(0.0f, imageHeight-100.0f),
+                                topLeft = Offset(0.0f, imageHeight - 100.0f),
                                 size = Size(100.0f, 100.0f)
                             )
                             this.drawRect(
                                 color = Color.Blue,
-                                topLeft = Offset(imageWidth-100.0f, 0.0f),
+                                topLeft = Offset(imageWidth - 100.0f, 0.0f),
                                 size = Size(100.0f, 100.0f)
                             )
                             this.drawRect(
                                 color = Color.Yellow,
-                                topLeft = Offset(imageWidth-100.0f, imageHeight-100.0f),
+                                topLeft = Offset(imageWidth - 100.0f, imageHeight - 100.0f),
                                 size = Size(100.0f, 100.0f)
                             )
                             this.drawRect(
@@ -452,17 +480,17 @@ fun CameraPreview(
                             )
                             this.drawRect(
                                 color = Color.Green,
-                                topLeft = Offset(0.0f, displayHeight-100.0f),
+                                topLeft = Offset(0.0f, displayHeight - 100.0f),
                                 size = Size(100.0f, 100.0f)
                             )
                             this.drawRect(
                                 color = Color.Blue,
-                                topLeft = Offset(displayWidth-100.0f, 0.0f),
+                                topLeft = Offset(displayWidth - 100.0f, 0.0f),
                                 size = Size(100.0f, 100.0f)
                             )
                             this.drawRect(
                                 color = Color.Yellow,
-                                topLeft = Offset(displayWidth-100.0f, displayHeight-100.0f),
+                                topLeft = Offset(displayWidth - 100.0f, displayHeight - 100.0f),
                                 size = Size(100.0f, 100.0f)
                             )
                         }
