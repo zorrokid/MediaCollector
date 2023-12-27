@@ -9,6 +9,8 @@ import androidx.camera.view.TransformExperimental
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -59,6 +61,7 @@ import com.zorrokid.mediacollector.common.composable.PermissionDialog
 import com.zorrokid.mediacollector.common.util.MyPoint
 import com.zorrokid.mediacollector.common.util.adjustPoint
 import com.zorrokid.mediacollector.model.TextBlock
+import com.zorrokid.mediacollector.model.TextLine
 import com.zorrokid.mediacollector.screens.add_or_edit_item.AddOrEditItemViewModel
 
 @Composable
@@ -208,6 +211,7 @@ fun SwitchWithLabelPreview() {
     )
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun TextScanResultCard(
     modifier: Modifier = Modifier,
@@ -220,17 +224,23 @@ fun TextScanResultCard(
         return textBlock.text.lines().filter { it.isNotBlank() }.joinToString(" ")
     }
     Card(modifier = modifier) {
-        Column(modifier = modifier) {
+        Column(
+            modifier = modifier,
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+
             if (showSingleWordSelection){
-                Row(
-                    modifier = modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
+                FlowRow(
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     textBlock.lines.forEach { line ->
                         line.words.forEach {
                             SingleWorldSelection(
                                 text = it,
-                                onSelected = onTextSelected
+                                onSelected = onTextSelected,
                             )
                         }
                     }
@@ -254,6 +264,16 @@ fun TextScanResultCardPreview() {
         onTextSelected = {},
         index = 0,
         showSingleWordSelection = false,
+    )
+}
+@Preview
+@Composable
+fun TextScanResultCardSingleWordSelectionPreview() {
+    TextScanResultCard(
+        textBlock = TextBlock("Example selection", listOf(TextLine(words = listOf("Hello", "World"))), emptyList()),
+        onTextSelected = {},
+        index = 0,
+        showSingleWordSelection = true,
     )
 }
 
