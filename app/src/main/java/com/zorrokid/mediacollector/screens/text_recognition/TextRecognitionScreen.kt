@@ -39,7 +39,9 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.ContentDrawScope
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -51,14 +53,12 @@ import com.google.accompanist.permissions.PermissionStatus
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
-import com.google.mlkit.vision.text.Text
-import com.google.mlkit.vision.text.Text.TextBlock
 import com.zorrokid.mediacollector.R
 import com.zorrokid.mediacollector.common.composable.BasicTopAppBar
 import com.zorrokid.mediacollector.common.composable.PermissionDialog
 import com.zorrokid.mediacollector.common.util.MyPoint
 import com.zorrokid.mediacollector.common.util.adjustPoint
-import com.zorrokid.mediacollector.common.util.adjustSize
+import com.zorrokid.mediacollector.model.TextBlock
 import com.zorrokid.mediacollector.screens.add_or_edit_item.AddOrEditItemViewModel
 
 @Composable
@@ -124,7 +124,7 @@ fun TextRecognitionScreenContent(
 @Composable
 fun TextScanResultSelector(
     modifier: Modifier = Modifier,
-    recognizedText: Text,
+    recognizedText: List<TextBlock>,
     onTextSelected: (List<String>, () -> Unit) -> Unit,
     popUp: () -> Unit,
 ) {
@@ -154,7 +154,7 @@ fun TextScanResultSelector(
                 Row (
                     modifier = modifier
                         .padding(8.dp),
-                    verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Switch(checked = showSingleWordSelection.value, onCheckedChange = {
                         showSingleWordSelection.value = it
@@ -165,7 +165,7 @@ fun TextScanResultSelector(
                     modifier = modifier
                         .fillMaxSize()
                 ) {
-                    itemsIndexed(recognizedText.textBlocks) { index, textBlock ->
+                    itemsIndexed(recognizedText) { index, textBlock ->
                         TextScanResultCard(
                             modifier = modifier.padding(8.dp),
                             textBlock,
@@ -201,9 +201,9 @@ fun TextScanResultCard(
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     textBlock.lines.forEach { line ->
-                        line.elements.filter{ it.text.isNotBlank() }.forEach {
+                        line.words /*.filter{ it.text.isNotBlank() }.*/.forEach {
                             SingleWorldSelection(
-                                text = it.text,
+                                text = it,
                                 onSelected = onTextSelected
                             )
                         }
@@ -223,9 +223,8 @@ fun TextScanResultCard(
 @Preview
 @Composable
 fun TextScanResultCardPreview() {
-    val text = Text("", listOf(""))
     TextScanResultCard(
-        textBlock = text.textBlocks.first(),
+        textBlock = TextBlock("Example selection", emptyList(), emptyList()),
         onTextSelected = {},
         index = 0,
         showSingleWordSelection = false,
@@ -358,53 +357,29 @@ fun CameraPreview(
         LifecycleCameraController(context)
     }
 
-    val screenWidth = remember { mutableIntStateOf(context.resources.displayMetrics.widthPixels) }
-    val screenHeight = remember { mutableIntStateOf(context.resources.displayMetrics.heightPixels) }
-
+    val configuratin = LocalConfiguration.current
+    val density = LocalDensity.current
     fun drawRectangles(
         drawScope: ContentDrawScope,
-        screenWidth: Int,
-        screenHeight: Int,
+        screenSize: Size,
         imageSize: Size,
-        recognizedText: Text,
+        recognizedText: List<TextBlock>,
     ) {
-        val screenSize = Size(screenWidth.toFloat(), screenHeight.toFloat())
-        recognizedText.textBlocks.forEach { textBlock ->
-            textBlock.lines.forEach { line ->
-                line.elements.forEach { element ->
-                    val point = adjustPoint(
-                        MyPoint(
-                            element.boundingBox?.left?.toFloat() ?: 0f,
-                            element.boundingBox?.top?.toFloat() ?: 0f
-                        ),
-                        imageSize,
-                        screenSize,
-                        uiState.rotation,
-                    )
-                    val size = adjustSize(
-                        Size(
-                            element.boundingBox
-                                ?.width()
-                                ?.toFloat() ?: 0f,
-                            element.boundingBox
-                                ?.height()
-                                ?.toFloat() ?: 0f
-                        ),
-                        imageSize,
-                        screenSize,
-                        uiState.rotation,
-                    )
+        recognizedText.forEach { textBlock ->
 
-                    drawScope.drawRect(
-                        color = Color.Red,
-                        alpha = 0.5f,
-                        topLeft = Offset(
-                            x = point.x,
-                            y = point.y
-                        ),
-                        size = size,
-                    )
+            val points = textBlock.points.map { adjustPoint(MyPoint(it.x, it.y), imageSize, screenSize, uiState.rotation) }
+
+            points.forEachIndexed { index, point ->
+                val end = if (index == points.size - 1) {
+                    points[0]
+                } else {
+                    points[index + 1]
                 }
+                drawScope.drawLine(
+                    color = Color.Red,
+                    Offset(point.x, point.y),
+                    Offset(end.x, end.y)
+                )
             }
         }
     }
@@ -413,6 +388,7 @@ fun CameraPreview(
         floatingActionButton = {
            FloatingActionButton(
                onClick = { onStopTextRecognition(cameraController) },
+
           ){
                Icon(Icons.Filled.Done, "Add")
            }
@@ -432,17 +408,66 @@ fun CameraPreview(
                             // Modifier.drawWithContent lets you execute DrawScope operations before or after the content of the composable.
                             // Call drawContent to render the actual content of the composable.
                             drawContent()
+                            val displayWidth = with(density) {
+                                configuratin.screenWidthDp.dp.roundToPx()
+                            }
+                            val displayHeight = with(density) {
+                                configuratin.screenHeightDp.dp.roundToPx()
+                            }
                             drawRectangles(
                                 this,
-                                screenWidth.value,
-                                screenHeight.value,
+                                Size(
+                                    displayWidth.toFloat(),
+                                    displayHeight.toFloat()
+                                ),
                                 uiState.imageSize,
                                 uiState.recognizedText,
                             )
+                            val imageWidth = uiState.imageSize.width
+                            val imageHeight = uiState.imageSize.height
+                            this.drawRect(
+                                color = Color.Red,
+                                topLeft = Offset(0.0f, 0.0f),
+                                size = Size(100.0f, 100.0f)
+                            )
+                            this.drawRect(
+                                color = Color.Green,
+                                topLeft = Offset(0.0f, imageHeight-100.0f),
+                                size = Size(100.0f, 100.0f)
+                            )
+                            this.drawRect(
+                                color = Color.Blue,
+                                topLeft = Offset(imageWidth-100.0f, 0.0f),
+                                size = Size(100.0f, 100.0f)
+                            )
+                            this.drawRect(
+                                color = Color.Yellow,
+                                topLeft = Offset(imageWidth-100.0f, imageHeight-100.0f),
+                                size = Size(100.0f, 100.0f)
+                            )
+                            this.drawRect(
+                                color = Color.Red,
+                                topLeft = Offset(0.0f, 0.0f),
+                                size = Size(100.0f, 100.0f)
+                            )
+                            this.drawRect(
+                                color = Color.Green,
+                                topLeft = Offset(0.0f, displayHeight-100.0f),
+                                size = Size(100.0f, 100.0f)
+                            )
+                            this.drawRect(
+                                color = Color.Blue,
+                                topLeft = Offset(displayWidth-100.0f, 0.0f),
+                                size = Size(100.0f, 100.0f)
+                            )
+                            this.drawRect(
+                                color = Color.Yellow,
+                                topLeft = Offset(displayWidth-100.0f, displayHeight-100.0f),
+                                size = Size(100.0f, 100.0f)
+                            )
                         }
                ){
-
-                // Using AndroidView since Jetpack Compose not currently supporting CameraX
+                    // Using AndroidView since Jetpack Compose not currently supporting CameraX
                     AndroidView(
                         modifier = modifier
                             .fillMaxSize()
@@ -462,12 +487,9 @@ fun CameraPreview(
                                     previewView
                                 )
                             }
-                        })
-                    }
-                Text(
-                    modifier = modifier.fillMaxWidth(),
-                    text = uiState.recognizedText.text
-                )
+                        }
+                    )
+                }
             }
         }
     )
