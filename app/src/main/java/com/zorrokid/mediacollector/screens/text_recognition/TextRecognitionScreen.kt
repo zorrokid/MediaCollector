@@ -9,6 +9,8 @@ import androidx.camera.view.TransformExperimental
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -39,8 +41,11 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.ContentDrawScope
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -50,14 +55,13 @@ import com.google.accompanist.permissions.PermissionStatus
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
-import com.google.mlkit.vision.text.Text
-import com.google.mlkit.vision.text.Text.TextBlock
 import com.zorrokid.mediacollector.R
 import com.zorrokid.mediacollector.common.composable.BasicTopAppBar
 import com.zorrokid.mediacollector.common.composable.PermissionDialog
 import com.zorrokid.mediacollector.common.util.MyPoint
 import com.zorrokid.mediacollector.common.util.adjustPoint
-import com.zorrokid.mediacollector.common.util.adjustSize
+import com.zorrokid.mediacollector.model.TextBlock
+import com.zorrokid.mediacollector.model.TextLine
 import com.zorrokid.mediacollector.screens.add_or_edit_item.AddOrEditItemViewModel
 
 @Composable
@@ -123,7 +127,7 @@ fun TextRecognitionScreenContent(
 @Composable
 fun TextScanResultSelector(
     modifier: Modifier = Modifier,
-    recognizedText: Text,
+    recognizedText: List<TextBlock>,
     onTextSelected: (List<String>, () -> Unit) -> Unit,
     popUp: () -> Unit,
 ) {
@@ -149,24 +153,23 @@ fun TextScanResultSelector(
                 modifier = modifier
                     .fillMaxSize()
                     .padding(padding)
+                    .padding(8.dp)
             ) {
-                Row (
-                    modifier = modifier
-                        .padding(8.dp),
-                    verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
-                ) {
-                    Switch(checked = showSingleWordSelection.value, onCheckedChange = {
+                SwitchWithLabel(
+                    label = "Show single word selection",
+                    checked = showSingleWordSelection.value,
+                    onCheckedChange = {
                         showSingleWordSelection.value = it
-                    })
-                    Text(text = "Show single word selection")
-                }
+                    },
+                    modifier = modifier
+                )
                 LazyColumn (
                     modifier = modifier
                         .fillMaxSize()
                 ) {
-                    itemsIndexed(recognizedText.textBlocks) { index, textBlock ->
+                    itemsIndexed(recognizedText) { index, textBlock ->
                         TextScanResultCard(
-                            modifier = modifier.padding(8.dp),
+                            modifier = modifier,
                             textBlock,
                             onTextSelected =  {
                                 selectedTexts.value = selectedTexts.value + it
@@ -182,6 +185,34 @@ fun TextScanResultSelector(
 }
 
 @Composable
+fun SwitchWithLabel(
+    modifier: Modifier = Modifier,
+    label: String,
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Switch(checked = checked, onCheckedChange = onCheckedChange)
+        Text(text = label,
+            modifier = modifier.padding(horizontal = 8.dp))
+    }
+}
+
+@Preview
+@Composable
+fun SwitchWithLabelPreview() {
+    SwitchWithLabel(
+        label = "Example label",
+        checked = false,
+        onCheckedChange = {},
+    )
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
 fun TextScanResultCard(
     modifier: Modifier = Modifier,
     textBlock: TextBlock,
@@ -189,25 +220,34 @@ fun TextScanResultCard(
     index: Int,
     showSingleWordSelection: Boolean,
 ) {
+    fun filterText(textBlock: TextBlock): String {
+        return textBlock.text.lines().filter { it.isNotBlank() }.joinToString(" ")
+    }
     Card(modifier = modifier) {
-        Column(modifier = modifier.padding(8.dp)) {
+        Column(
+            modifier = modifier,
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+
             if (showSingleWordSelection){
-                Row(
-                    modifier = modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
+                FlowRow(
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     textBlock.lines.forEach { line ->
-                        line.elements.filter{ it.text.isNotBlank() }.forEach {
+                        line.words.forEach {
                             SingleWorldSelection(
-                                textElement = it,
-                                onSelected = onTextSelected
+                                text = it,
+                                onSelected = onTextSelected,
                             )
                         }
                     }
                 }
             } else {
                 TextBlockSelection(
-                    textBlock = textBlock,
+                    text= filterText(textBlock),
                     onSelected = onTextSelected,
                     modifier = modifier
                 )
@@ -216,10 +256,31 @@ fun TextScanResultCard(
     }
 }
 
+@Preview
+@Composable
+fun TextScanResultCardPreview() {
+    TextScanResultCard(
+        textBlock = TextBlock("Example selection", emptyList(), emptyList()),
+        onTextSelected = {},
+        index = 0,
+        showSingleWordSelection = false,
+    )
+}
+@Preview
+@Composable
+fun TextScanResultCardSingleWordSelectionPreview() {
+    TextScanResultCard(
+        textBlock = TextBlock("Example selection", listOf(TextLine(words = listOf("Hello", "World"))), emptyList()),
+        onTextSelected = {},
+        index = 0,
+        showSingleWordSelection = true,
+    )
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SingleWorldSelection(
-    textElement: Text.Element,
+    text: String,
     onSelected: (String) -> Unit,
 ) {
     val isSelected = remember { mutableStateOf(false) }
@@ -227,36 +288,57 @@ fun SingleWorldSelection(
         selected = isSelected.value,
         onClick = {
             isSelected.value = !isSelected.value
-            onSelected(textElement.text)
+            onSelected(text)
           },
-        label = { Text(textElement.text) }
+        label = { Text(text) }
+    )
+}
+
+@Preview
+@Composable
+fun SingleWorldSelectionPreview() {
+    SingleWorldSelection(
+        text = "Example selection",
+        onSelected = {},
     )
 }
 
 @Composable
 fun TextBlockSelection(
-    textBlock: TextBlock,
+    text: String,
     onSelected: (String) -> Unit,
     modifier: Modifier,
 ) {
-    fun filterText(textBlock: TextBlock): String {
-        return textBlock.text.lines().filter { it.isNotBlank() }.joinToString(" ")
-    }
     val isSelected = remember { mutableStateOf(false) }
 
-    Row(modifier = modifier.fillMaxWidth()) {
-
-    Checkbox(checked = isSelected.value, onCheckedChange = {
-            isSelected.value = it
-            if (it) {
-                onSelected(filterText(textBlock))
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Checkbox(
+            checked = isSelected.value,
+            onCheckedChange = {
+                isSelected.value = it
+                if (it) {
+                    onSelected(text)
+                }
             }
-        })
+        )
         Text(
-            text = filterText(textBlock),
+            text = text,
             modifier = modifier.weight(1.0f)
         )
     }
+}
+
+@Composable
+@Preview
+fun TextBlockSelectionPreview() {
+    TextBlockSelection(
+        text= "Example selection",
+        onSelected = {},
+        modifier = Modifier,
+    )
 }
 
 @OptIn(ExperimentalPermissionsApi::class, ExperimentalMaterial3Api::class)
@@ -271,7 +353,9 @@ fun NoPermissionScreen(
     Scaffold(content = {
         // TODO Back arrow
         Column(
-            modifier = modifier.padding(paddingValues = it).fillMaxSize(),
+            modifier = modifier
+                .padding(paddingValues = it)
+                .fillMaxSize(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
@@ -321,53 +405,29 @@ fun CameraPreview(
         LifecycleCameraController(context)
     }
 
-    val screenWidth = remember { mutableIntStateOf(context.resources.displayMetrics.widthPixels) }
-    val screenHeight = remember { mutableIntStateOf(context.resources.displayMetrics.heightPixels) }
-
+    val configuratin = LocalConfiguration.current
+    val density = LocalDensity.current
     fun drawRectangles(
         drawScope: ContentDrawScope,
-        screenWidth: Int,
-        screenHeight: Int,
+        screenSize: Size,
         imageSize: Size,
-        recognizedText: Text,
+        recognizedText: List<TextBlock>,
     ) {
-        val screenSize = Size(screenWidth.toFloat(), screenHeight.toFloat())
-        recognizedText.textBlocks.forEach { textBlock ->
-            textBlock.lines.forEach { line ->
-                line.elements.forEach { element ->
-                    val point = adjustPoint(
-                        MyPoint(
-                            element.boundingBox?.left?.toFloat() ?: 0f,
-                            element.boundingBox?.top?.toFloat() ?: 0f
-                        ),
-                        imageSize,
-                        screenSize,
-                        uiState.rotation,
-                    )
-                    val size = adjustSize(
-                        Size(
-                            element.boundingBox
-                                ?.width()
-                                ?.toFloat() ?: 0f,
-                            element.boundingBox
-                                ?.height()
-                                ?.toFloat() ?: 0f
-                        ),
-                        imageSize,
-                        screenSize,
-                        uiState.rotation,
-                    )
+        recognizedText.forEach { textBlock ->
 
-                    drawScope.drawRect(
-                        color = Color.Red,
-                        alpha = 0.5f,
-                        topLeft = Offset(
-                            x = point.x,
-                            y = point.y
-                        ),
-                        size = size,
-                    )
+            val points = textBlock.points.map { adjustPoint(MyPoint(it.x, it.y), imageSize, screenSize, uiState.rotation) }
+
+            points.forEachIndexed { index, point ->
+                val end = if (index == points.size - 1) {
+                    points[0]
+                } else {
+                    points[index + 1]
                 }
+                drawScope.drawLine(
+                    color = Color.Red,
+                    Offset(point.x, point.y),
+                    Offset(end.x, end.y)
+                )
             }
         }
     }
@@ -376,6 +436,7 @@ fun CameraPreview(
         floatingActionButton = {
            FloatingActionButton(
                onClick = { onStopTextRecognition(cameraController) },
+
           ){
                Icon(Icons.Filled.Done, "Add")
            }
@@ -395,17 +456,66 @@ fun CameraPreview(
                             // Modifier.drawWithContent lets you execute DrawScope operations before or after the content of the composable.
                             // Call drawContent to render the actual content of the composable.
                             drawContent()
+                            val displayWidth = with(density) {
+                                configuratin.screenWidthDp.dp.roundToPx()
+                            }
+                            val displayHeight = with(density) {
+                                configuratin.screenHeightDp.dp.roundToPx()
+                            }
                             drawRectangles(
                                 this,
-                                screenWidth.value,
-                                screenHeight.value,
+                                Size(
+                                    displayWidth.toFloat(),
+                                    displayHeight.toFloat()
+                                ),
                                 uiState.imageSize,
                                 uiState.recognizedText,
                             )
+                            val imageWidth = uiState.imageSize.width
+                            val imageHeight = uiState.imageSize.height
+                            this.drawRect(
+                                color = Color.Red,
+                                topLeft = Offset(0.0f, 0.0f),
+                                size = Size(100.0f, 100.0f)
+                            )
+                            this.drawRect(
+                                color = Color.Green,
+                                topLeft = Offset(0.0f, imageHeight - 100.0f),
+                                size = Size(100.0f, 100.0f)
+                            )
+                            this.drawRect(
+                                color = Color.Blue,
+                                topLeft = Offset(imageWidth - 100.0f, 0.0f),
+                                size = Size(100.0f, 100.0f)
+                            )
+                            this.drawRect(
+                                color = Color.Yellow,
+                                topLeft = Offset(imageWidth - 100.0f, imageHeight - 100.0f),
+                                size = Size(100.0f, 100.0f)
+                            )
+                            this.drawRect(
+                                color = Color.Red,
+                                topLeft = Offset(0.0f, 0.0f),
+                                size = Size(100.0f, 100.0f)
+                            )
+                            this.drawRect(
+                                color = Color.Green,
+                                topLeft = Offset(0.0f, displayHeight - 100.0f),
+                                size = Size(100.0f, 100.0f)
+                            )
+                            this.drawRect(
+                                color = Color.Blue,
+                                topLeft = Offset(displayWidth - 100.0f, 0.0f),
+                                size = Size(100.0f, 100.0f)
+                            )
+                            this.drawRect(
+                                color = Color.Yellow,
+                                topLeft = Offset(displayWidth - 100.0f, displayHeight - 100.0f),
+                                size = Size(100.0f, 100.0f)
+                            )
                         }
                ){
-
-                // Using AndroidView since Jetpack Compose not currently supporting CameraX
+                    // Using AndroidView since Jetpack Compose not currently supporting CameraX
                     AndroidView(
                         modifier = modifier
                             .fillMaxSize()
@@ -425,12 +535,9 @@ fun CameraPreview(
                                     previewView
                                 )
                             }
-                        })
-                    }
-                Text(
-                    modifier = modifier.fillMaxWidth(),
-                    text = uiState.recognizedText.text
-                )
+                        }
+                    )
+                }
             }
         }
     )

@@ -6,10 +6,14 @@ import androidx.camera.view.LifecycleCameraController
 import androidx.camera.view.PreviewView
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.geometry.Size
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import com.google.mlkit.vision.text.Text
 import com.zorrokid.mediacollector.common.analyzers.TextRecognitionAnalyzer
+import com.zorrokid.mediacollector.model.TextBlock
+import com.zorrokid.mediacollector.model.TextLine
 import com.zorrokid.mediacollector.model.TextRecognitionInfo
 import com.zorrokid.mediacollector.model.service.LogService
 import com.zorrokid.mediacollector.screens.MediaCollectorViewModel
@@ -24,10 +28,35 @@ class TextRecognitionViewModel @Inject constructor(
     var uiState = mutableStateOf(TextRecognitionUiState())
         private set
 
-    private fun onDetectedTextUpdated(textRecognitionInfo: TextRecognitionInfo) {
+    private fun convertTextRecognitionResult(text: Text): List<TextBlock> {
+        val result = text.textBlocks.map { textBlock ->
+            TextBlock(
+                text = textBlock.text,
+                lines = textBlock.text.lines().filter {it.isNotBlank() }.map { line ->
+                    TextLine(
+                        words = line.split(" ").filter { it.isNotBlank() }
+                    )
+                },
+                points = textBlock.cornerPoints?.map { Offset(it.x.toFloat(), it.y.toFloat()) } ?: emptyList()
+            )
+        }
+        return result
+    }
+
+    private fun getRotatedSize(imageSize: Size, rotation: Int): Size {
+        return if (rotation == 0 || rotation == 180) {
+            imageSize
+        } else {
+            Size(imageSize.height, imageSize.width)
+        }
+    }
+
+    private fun onDetectedTextUpdated(
+        textRecognitionInfo: TextRecognitionInfo,
+    ) {
         uiState.value = uiState.value.copy(
-            recognizedText = textRecognitionInfo.text,
-            imageSize = textRecognitionInfo.imageSize,
+            recognizedText = convertTextRecognitionResult(textRecognitionInfo.text),
+            imageSize = getRotatedSize(textRecognitionInfo.imageSize, textRecognitionInfo.rotation),
             rotation = textRecognitionInfo.rotation,
         )
     }
