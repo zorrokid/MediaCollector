@@ -1,11 +1,8 @@
 package com.zorrokid.mediacollector.screens.login
 
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.res.stringResource
 import com.zorrokid.mediacollector.MediaCollectorScreen
-import com.zorrokid.mediacollector.R
 import com.zorrokid.mediacollector.common.ext.isValidEmail
-import com.zorrokid.mediacollector.common.snackbar.SnackbarManager
 import com.zorrokid.mediacollector.model.service.AccountService
 import com.zorrokid.mediacollector.model.service.LogService
 import com.zorrokid.mediacollector.screens.MediaCollectorViewModel

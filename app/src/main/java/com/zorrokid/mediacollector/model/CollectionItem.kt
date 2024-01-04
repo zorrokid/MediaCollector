@@ -23,4 +23,5 @@ data class CollectionItem(
     val releaseAreaName: String = "",
     val conditionClassificationId: String = "",
     val conditionClassificationName: String = "",
+    val originalName: String = "",
 )

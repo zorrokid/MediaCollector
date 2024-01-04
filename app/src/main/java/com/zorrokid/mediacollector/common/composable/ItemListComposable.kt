@@ -96,11 +96,17 @@ fun ItemListCard(
                 modifier = modifier
                     .fillMaxWidth(),
             ) {
-                Text(
-                    text = collectionItem.name,
-                    maxLines = 1
-                )
-                Spacer(modifier = modifier.weight(1.0f))
+                Column {
+                    Text(
+                        text = collectionItem.name,
+                        maxLines = 1
+                    )
+                    Text(
+                        text = collectionItem.originalName,
+                        maxLines = 1
+                    )
+                }
+                Spacer(modifier = modifier.weight(1f))
                 ItemCardMenu(
                     id = collectionItem.id,
                     onEdit = onEdit,
@@ -111,6 +117,7 @@ fun ItemListCard(
             }
             Text(text = collectionItem.barcode, modifier = modifier)
             Text(text = collectionItem.releaseAreaName, modifier = modifier)
+            Text(text = collectionItem.conditionClassificationName, modifier = modifier)
         }
     }
 }
@@ -162,9 +169,11 @@ fun ItemCardMenu(
 fun ItemListCardPreview() {
     ItemListCard(collectionItem = CollectionItem(
         id = "1234",
-        name = "Test",
+        name = "Local name",
         barcode = "123456789",
         releaseAreaName = "Nordic countries",
+        originalName = "Original name",
+        conditionClassificationName = "Mint"
         ), onEdit = {
             openScreen, id -> openScreen("EditItemScreen/$id")
     }, onDelete = {}, openScreen = {})
