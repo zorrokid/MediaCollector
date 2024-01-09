@@ -18,6 +18,8 @@ import com.zorrokid.mediacollector.model.service.ReleaseAreaService
 import com.zorrokid.mediacollector.model.service.StorageService
 import com.zorrokid.mediacollector.screens.MediaCollectorViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 @HiltViewModel
@@ -93,9 +95,24 @@ class AddOrEditItemViewModel @Inject constructor(
             barcodeScanService.startScanning().collect{
                 if (!it.isNullOrEmpty()){
                     uiState.value = uiState.value.copy(barcode = it)
+                    val results = storageService.collectionItems.map {
+                        items ->  items.filter { item -> item.barcode == barcode }
+                    }.collect{collectionItems ->
+                        if (collectionItems.isNotEmpty()) {
+                            uiState.value = uiState.value.copy(searchResults = collectionItems)
+                        }
+                    }
                 }
             }
         }
+    }
+
+    fun onSearchResultsDismiss() {
+        uiState.value = uiState.value.copy(searchResults = emptyList())
+    }
+
+    fun onCreateCopy(collectionItem: CollectionItem) {
+        // TODO
     }
 
     fun onReleaseAreaSelect(releaseArea: ReleaseArea) {

@@ -1,28 +1,36 @@
 package com.zorrokid.mediacollector.screens.add_or_edit_item
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material3.Button
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.zorrokid.mediacollector.MediaCollectorScreen
 import com.zorrokid.mediacollector.R
 import com.zorrokid.mediacollector.common.composable.BarcodeInput
 import com.zorrokid.mediacollector.common.composable.BasicTopAppBar
 import com.zorrokid.mediacollector.common.composable.DropDownWithTextField
 import com.zorrokid.mediacollector.common.composable.TextRecognitionInput
+import com.zorrokid.mediacollector.model.CollectionItem
 import com.zorrokid.mediacollector.model.ConditionClassification
 import com.zorrokid.mediacollector.model.ReleaseArea
 
@@ -48,6 +56,8 @@ fun AddItemScreen(
         onNameChange = viewModel::onNameChange,
         popUp = popUp,
         isEditing = uiState.id != null,
+        onSearchResultsDismiss = viewModel::onSearchResultsDismiss,
+        onCreateCopy = viewModel::onCreateCopy,
     )
 }
 
@@ -67,6 +77,8 @@ fun AddItemScreenContent(
     onNameChange: (String) -> Unit,
     popUp: () -> Unit,
     isEditing: Boolean = false,
+    onSearchResultsDismiss: () -> Unit,
+    onCreateCopy: (CollectionItem) -> Unit,
 ) {
    Scaffold (
        topBar = {
@@ -107,7 +119,72 @@ fun AddItemScreenContent(
                     label = "Condition"
                 )
             }
+            if (uiState.searchResults.isNotEmpty()) {
+                ModalBottomSheet(
+                    onDismissRequest = { onSearchResultsDismiss() }
+                ) {
+                    SearchResults(uiState.searchResults, onCreateCopy)
+                }
+            }
         }
+    )
+}
+
+@Composable
+fun SearchResults(
+    searchResults: List<CollectionItem>,
+    onCreateCopy: (CollectionItem) -> Unit,
+) {
+    Column(
+        modifier = Modifier
+            .padding(16.dp)
+    ) {
+        Text(
+            text = stringResource(id = R.string.create_copy_from_resul),
+        )
+        searchResults.forEach { collectionItem ->
+           SearchResultSelect(collectionItem, onCreateCopy)
+        }
+    }
+}
+
+@Composable
+fun SearchResultSelect(
+    collectionItem: CollectionItem,
+    onCreateCopy: (CollectionItem) -> Unit,
+) {
+    // TODO: this logic should be moved to the view model or rather
+    // to CollectionItemModel (CollectionItemObject?)
+    val description = if (collectionItem.name.isNotEmpty())
+        collectionItem.name
+    else if (collectionItem.originalName.isNotEmpty())
+        collectionItem.originalName
+    else
+        collectionItem.barcode
+    Row(
+        modifier = Modifier
+            .padding(8.dp),
+        verticalAlignment = Alignment.CenterVertically
+
+    ) {
+        Text(text = description)
+        Spacer(modifier = Modifier.weight(1f))
+        Button(onClick = {
+            onCreateCopy(collectionItem)
+        }) {
+            Text(text = "Create copy")
+        }
+    }
+}
+
+@Composable
+@Preview(showBackground = true)
+fun SearchResultSelectPreview(){
+    SearchResultSelect(
+        collectionItem = CollectionItem(
+            name = "Test",
+        ),
+        onCreateCopy = {},
     )
 }
 
@@ -126,6 +203,8 @@ fun AddItemScreenContentPreview(){
         onScanText = {},
         onNameChange = {},
         popUp = {},
+        onSearchResultsDismiss = {},
+        onCreateCopy = {},
     )
 }
 
