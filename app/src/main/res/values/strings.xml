@@ -35,4 +35,6 @@
     <string name="invalid_password">Invalid password</string>
     <string name="invalid_repeat_password">Passwords are not matching</string>
     <string name="no_results">No results</string>
+    <string name="already_in_collection">Already in collection</string>
+    <string name="create_copy_from_resul">Create a copy from existing collection item</string>
 </resources>
