@@ -18,7 +18,6 @@ import com.zorrokid.mediacollector.model.service.ReleaseAreaService
 import com.zorrokid.mediacollector.model.service.StorageService
 import com.zorrokid.mediacollector.screens.MediaCollectorViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -69,21 +68,12 @@ class AddOrEditItemViewModel @Inject constructor(
         }
     }
 
-
-    private val name
-        get() = uiState.value.name
-
-    private val barcode
-        get() = uiState.value.barcode
-
-    private val releaseAreaId
-        get() = uiState.value.releaseAreaId
-
-    private val conditionClassificationId
-        get() = uiState.value.conditionClassificationId
-
     fun onNameChange(newValue: String) {
         uiState.value = uiState.value.copy(name = newValue)
+    }
+
+    fun onOriginalNameChange(newValue: String) {
+        uiState.value = uiState.value.copy(originalName = newValue)
     }
 
     fun onBarcodeChange(newValue: String) {
@@ -96,10 +86,12 @@ class AddOrEditItemViewModel @Inject constructor(
                 if (!it.isNullOrEmpty()){
                     uiState.value = uiState.value.copy(barcode = it)
                     val results = storageService.collectionItems.map {
-                        items ->  items.filter { item -> item.barcode == barcode }
+                        items ->  items.filter { item -> item.barcode == uiState.value.barcode}
                     }.collect{collectionItems ->
                         if (collectionItems.isNotEmpty()) {
-                            uiState.value = uiState.value.copy(searchResults = collectionItems)
+                            uiState.value = uiState.value.copy(
+                                searchResults = collectionItems,
+                            )
                         }
                     }
                 }
@@ -112,7 +104,13 @@ class AddOrEditItemViewModel @Inject constructor(
     }
 
     fun onCreateCopy(collectionItem: CollectionItem) {
-        // TODO
+        uiState.value = uiState.value.copy(
+            name = collectionItem.name,
+            barcode = collectionItem.barcode,
+            releaseAreaId = collectionItem.releaseAreaId,
+            originalName = collectionItem.originalName,
+            searchResults = emptyList(),
+        )
     }
 
     fun onReleaseAreaSelect(releaseArea: ReleaseArea) {
@@ -139,13 +137,18 @@ class AddOrEditItemViewModel @Inject constructor(
         val isUpdate = !uiState.value.id.isNullOrEmpty()
         val collectionItem = CollectionItem(
             id = uiState.value.id,
-            name = name,
-            barcode = barcode,
+            name = uiState.value.name,
+            originalName = uiState.value.originalName,
+            barcode = uiState.value.barcode,
             userId = accountService.currentUserId,
-            releaseAreaId = releaseAreaId,
-            releaseAreaName = releaseAreas.find { it.id == releaseAreaId }?.name ?: "",
-            conditionClassificationId = conditionClassificationId,
-            conditionClassificationName = conditionClassifications.find { it.id == conditionClassificationId }?.name ?: "",
+            releaseAreaId = uiState.value.releaseAreaId,
+            releaseAreaName = releaseAreas.find {
+                it.id == uiState.value.releaseAreaId
+            }?.name ?: "",
+            conditionClassificationId = uiState.value.conditionClassificationId,
+            conditionClassificationName = conditionClassifications.find {
+                it.id == uiState.value.conditionClassificationId
+            }?.name ?: "",
         )
 
         launchCatching {

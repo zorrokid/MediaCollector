@@ -5,18 +5,14 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Button
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -24,7 +20,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.zorrokid.mediacollector.MediaCollectorScreen
 import com.zorrokid.mediacollector.R
 import com.zorrokid.mediacollector.common.composable.BarcodeInput
 import com.zorrokid.mediacollector.common.composable.BasicTopAppBar
@@ -54,6 +49,7 @@ fun AddItemScreen(
         conditionClassifications = viewModel.conditionClassifications,
         onScanText = { viewModel.onScanText(navigate) },
         onNameChange = viewModel::onNameChange,
+        onOriginalNameChange = viewModel::onOriginalNameChange,
         popUp = popUp,
         isEditing = uiState.id != null,
         onSearchResultsDismiss = viewModel::onSearchResultsDismiss,
@@ -75,6 +71,7 @@ fun AddItemScreenContent(
     conditionClassifications: List<ConditionClassification>,
     onScanText: () -> Unit,
     onNameChange: (String) -> Unit,
+    onOriginalNameChange: (String) -> Unit,
     popUp: () -> Unit,
     isEditing: Boolean = false,
     onSearchResultsDismiss: () -> Unit,
@@ -99,9 +96,15 @@ fun AddItemScreenContent(
                     onTextChange = onNameChange,
                     onScanText = onScanText,
                     text = uiState.name,
-                    placeHolder = R.string.name,
+                    placeHolder = R.string.local_name,
                 )
-               BarcodeInput(
+                TextRecognitionInput(
+                    onTextChange = onOriginalNameChange,
+                    onScanText = onScanText,
+                    text = uiState.originalName,
+                    placeHolder = R.string.original_name,
+                )
+                BarcodeInput(
                     onBarcodeChange = onBarcodeChange,
                     onScanBarcodeClick = onScanBarcodeClick,
                     barcode = uiState.barcode
@@ -137,7 +140,7 @@ fun SearchResults(
 ) {
     Column(
         modifier = Modifier
-            .padding(16.dp)
+            .padding(bottom = 56.dp)
     ) {
         Text(
             text = stringResource(id = R.string.create_copy_from_resul),
@@ -202,6 +205,7 @@ fun AddItemScreenContentPreview(){
         conditionClassifications = listOf(ConditionClassification("Test")),
         onScanText = {},
         onNameChange = {},
+        onOriginalNameChange = {},
         popUp = {},
         onSearchResultsDismiss = {},
         onCreateCopy = {},
