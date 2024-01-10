@@ -5,6 +5,7 @@ import com.zorrokid.mediacollector.model.CollectionItem
 data class AddOrEditItemUiState(
     val id: String = "",
     val name: String = "",
+    val originalName: String = "",
     val barcode: String = "",
     val releaseAreaId: String = "",
     val conditionClassificationId: String = "",

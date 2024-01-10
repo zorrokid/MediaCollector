@@ -37,4 +37,6 @@
     <string name="no_results">No results</string>
     <string name="already_in_collection">Already in collection</string>
     <string name="create_copy_from_resul">Create a copy from existing collection item</string>
+    <string name="local_name">Local name</string>
+    <string name="original_name">Original name</string>
 </resources>
