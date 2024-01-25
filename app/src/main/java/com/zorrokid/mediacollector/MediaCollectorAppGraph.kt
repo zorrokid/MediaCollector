@@ -49,34 +49,17 @@ fun NavGraphBuilder.mediaCollectorAppGraph(appState: MediaCollectorAppState) {
         )
     }
 
-    // TODO: could be probably cleaned up now since shared view model is not needed anymore
-   navigation(
+   composable(
         route = "${MediaCollectorScreen.AddOrEditItem.name}$ID_ARG",
-        startDestination = MediaCollectorScreen.AddOrEditItemForm.name,
         arguments = listOf(navArgument(ID) {
                 nullable = true
                 defaultValue = null
             })
     ){
-        composable(
-            route = MediaCollectorScreen.AddOrEditItemForm.name,
-            arguments = listOf(navArgument(ID) {
-                    nullable = true
-                    defaultValue = null
-                })
-        ){
-            val parentEntry = remember(it){
-                appState.navController.getBackStackEntry(MediaCollectorScreen.AddOrEditItem.name)
-            }
-            val parentViewModel = hiltViewModel<AddOrEditItemViewModel>(parentEntry)
-            val id = parentEntry.arguments?.getString(ID)
-            parentViewModel.uiState.value = parentViewModel.uiState.value.copy(id = id ?: "")
-            AddItemScreen(
-                openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) },
-                viewModel = parentViewModel,
-                popUp = appState::popUp
-            )
-        }
+       AddItemScreen(
+            openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) },
+            popUp = appState::popUp
+        )
     }
     composable(route = MediaCollectorScreen.Search.name){
         SearchScreen(
