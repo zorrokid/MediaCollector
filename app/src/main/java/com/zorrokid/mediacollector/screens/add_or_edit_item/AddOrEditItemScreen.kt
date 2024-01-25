@@ -25,17 +25,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.PermissionStatus
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
 import com.zorrokid.mediacollector.R
-import com.zorrokid.mediacollector.common.text_recognition.composable.CameraPreview
 import com.zorrokid.mediacollector.common.composable.BarcodeInput
 import com.zorrokid.mediacollector.common.composable.BasicTopAppBar
 import com.zorrokid.mediacollector.common.composable.DropDownWithTextField
 import com.zorrokid.mediacollector.common.composable.PermissionDialog
 import com.zorrokid.mediacollector.common.composable.TextRecognitionInput
+import com.zorrokid.mediacollector.common.text_recognition.composable.CameraPreview
 import com.zorrokid.mediacollector.common.text_recognition.composable.TextRecognitionResultSelector
 import com.zorrokid.mediacollector.model.CollectionItem
 import com.zorrokid.mediacollector.model.ConditionClassification
@@ -50,7 +49,21 @@ fun AddItemScreen(
     popUp: () -> Unit,
 ) {
     val uiState by viewModel.uiState
-
+    val cameraPermissionState = rememberPermissionState(
+        Manifest.permission.CAMERA
+    )
+    fun onNameRecognitionStart() {
+        viewModel.onStartTextRecognition(
+            cameraPermissionState,
+            viewModel::onNameChange,
+        )
+    }
+    fun onOriginalNameRecognitionStart() {
+        viewModel.onStartTextRecognition(
+            cameraPermissionState,
+            viewModel::onOriginalNameChange,
+        )
+    }
     AddItemScreenContent(
         uiState = uiState,
         onSubmitClick = { viewModel.onSubmitClick(openAndPopUp) },
@@ -60,7 +73,6 @@ fun AddItemScreen(
         releaseAreas = viewModel.releaseAreas,
         onConditionClassificationSelect = viewModel::onConditionClassificationSelect,
         conditionClassifications = viewModel.conditionClassifications,
-        onScanText = viewModel::onStartTextRecognition,
         onNameChange = viewModel::onNameChange,
         onOriginalNameChange = viewModel::onOriginalNameChange,
         popUp = popUp,
@@ -69,12 +81,21 @@ fun AddItemScreen(
         onCreateCopy = viewModel::onCreateCopy,
         onTextRecognitionFinished = viewModel::onTextRecognitionFinished,
         onDetectedTextUpdated = viewModel::onDetectedTextUpdated,
-        onDismissPermissionRequest = viewModel::onDismissPermissionRequest,
         onTextSelected = viewModel::onTextSelected,
+        onNameRecognitionStart = ::onNameRecognitionStart,
+        onOriginalNameRecognitionStart = ::onOriginalNameRecognitionStart,
     )
+    if (uiState.showPermissionModal) {
+        CameraPermissionModal(
+            permissionStatus = cameraPermissionState.status,
+            onPermissionRequested = {
+                cameraPermissionState.launchPermissionRequest()
+            },
+            onDismissRequest = viewModel::onDismissPermissionRequest,
+        )
+    }
 }
 
-@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun AddItemScreenContent(
     modifier: Modifier = Modifier,
@@ -86,7 +107,6 @@ fun AddItemScreenContent(
     releaseAreas: List<ReleaseArea>,
     onConditionClassificationSelect: (ConditionClassification) -> Unit,
     conditionClassifications: List<ConditionClassification>,
-    onScanText: (permissionState: PermissionState, (String) -> Unit) -> Unit,
     onNameChange: (String) -> Unit,
     onOriginalNameChange: (String) -> Unit,
     popUp: () -> Unit,
@@ -95,8 +115,9 @@ fun AddItemScreenContent(
     onCreateCopy: (CollectionItem) -> Unit,
     onTextRecognitionFinished: () -> Unit,
     onDetectedTextUpdated: (TextRecognitionInfo) -> Unit,
-    onDismissPermissionRequest: () -> Unit = {},
     onTextSelected: ((String) -> Unit, String) -> Unit,
+    onNameRecognitionStart: () -> Unit,
+    onOriginalNameRecognitionStart: () -> Unit,
 ) {
     if (uiState.addOrEditItemScreenStatus == AddOrEditItemScreenStatus.SelectTextRecognitionResults) {
         TextRecognitionResultSelector(
@@ -124,19 +145,19 @@ fun AddItemScreenContent(
             releaseAreas = releaseAreas,
             onConditionClassificationSelect = onConditionClassificationSelect,
             conditionClassifications = conditionClassifications,
-            onScanText = onScanText,
             onNameChange = onNameChange,
             onOriginalNameChange = onOriginalNameChange,
             popUp = popUp,
             isEditing = isEditing,
             onSearchResultsDismiss = onSearchResultsDismiss,
             onCreateCopy = onCreateCopy,
-            onDismissPermissionRequest = onDismissPermissionRequest,
+            onNameRecognitionStart = onNameRecognitionStart,
+            onOriginalNameRecognitionStart = onOriginalNameRecognitionStart,
         )
     }
 }
 
-@OptIn(ExperimentalPermissionsApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FormContent(
     modifier: Modifier = Modifier,
@@ -148,18 +169,15 @@ fun FormContent(
     releaseAreas: List<ReleaseArea>,
     onConditionClassificationSelect: (ConditionClassification) -> Unit,
     conditionClassifications: List<ConditionClassification>,
-    onScanText: (permissionState: PermissionState, (String) -> Unit) -> Unit,
     onNameChange: (String) -> Unit,
     onOriginalNameChange: (String) -> Unit,
     popUp: () -> Unit,
     isEditing: Boolean = false,
     onSearchResultsDismiss: () -> Unit,
     onCreateCopy: (CollectionItem) -> Unit,
-    onDismissPermissionRequest: () -> Unit = {},
+    onNameRecognitionStart: () -> Unit,
+    onOriginalNameRecognitionStart: () -> Unit,
 ){
-    val cameraPermissionState = rememberPermissionState(
-        Manifest.permission.CAMERA
-    )
     Scaffold (
        topBar = {
            val titleResourceId = if (isEditing)
@@ -177,13 +195,13 @@ fun FormContent(
             Column(modifier = modifier.padding(padding)){
                 TextRecognitionInput(
                     onTextChange = onNameChange,
-                    onScanText = { onScanText(cameraPermissionState, onNameChange) },
+                    onScanText = onNameRecognitionStart,
                     text = uiState.name,
                     placeHolder = R.string.local_name,
                 )
                 TextRecognitionInput(
                     onTextChange = onOriginalNameChange,
-                    onScanText = { onScanText(cameraPermissionState, onOriginalNameChange) },
+                    onScanText = onOriginalNameRecognitionStart,
                     text = uiState.originalName,
                     placeHolder = R.string.original_name,
                 )
@@ -212,18 +230,32 @@ fun FormContent(
                     SearchResults(uiState.searchResults, onCreateCopy)
                 }
             }
-            if (uiState.showPermissionModal) {
-                CameraPermissionModal(
-                    permissionStatus = cameraPermissionState.status,
-                    onPermissionRequested = {
-                        cameraPermissionState.launchPermissionRequest()
-                    },
-                    onDismissRequest = onDismissPermissionRequest,
-                )
-            }
+
         }
     )
 }
+@Composable
+@Preview
+fun FormContentPreview(){
+    FormContent(
+        uiState = AddOrEditItemUiState(),
+        onSubmitClick = {},
+        onBarcodeChange = {},
+        onScanBarcodeClick = {},
+        onReleaseAreaSelect = {},
+        releaseAreas = listOf(ReleaseArea("123", "Test")),
+        onConditionClassificationSelect = {},
+        conditionClassifications = listOf(ConditionClassification("Test")),
+        onNameChange = {},
+        onOriginalNameChange = {},
+        popUp = {},
+        onSearchResultsDismiss = {},
+        onCreateCopy = {},
+        onNameRecognitionStart = {},
+        onOriginalNameRecognitionStart = {},
+    )
+}
+
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
 @Composable
@@ -324,29 +356,4 @@ fun SearchResultSelectPreview(){
         onCreateCopy = {},
     )
 }
-
-/* TODO:
-@OptIn(ExperimentalPermissionsApi::class)
-@Composable
-@Preview
-fun AddItemScreenContentPreview(){
-    AddItemScreenContent(
-        uiState = AddOrEditItemUiState(),
-        onSubmitClick = {},
-        onBarcodeChange = {},
-        onScanBarcodeClick = {},
-        onReleaseAreaSelect = {},
-        releaseAreas = listOf(ReleaseArea("123", "Test")),
-        onConditionClassificationSelect = {},
-        conditionClassifications = listOf(ConditionClassification("Test")),
-        onScanText = (),
-        onNameChange = {},
-        onOriginalNameChange = {},
-        popUp = {},
-        onSearchResultsDismiss = {},
-        onCreateCopy = {},
-        onTextRecognitionFinished = {},
-        onTextSelected = {}
-    )
-}*/
 
