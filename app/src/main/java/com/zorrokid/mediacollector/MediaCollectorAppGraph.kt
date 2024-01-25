@@ -15,7 +15,6 @@ import com.zorrokid.mediacollector.screens.settings.SettingsScreen
 import com.zorrokid.mediacollector.screens.signup.SignUpScreen
 import com.zorrokid.mediacollector.screens.splash.SplashScreen
 import com.zorrokid.mediacollector.screens.start.StartScreen
-import com.zorrokid.mediacollector.screens.text_recognition.TextRecognitionScreen
 
 fun NavGraphBuilder.mediaCollectorAppGraph(appState: MediaCollectorAppState) {
     composable(route = MediaCollectorScreen.Splash.name) {
@@ -50,45 +49,17 @@ fun NavGraphBuilder.mediaCollectorAppGraph(appState: MediaCollectorAppState) {
         )
     }
 
-    navigation(
+   composable(
         route = "${MediaCollectorScreen.AddOrEditItem.name}$ID_ARG",
-        startDestination = MediaCollectorScreen.AddOrEditItemForm.name,
         arguments = listOf(navArgument(ID) {
                 nullable = true
                 defaultValue = null
             })
     ){
-        composable(
-            route = MediaCollectorScreen.AddOrEditItemForm.name,
-            arguments = listOf(navArgument(ID) {
-                    nullable = true
-                    defaultValue = null
-                })
-        ){
-            val parentEntry = remember(it){
-                appState.navController.getBackStackEntry(MediaCollectorScreen.AddOrEditItem.name)
-            }
-            var parentViewModel = hiltViewModel<AddOrEditItemViewModel>(parentEntry)
-
-            val id = parentEntry.arguments?.getString(ID)
-            parentViewModel.uiState.value = parentViewModel.uiState.value.copy(id = id ?: "")
-            AddItemScreen(
-                openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) },
-                navigate = { route -> appState.navigate(route) },
-                viewModel = parentViewModel,
-                popUp = appState::popUp
-            )
-        }
-        composable(route = MediaCollectorScreen.TextRecognition.name){
-            val parentEntry = remember(it){
-                appState.navController.getBackStackEntry(MediaCollectorScreen.AddOrEditItem.name)
-            }
-            val parentViewModel = hiltViewModel<AddOrEditItemViewModel>(parentEntry)
-            TextRecognitionScreen(
-                sharedViewModel = parentViewModel,
-                popUp = { appState.popUp() }
-            )
-        }
+       AddItemScreen(
+            openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) },
+            popUp = appState::popUp
+        )
     }
     composable(route = MediaCollectorScreen.Search.name){
         SearchScreen(
