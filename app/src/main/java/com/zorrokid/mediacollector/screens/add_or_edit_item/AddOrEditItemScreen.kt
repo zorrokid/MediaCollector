@@ -64,7 +64,7 @@ fun AddItemScreen(
         onNameChange = viewModel::onNameChange,
         onOriginalNameChange = viewModel::onOriginalNameChange,
         popUp = popUp,
-        isEditing = uiState.id != null,
+        isEditing = uiState.id.isNotEmpty(),
         onSearchResultsDismiss = viewModel::onSearchResultsDismiss,
         onCreateCopy = viewModel::onCreateCopy,
         onTextRecognitionFinished = viewModel::onTextRecognitionFinished,

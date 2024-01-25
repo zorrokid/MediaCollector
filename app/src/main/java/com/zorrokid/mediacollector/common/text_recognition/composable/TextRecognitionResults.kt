@@ -41,7 +41,7 @@ fun TextRecognitionResultSelector(
 ) {
     val selectedTexts = remember { mutableStateOf(emptyList<String>()) }
 
-    var showSingleWordSelection = remember {
+    val showSingleWordSelection = remember {
         mutableStateOf(false)
     }
 
