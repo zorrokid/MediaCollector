@@ -11,9 +11,8 @@ import com.google.mlkit.vision.text.Text
 import com.zorrokid.mediacollector.ID
 import com.zorrokid.mediacollector.MediaCollectorScreen
 import com.zorrokid.mediacollector.R
-import com.zorrokid.mediacollector.common.text_recognition.model.TextRecognitionStatus
-import com.zorrokid.mediacollector.common.ext.capitalizeWords
 import com.zorrokid.mediacollector.common.snackbar.SnackbarManager
+import com.zorrokid.mediacollector.common.text_recognition.model.TextRecognitionStatus
 import com.zorrokid.mediacollector.model.CollectionItem
 import com.zorrokid.mediacollector.model.ConditionClassification
 import com.zorrokid.mediacollector.model.ReleaseArea
@@ -95,7 +94,7 @@ class AddOrEditItemViewModel @Inject constructor(
             barcodeScanService.startScanning().collect{
                 if (!it.isNullOrEmpty()){
                     uiState.value = uiState.value.copy(barcode = it)
-                    val results = storageService.collectionItems.map {
+                    storageService.collectionItems.map {
                         items ->  items.filter { item -> item.barcode == uiState.value.barcode}
                     }.collect{collectionItems ->
                         if (collectionItems.isNotEmpty()) {
@@ -205,7 +204,7 @@ class AddOrEditItemViewModel @Inject constructor(
     fun onSubmitClick(
         openAndPopUp: (String, String) -> Unit
     ) {
-        val isUpdate = !uiState.value.id.isNullOrEmpty()
+        val isUpdate = uiState.value.id.isNotEmpty()
         val collectionItem = CollectionItem(
             id = uiState.value.id,
             name = uiState.value.name,
@@ -228,7 +227,7 @@ class AddOrEditItemViewModel @Inject constructor(
             } else {
                 storageService.save(collectionItem)
             }
-            var messageId = if (isUpdate) R.string.item_updated else R.string.item_added
+            val messageId = if (isUpdate) R.string.item_updated else R.string.item_added
             SnackbarManager.showMessage(messageId)
             openAndPopUp(MediaCollectorScreen.Main.name, MediaCollectorScreen.AddOrEditItemForm.name)
         }

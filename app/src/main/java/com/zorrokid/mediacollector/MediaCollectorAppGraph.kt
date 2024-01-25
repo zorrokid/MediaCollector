@@ -1,13 +1,9 @@
 package com.zorrokid.mediacollector
 
-import androidx.compose.runtime.remember
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
 import com.zorrokid.mediacollector.screens.add_or_edit_item.AddItemScreen
-import com.zorrokid.mediacollector.screens.add_or_edit_item.AddOrEditItemViewModel
 import com.zorrokid.mediacollector.screens.login.LogInScreen
 import com.zorrokid.mediacollector.screens.main.MainScreen
 import com.zorrokid.mediacollector.screens.search.SearchScreen
