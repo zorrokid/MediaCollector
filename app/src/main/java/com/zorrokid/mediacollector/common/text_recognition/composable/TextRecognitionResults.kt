@@ -81,7 +81,6 @@ fun TextRecognitionResultSelector(
                                 selectedTexts.value = selectedTexts.value + it
                                 Log.d("TextRecognitionResultSelector", "SelectedTexts: $selectedTexts")
                             },
-                            index,
                             showSingleWordSelection.value,
                         )
                     }
@@ -124,7 +123,6 @@ fun TextScanResultCard(
     modifier: Modifier = Modifier,
     textBlock: TextBlock,
     onTextSelected: (String) -> Unit,
-    index: Int,
     showSingleWordSelection: Boolean,
 ) {
     fun filterText(textBlock: TextBlock): String {
@@ -169,7 +167,6 @@ fun TextScanResultCardPreview() {
     TextScanResultCard(
         textBlock = TextBlock("Example selection", emptyList(), emptyList()),
         onTextSelected = {},
-        index = 0,
         showSingleWordSelection = false,
     )
 }
@@ -179,7 +176,6 @@ fun TextScanResultCardSingleWordSelectionPreview() {
     TextScanResultCard(
         textBlock = TextBlock("Example selection", listOf(TextLine(words = listOf("Hello", "World"))), emptyList()),
         onTextSelected = {},
-        index = 0,
         showSingleWordSelection = true,
     )
 }
