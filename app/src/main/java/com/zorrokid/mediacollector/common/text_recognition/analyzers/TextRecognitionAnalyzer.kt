@@ -1,4 +1,4 @@
-package com.zorrokid.mediacollector.common.analyzers
+package com.zorrokid.mediacollector.common.text_recognition.analyzers
 
 import android.media.Image
 import android.util.Log

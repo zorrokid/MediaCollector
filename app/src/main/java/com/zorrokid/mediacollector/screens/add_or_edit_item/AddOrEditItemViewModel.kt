@@ -1,15 +1,25 @@
 package com.zorrokid.mediacollector.screens.add_or_edit_item
 
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.lifecycle.SavedStateHandle
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.PermissionState
+import com.google.accompanist.permissions.isGranted
+import com.google.mlkit.vision.text.Text
 import com.zorrokid.mediacollector.ID
 import com.zorrokid.mediacollector.MediaCollectorScreen
 import com.zorrokid.mediacollector.R
+import com.zorrokid.mediacollector.common.text_recognition.model.TextRecognitionStatus
 import com.zorrokid.mediacollector.common.ext.capitalizeWords
 import com.zorrokid.mediacollector.common.snackbar.SnackbarManager
 import com.zorrokid.mediacollector.model.CollectionItem
 import com.zorrokid.mediacollector.model.ConditionClassification
 import com.zorrokid.mediacollector.model.ReleaseArea
+import com.zorrokid.mediacollector.model.TextBlock
+import com.zorrokid.mediacollector.model.TextLine
+import com.zorrokid.mediacollector.model.TextRecognitionInfo
 import com.zorrokid.mediacollector.model.service.AccountService
 import com.zorrokid.mediacollector.model.service.BarcodeScanService
 import com.zorrokid.mediacollector.model.service.ConditionClassificationService
@@ -121,14 +131,75 @@ class AddOrEditItemViewModel @Inject constructor(
         uiState.value = uiState.value.copy(conditionClassificationId = conditionClassification.id)
     }
 
-    fun onScanText(navigate: (String) -> Unit) {
-        navigate(MediaCollectorScreen.TextRecognition.name)
+    fun onDismissPermissionRequest() {
+        uiState.value = uiState.value.copy(
+            showPermissionModal = false,
+        )
     }
 
-    fun onTextSelected(textList: List<String>, popUp: () -> Unit) {
-        val text = textList.joinToString(" ").capitalizeWords()
-        uiState.value = uiState.value.copy(name = text)
-        popUp()
+    @OptIn(ExperimentalPermissionsApi::class)
+    fun onStartTextRecognition(permissionState: PermissionState, onTextSelected: (String) -> Unit) {
+        if (permissionState.status.isGranted) {
+            uiState.value = uiState.value.copy(
+                showPermissionModal = false,
+                addOrEditItemScreenStatus = AddOrEditItemScreenStatus.TextRecognition,
+                onTextSelected = onTextSelected,
+            )
+        } else {
+            uiState.value = uiState.value.copy(
+                showPermissionModal = true,
+            )
+        }
+    }
+
+    fun onTextSelected(onTextSelected: (String) -> Unit, text: String) {
+        onTextSelected(text)
+        uiState.value = uiState.value.copy(
+            addOrEditItemScreenStatus = AddOrEditItemScreenStatus.Initial
+        )
+    }
+
+    // TODO: move this to TextRecognitionController?
+    private fun convertTextRecognitionResult(text: Text): List<TextBlock> {
+        val result = text.textBlocks.map { textBlock ->
+            TextBlock(
+                text = textBlock.text,
+                lines = textBlock.text.lines().filter {it.isNotBlank() }.map { line ->
+                    TextLine(
+                        words = line.split(" ").filter { it.isNotBlank() }
+                    )
+                },
+                points = textBlock.cornerPoints?.map { Offset(it.x.toFloat(), it.y.toFloat()) } ?: emptyList()
+            )
+        }
+        return result
+    }
+
+    // TODO: move this to TextRecognitionController?
+    private fun getRotatedSize(imageSize: Size, rotation: Int): Size {
+        return if (rotation == 0 || rotation == 180) {
+            imageSize
+        } else {
+            Size(imageSize.height, imageSize.width)
+        }
+    }
+
+
+    fun onDetectedTextUpdated(
+        textRecognitionInfo: TextRecognitionInfo,
+    ) {
+        uiState.value = uiState.value.copy(
+            textRecognitionStatus = TextRecognitionStatus(
+                recognizedText = convertTextRecognitionResult(textRecognitionInfo.text),
+                imageSize = getRotatedSize(textRecognitionInfo.imageSize, textRecognitionInfo.rotation),
+                rotation = textRecognitionInfo.rotation,
+            ),
+        )
+    }
+    fun onTextRecognitionFinished() {
+        uiState.value = uiState.value.copy(
+            addOrEditItemScreenStatus = AddOrEditItemScreenStatus.SelectTextRecognitionResults
+        )
     }
 
     fun onSubmitClick(
