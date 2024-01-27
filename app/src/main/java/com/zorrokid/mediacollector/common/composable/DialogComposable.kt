@@ -27,26 +27,3 @@ fun ConfirmDialog(
         }
     )
 }
-
-@Composable
-fun PermissionDialog(
-    onLaunchPermissionRequest: () -> Unit,
-    message: String,
-    onDismiss: () -> Unit,
-) {
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text("Permission needed") },
-        text = { Text(message) },
-        confirmButton = {
-            TextButton(onClick = onLaunchPermissionRequest) {
-                Text("Proceed to settings")
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismiss) {
-                Text("Cancel")
-            }
-        }
-    )
-}

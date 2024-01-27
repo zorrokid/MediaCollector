@@ -102,3 +102,10 @@ full variant:
 
     adb install app/full/release/app-full-release.apk
 
+# Debugging notes
+
+To reset permissions for virtual device
+
+   adb shell pm reset-permissions
+
+
