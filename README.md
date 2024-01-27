@@ -18,7 +18,7 @@ Text recognition feature needs camera permsission.
 
 Barcode scan feature uses Google Play services for Barcode Scanning so no permissions are needed for that.
 
-# Authentication and data storeage
+# Authentication and data storage
 
 Unsing [Firebase](https://firebase.google.com/docs/android/setup) authentication and Firestore database.
 
