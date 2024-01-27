@@ -84,6 +84,7 @@ fun AddItemScreen(
         onTextSelected = viewModel::onTextSelected,
         onNameRecognitionStart = ::onNameRecognitionStart,
         onOriginalNameRecognitionStart = ::onOriginalNameRecognitionStart,
+        modifier = Modifier.padding(20.dp),
     )
     if (uiState.showPermissionModal) {
         CameraPermissionModal(
@@ -160,7 +161,7 @@ fun AddItemScreenContent(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FormContent(
-    modifier: Modifier = Modifier,
+    modifier: Modifier,
     uiState: AddOrEditItemUiState,
     onSubmitClick: () -> Unit,
     onBarcodeChange: (String) -> Unit,
@@ -227,7 +228,7 @@ fun FormContent(
                 ModalBottomSheet(
                     onDismissRequest = { onSearchResultsDismiss() }
                 ) {
-                    SearchResults(uiState.searchResults, onCreateCopy)
+                    SearchResults(uiState.searchResults, onCreateCopy, modifier)
                 }
             }
 
@@ -235,7 +236,7 @@ fun FormContent(
     )
 }
 @Composable
-@Preview
+@Preview(apiLevel = 33)
 fun FormContentPreview(){
     FormContent(
         uiState = AddOrEditItemUiState(),
@@ -253,6 +254,35 @@ fun FormContentPreview(){
         onCreateCopy = {},
         onNameRecognitionStart = {},
         onOriginalNameRecognitionStart = {},
+        modifier = Modifier,
+    )
+}
+
+@Composable
+fun PermissionModalContent(
+    modifier: Modifier,
+    onOpenPermissionDialogClicked: () -> Unit,
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
+            .padding(bottom = 30.dp)
+    ) {
+        Button(
+            onClick = onOpenPermissionDialogClicked,
+        ) {
+            Text("Set permissions")
+        }
+        Text(text = "Camera permission is required for text recognition feature to fill in selected text field.")
+    }
+}
+
+@Composable
+@Preview(showBackground = true)
+fun PermissionModalContentPreview(){
+    PermissionModalContent(
+        modifier = Modifier.padding(8.dp),
+        onOpenPermissionDialogClicked = {},
     )
 }
 
@@ -266,25 +296,23 @@ fun CameraPermissionModal(
     modifier: Modifier = Modifier,
 ) {
     val openPermissionDialog = remember { mutableStateOf(false) }
+    fun onOpenPermissionDialogClicked() {
+        openPermissionDialog.value = true
+    }
     ModalBottomSheet(
         onDismissRequest = onDismissRequest
     ) {
-        Column {
-            Text(text = "Camera permission is required to fill in field with text recognition.")
-            Button(
-                onClick = { openPermissionDialog.value = true },
-                modifier.padding(8.dp)
-            ) {
-                Text("Set permissions")
-            }
-        }
+        PermissionModalContent(
+            modifier = modifier,
+            onOpenPermissionDialogClicked = ::onOpenPermissionDialogClicked,
+        )
     }
     when {
         openPermissionDialog.value -> {
             val message = if (permissionStatus.shouldShowRationale)
-                "Text recognition feature requires camera permission."
+                "Allow permission for camera needed for text recognition?"
             else
-                "Text recognition feature requires camera permission. Please go to settings and enable camera permission."
+                "Allow permission for camera needed for text recognition?"
             PermissionDialog(
                 onLaunchPermissionRequest = {
                     openPermissionDialog.value = false
@@ -303,16 +331,17 @@ fun CameraPermissionModal(
 fun SearchResults(
     searchResults: List<CollectionItem>,
     onCreateCopy: (CollectionItem) -> Unit,
+    modifier: Modifier,
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .padding(bottom = 56.dp)
     ) {
         Text(
             text = stringResource(id = R.string.create_copy_from_resul),
         )
         searchResults.forEach { collectionItem ->
-           SearchResultSelect(collectionItem, onCreateCopy)
+           SearchResultSelect(collectionItem, onCreateCopy, modifier)
         }
     }
 }
@@ -321,6 +350,7 @@ fun SearchResults(
 fun SearchResultSelect(
     collectionItem: CollectionItem,
     onCreateCopy: (CollectionItem) -> Unit,
+    modifier: Modifier,
 ) {
     // TODO: this logic should be moved to the view model or rather
     // to CollectionItemModel (CollectionItemObject?)
@@ -331,8 +361,8 @@ fun SearchResultSelect(
     else
         collectionItem.barcode
     Row(
-        modifier = Modifier
-            .padding(8.dp),
+        modifier = modifier
+            .padding(bottom = 20.dp),
         verticalAlignment = Alignment.CenterVertically
 
     ) {
@@ -347,13 +377,14 @@ fun SearchResultSelect(
 }
 
 @Composable
-@Preview(showBackground = true)
+@Preview(showBackground = true, apiLevel = 33)
 fun SearchResultSelectPreview(){
     SearchResultSelect(
         collectionItem = CollectionItem(
             name = "Test",
         ),
         onCreateCopy = {},
+        modifier = Modifier.padding(8.dp),
     )
 }
 
