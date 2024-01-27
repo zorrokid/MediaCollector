@@ -7,6 +7,7 @@ import androidx.lifecycle.SavedStateHandle
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.shouldShowRationale
 import com.google.mlkit.vision.text.Text
 import com.zorrokid.mediacollector.ID
 import com.zorrokid.mediacollector.MediaCollectorScreen
@@ -140,10 +141,11 @@ class AddOrEditItemViewModel @Inject constructor(
     fun onStartTextRecognition(permissionState: PermissionState, onTextSelected: (String) -> Unit) {
         if (permissionState.status.isGranted) {
             uiState.value = uiState.value.copy(
-                showPermissionModal = false,
                 addOrEditItemScreenStatus = AddOrEditItemScreenStatus.TextRecognition,
                 onTextSelected = onTextSelected,
             )
+        } else if (permissionState.status.shouldShowRationale.not()) {
+            permissionState.launchPermissionRequest()
         } else {
             uiState.value = uiState.value.copy(
                 showPermissionModal = true,

@@ -16,8 +16,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -25,14 +23,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.PermissionStatus
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
 import com.zorrokid.mediacollector.R
 import com.zorrokid.mediacollector.common.composable.BarcodeInput
 import com.zorrokid.mediacollector.common.composable.BasicTopAppBar
 import com.zorrokid.mediacollector.common.composable.DropDownWithTextField
-import com.zorrokid.mediacollector.common.composable.PermissionDialog
 import com.zorrokid.mediacollector.common.composable.TextRecognitionInput
 import com.zorrokid.mediacollector.common.text_recognition.composable.CameraPreview
 import com.zorrokid.mediacollector.common.text_recognition.composable.TextRecognitionResultSelector
@@ -88,9 +84,9 @@ fun AddItemScreen(
     )
     if (uiState.showPermissionModal) {
         CameraPermissionModal(
-            permissionStatus = cameraPermissionState.status,
             onPermissionRequested = {
                 cameraPermissionState.launchPermissionRequest()
+                viewModel.onDismissPermissionRequest()
             },
             onDismissRequest = viewModel::onDismissPermissionRequest,
         )
@@ -260,6 +256,7 @@ fun FormContentPreview(){
 
 @Composable
 fun PermissionModalContent(
+    message: String,
     modifier: Modifier,
     onOpenPermissionDialogClicked: () -> Unit,
 ) {
@@ -273,14 +270,15 @@ fun PermissionModalContent(
         ) {
             Text("Set permissions")
         }
-        Text(text = "Camera permission is required for text recognition feature to fill in selected text field.")
+        Text(text =  message /*"Camera permission is required for text recognition feature to fill in selected text field."*/)
     }
 }
 
 @Composable
-@Preview(showBackground = true)
+@Preview(showBackground = true, apiLevel = 33)
 fun PermissionModalContentPreview(){
     PermissionModalContent(
+        message = "Camera permission is required for text recognition feature to fill in selected text field.",
         modifier = Modifier.padding(8.dp),
         onOpenPermissionDialogClicked = {},
     )
@@ -290,40 +288,20 @@ fun PermissionModalContentPreview(){
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
 @Composable
 fun CameraPermissionModal(
-    permissionStatus: PermissionStatus,
     onPermissionRequested: () -> Unit,
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val openPermissionDialog = remember { mutableStateOf(false) }
-    fun onOpenPermissionDialogClicked() {
-        openPermissionDialog.value = true
-    }
-    ModalBottomSheet(
+   ModalBottomSheet(
         onDismissRequest = onDismissRequest
     ) {
+        val message =
+            "Camera permission is required for text recognition feature to fill in selected text field. Please go to settings and enable camera permission."
         PermissionModalContent(
+            message = message,
             modifier = modifier,
-            onOpenPermissionDialogClicked = ::onOpenPermissionDialogClicked,
+            onOpenPermissionDialogClicked = onPermissionRequested,
         )
-    }
-    when {
-        openPermissionDialog.value -> {
-            val message = if (permissionStatus.shouldShowRationale)
-                "Allow permission for camera needed for text recognition?"
-            else
-                "Allow permission for camera needed for text recognition?"
-            PermissionDialog(
-                onLaunchPermissionRequest = {
-                    openPermissionDialog.value = false
-                    onPermissionRequested()
-                },
-                message = message,
-                onDismiss = {
-                    openPermissionDialog.value = false
-                },
-            )
-        }
     }
 }
 
