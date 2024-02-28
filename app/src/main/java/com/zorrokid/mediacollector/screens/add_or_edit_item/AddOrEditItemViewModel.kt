@@ -12,6 +12,7 @@ import com.google.mlkit.vision.text.Text
 import com.zorrokid.mediacollector.ID
 import com.zorrokid.mediacollector.MediaCollectorScreen
 import com.zorrokid.mediacollector.R
+import com.zorrokid.mediacollector.common.ext.capitalizeWords
 import com.zorrokid.mediacollector.common.snackbar.SnackbarManager
 import com.zorrokid.mediacollector.common.text_recognition.model.TextRecognitionStatus
 import com.zorrokid.mediacollector.model.CollectionItem
@@ -79,11 +80,11 @@ class AddOrEditItemViewModel @Inject constructor(
     }
 
     fun onNameChange(newValue: String) {
-        uiState.value = uiState.value.copy(name = newValue)
+        uiState.value = uiState.value.copy(name = newValue.capitalizeWords())
     }
 
     fun onOriginalNameChange(newValue: String) {
-        uiState.value = uiState.value.copy(originalName = newValue)
+        uiState.value = uiState.value.copy(originalName = newValue.capitalizeWords())
     }
 
     fun onBarcodeChange(newValue: String) {
