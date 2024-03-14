@@ -8,6 +8,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -18,6 +19,7 @@ import com.zorrokid.mediacollector.common.composable.BarcodeInput
 import com.zorrokid.mediacollector.common.composable.ItemList
 import com.zorrokid.mediacollector.common.composable.MainNavigationBar
 import com.zorrokid.mediacollector.model.CollectionItem
+import com.zorrokid.mediacollector.model.Response
 
 @Composable
 fun SearchScreen(
@@ -67,12 +69,32 @@ fun SearchScreenContent(
                     onScanBarcodeClick = onScanBarcodeClick,
                     barcode = uiState.barcode,
                 )
-                ItemList(
-                    collectionItems = searchResults,
-                    onEdit = onEditClicked,
-                    onDelete = onDeleteClicked,
-                    openScreen = openScreen,
-                )
+                when (uiState.collectionItemsResponse) {
+                    is Response.Initial -> {
+                        Text("Search for items by barcode")
+                    }
+                    is Response.Loading -> {
+                        Text("Seaching for results")
+                    }
+
+                    is Response.Success -> {
+                        val collectionItems = uiState.collectionItemsResponse.data
+                        if (collectionItems.isNullOrEmpty()) {
+                            Text("No items found")
+                        } else {
+                            ItemList(
+                                collectionItems = collectionItems,
+                                onEdit = onEditClicked,
+                                onDelete = onDeleteClicked,
+                                openScreen = openScreen,
+                            )
+                        }
+                    }
+
+                    is Response.Error -> {
+                        Text(uiState.collectionItemsResponse.message)
+                    }
+                }
             }
         },
         bottomBar = {
